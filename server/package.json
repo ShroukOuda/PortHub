@@ -1,0 +1,42 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Personal Portfolio Builder is a full-stack web application that allows users to create, manage, and showcase their own professional portfolios. Each registered user gets a personal portfolio page where they can add projects, skills, experience, education, contact information, and more.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShroukOuda/Portfolio.git"
+  },
+  "keywords": [
+    "portfolio",
+    "MEAN",
+    "stack",
+    "angular",
+    "nodejs",
+    "mongodb",
+    "express",
+    "developer",
+    "resume",
+    "personal",
+    "website"
+  ],
+  "author": "Shrouk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShroukOuda/Portfolio/issues"
+  },
+  "homepage": "https://github.com/ShroukOuda/Portfolio#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.5",
+    "nodemon": "^3.1.10",
+    "validator": "^13.15.15"
+  }
+}
