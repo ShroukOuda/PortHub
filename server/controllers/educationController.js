@@ -52,7 +52,7 @@ const deleteEducation = async (req, res) => {
 
     try {
         await Education.findByIdAndDelete(educationId);
-        res.status(204).send('Education deleted successfully');
+        res.status(200).json({ message: 'Education deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting education', error: error.message });
     }

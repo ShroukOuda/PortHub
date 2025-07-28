@@ -5,10 +5,10 @@ const { generateToken } = require('../utils/jwt');
 const { isValidEmail, isValidPassword } = require('../utils/validators');
 
 const registerUser = async (req, res) => {
-    const { firstName, lastName, username, email, password } = req.body;
+    const { firstName, lastName, username, email, password , phone, role } = req.body;
 
     try {
-        if (!firstName || !username || !email || !password) {
+        if (!firstName || !username || !email || !password || !phone) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
@@ -32,13 +32,15 @@ const registerUser = async (req, res) => {
             lastName,
             username,
             email,
+            phone,
             password: await hashPassword(password),
+            role: role || 'user'
         });
 
         res.status(201).json({ message: 'User registered successfully' });
 
     } catch (error) {
-        console.error('Register Error:', error); // 👈 helpful for debugging
+        console.error('Register Error:', error); 
         res.status(500).json({ message: 'Error registering user', error: error.message });
     }
 };
@@ -62,7 +64,7 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ accessToken: null, message: 'Invalid email or password' });
         }
         
-        const token = generateToken(user);
+        const token = await generateToken(user);
         res.status(200).json({ 
             message: 'Login successful', 
             accessToken: token, 
@@ -71,12 +73,23 @@ const loginUser = async (req, res) => {
                 username: user.username,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName
+                lastName: user.lastName,
+                role: user.role,
+                phone: user.phone
             }
         });
     
     } catch (error) {
         return res.status(500).json({ message: 'Invalid email or password', error: error.message });
+    }
+};
+
+// logoutUser
+const logoutUser = (req, res) => {
+    try {
+        res.status(200).json({ message: 'User logged out successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error logging out user', error: error.message });
     }
 };
 
@@ -108,7 +121,7 @@ const getUserById = async (req, res) => {
 // Update user
 const updateUser = async (req, res) => {
     const userId = req.params.id;
-    const { firstName, lastName, username, email, password } = req.body;
+    const { firstName, lastName, username, email, password, phone, role } = req.body;
 
     try {
         const user = await userModel.findById(userId);
@@ -120,6 +133,8 @@ const updateUser = async (req, res) => {
         user.lastName = lastName || user.lastName;
         user.username = username || user.username;
         user.email = email || user.email;
+        user.phone = phone || user.phone;
+        user.role = role || user.role;
         if (password) {
             user.password = await hashPassword(password);
         }
@@ -148,6 +163,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
+    logoutUser,
     getAllUsers,
     getUserById,
     updateUser,

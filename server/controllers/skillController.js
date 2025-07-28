@@ -46,7 +46,7 @@ const deleteSkill = async (req, res) => {
 
     try {
         await Skill.findByIdAndDelete(skillId);
-        res.status(204).send('Skill deleted successfully');
+        res.status(200).json({ message: 'Skill deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting skill', error: error.message });
     }

@@ -68,7 +68,7 @@ const deleteExperience = async (req, res) => {
         if (!experience) {
             return res.status(404).json({ error: 'Experience not found' });
         }
-        res.status(204).send('Experience deleted successfully');
+        res.status(200).json({ message: 'Experience deleted successfully' });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

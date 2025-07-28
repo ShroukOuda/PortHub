@@ -39,7 +39,7 @@ const deletePortfolio = async (req, res) => {
 
     try {
         await Portfolio.findByIdAndDelete(portfolioId);
-        res.status(204).send("Portfolio deleted successfully");
+        res.status(200).json({ message: 'Portfolio deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting portfolio', error: error.message });
     }
