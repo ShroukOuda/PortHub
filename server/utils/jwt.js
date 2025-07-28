@@ -5,11 +5,12 @@ const jwtExpiration = process.env.JWT_EXPIRATION;
 
 const generateToken = async (user) => {
     return await jwt.sign({ 
-        id: user._id, 
+        userId: user._id,  // FIXED LINE
         username: user.username, 
         email: user.email, 
         firstName: user.firstName,
-        lastName: user.lastName 
+        lastName: user.lastName,
+        role: user.role
     }, jwtSecret, { expiresIn: jwtExpiration });
 }
 
