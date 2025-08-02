@@ -3,9 +3,11 @@ export interface Iusers {
     name: string;
     email: string;
     phone: string;
+    bio: string;
+    avatarUrl?: string;
     address: string;
     gender: string;
     age: number;
     image: string;
-    role: string;
+    skills?: string[];
 }

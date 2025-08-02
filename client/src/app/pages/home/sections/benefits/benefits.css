@@ -1,0 +1,18 @@
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(147, 114, 156, 0.2);
+}
+.sidebar-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.gradient-text {
+    background: linear-gradient(135deg, #91729c 0%, #432161 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
