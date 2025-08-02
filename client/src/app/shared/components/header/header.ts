@@ -9,4 +9,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Header {
 
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }
+

@@ -2,7 +2,9 @@
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <!-- Logo -->
     <a 
-      [routerLink]="['/']" 
+      [routerLink]="['/']"
+      (click)="scrollToTop()"
+   
       class="text-3xl font-bold text-[#91729c] hover:text-[#432161] transition-colors duration-200">
       PortHub
     </a>
@@ -13,6 +15,7 @@
         [routerLink]="['/']"
         routerLinkActive="text-[#432161] font-semibold underline decoration-2"
         [routerLinkActiveOptions]="{ exact: true }"
+        (click)="scrollToTop()"
         class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
         Home
       </a>
@@ -21,6 +24,7 @@
         [routerLink]="['/about']"
         routerLinkActive="text-[#432161] font-semibold underline decoration-2"
         [routerLinkActiveOptions]="{ exact: true }"
+        (click)="scrollToTop()"
         class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
         About
       </a>
@@ -29,6 +33,7 @@
         [routerLink]="['/portfolios']"
         routerLinkActive="text-[#432161] font-semibold underline decoration-2"
         [routerLinkActiveOptions]="{ exact: true }"
+        (click)="scrollToTop()"
         class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
         Portfolios
       </a>
@@ -37,6 +42,7 @@
         [routerLink]="['/contact']"
         routerLinkActive="text-[#432161] font-semibold underline decoration-2"
         [routerLinkActiveOptions]="{ exact: true }"
+        (click)="scrollToTop()"
         class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
         Contact
       </a>
