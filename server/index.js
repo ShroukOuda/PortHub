@@ -17,6 +17,8 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const skillRoutes = require('./routes/skillRoutes');
 const experienceRoutes = require('./routes/experienceRoutes');
 const educationRoutes = require('./routes/educationRoutes');
+const testimonialRoutes = require('./routes/testimonialRoutes');
+const certificateRoutes = require('./routes/certificateRoutes');
 
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
@@ -25,6 +27,8 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/experiences', experienceRoutes);
 app.use('/api/educations', educationRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/certificates', certificateRoutes);
 
 const port = process.env.PORT;
 

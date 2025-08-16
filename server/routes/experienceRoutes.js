@@ -8,10 +8,13 @@ const {
     deleteExperience
 } = require('../controllers/experienceController');
 
-router.post('/', createExperience);
+const authMiddleware = require('../middlewares/authMiddleware');
+const roleMiddleware = require('../middlewares/roleMiddleware');
+
+router.post('/', authMiddleware, roleMiddleware(['user']), createExperience);
 router.get('/portfolio/:portfolioId', getExperienceByPortfolioId);
 router.get('/:id', getExperienceById);
-router.put('/:id', updateExperience);
-router.delete('/:id', deleteExperience);
+router.put('/:id', authMiddleware, roleMiddleware(['user']), updateExperience);
+router.delete('/:id', authMiddleware, roleMiddleware(['user']), deleteExperience);
 
 module.exports = router;

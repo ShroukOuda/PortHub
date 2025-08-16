@@ -18,7 +18,12 @@ const SkillSchema = new mongoose.Schema({
         required: true,
         enum: ['Beginner', 'Intermediate', 'Advanced'],
         default: 'Beginner'
-    }
+    },
+    icon: {
+        type: String,
+        required: false,
+        trim: true
+    },
 }, {
     timestamps: true,
 });

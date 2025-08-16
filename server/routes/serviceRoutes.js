@@ -8,9 +8,12 @@ const {
     getServicesByPortfolioId
 } = require('../controllers/serviceController');
 
-router.post('/', createService);
-router.put('/:serviceId', updateService);
-router.delete('/:serviceId', deleteService);
+const authMiddleware = require('../middlewares/authMiddleware');
+const roleMiddleware = require('../middlewares/roleMiddleware');
+
+router.post('/', authMiddleware, roleMiddleware(['user']), createService);
+router.put('/:serviceId', authMiddleware, roleMiddleware(['user']), updateService);
+router.delete('/:serviceId', authMiddleware, roleMiddleware(['user']), deleteService);
 router.get('/:serviceId', getServiceById);
 router.get('/portfolio/:portfolioId', getServicesByPortfolioId);
 

@@ -39,6 +39,41 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    profilePicture: {
+        type: String,
+        default: 'default-profile.png',
+        trim: true
+    },
+    bio: {
+        type: String,
+        maxlength: 500,
+        trim: true
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other'],
+        default: 'other'
+    },
+    dateOfBirth: {
+        type: Date,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    city: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    address: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
     role: {
         type: String,
         enum: ['user', 'admin'],

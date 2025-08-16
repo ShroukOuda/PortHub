@@ -1,55 +1,56 @@
 const mongoose = require('mongoose');
-const EducationSchema = new mongoose.Schema({
+
+const CertificateSchema = new mongoose.Schema({
     portfolioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Portfolio',
         required: true
     },
-    institution: {
+    title: {
         type: String,
         required: true,
         minlength: 2,
         maxlength: 100,
         trim: true
-    },
-    degree: {
-        type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 100,
-        trim: true
-    },
-    fieldOfStudy: {
-        type: String,
-        required: false,
-        minlength: 2,
-        maxlength: 100,
-        trim: true
-    },
-    startDate: {
-        type: Date,
-        required: true
-    },
-    endDate: {
-        type: Date,
-        required: false
     },
     description: {
         type: String,
-        required: false,
-        minlength: 2,
+        required: true,
+        minlength: 10,
         maxlength: 500,
         trim: true
     },
-    grade: {
+    technologies: {
+        type: [String],
+        required: false,
+        default: []
+    },
+    issuer: {
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 100,
+        trim: true
+    },
+    issueDate: {
+        type: Date,
+        required: true,
+        default: Date.now,
+    },
+    expirationDate: {
+        type: Date,
+        required: false,
+        default: null
+    },
+    CertificateImage: {
         type: String,
         required: false,
-        minlength: 1,
-        maxlength: 10,
+        default: 'default-certificate-image.png',
         trim: true
-    }
+    },
 }, {
     timestamps: true,
 });
 
-module.exports = mongoose.model('Education', EducationSchema);
+const Certificate = mongoose.model('Certificate', CertificateSchema);
+module.exports = Certificate;

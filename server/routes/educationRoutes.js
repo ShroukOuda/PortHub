@@ -8,10 +8,13 @@ const {
     deleteEducation
 } = require('../controllers/educationController');
 
-router.post('/', createEducation);
+const roleMiddleware = require('../middlewares/roleMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
+
+router.post('/', authMiddleware, roleMiddleware(['user']), createEducation);
 router.get('/portfolio/:portfolioId', getEducationByPortfolioId);
 router.get('/:educationId', getEducationById);
-router.put('/:educationId', updateEducation);
-router.delete('/:educationId', deleteEducation);
+router.put('/:educationId', authMiddleware, roleMiddleware(['user']), updateEducation);
+router.delete('/:educationId', authMiddleware, roleMiddleware(['user']), deleteEducation);
 
 module.exports = router;

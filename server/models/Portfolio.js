@@ -21,6 +21,12 @@ const PortfolioSchema = new mongoose.Schema({
         maxlength: 500, 
         trim: true
     },
+
+    AboutImage: {
+        type: String,
+        default: 'default-about-image.png',
+        trim: true
+    },
     sociallinks: {
         github: {
             type: String,
