@@ -17,9 +17,12 @@ const projectSchema = new mongoose.Schema({
   technologies: [{
     type: String
   }],
-  images: [{
-    type: String
-  }],
+  image: {
+    type: String,
+    required: false,
+    default: 'default-project-image.png',
+    trim: true
+  },
   demoUrl: {
     type: String,
     default: ''
@@ -28,10 +31,6 @@ const projectSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  featured: {
-    type: Boolean,
-    default: false
-  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Project', projectSchema);
