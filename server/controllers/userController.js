@@ -5,10 +5,10 @@ const { generateToken } = require('../utils/jwt');
 const { isValidEmail, isValidPassword } = require('../utils/validators');
 
 const registerUser = async (req, res) => {
-    const { firstName, lastName, username, email, password , phone, role } = req.body;
+    const { firstName, lastName, username, email, password, phone, gender, dateOfBirth, country, city, address, role } = req.body;
 
     try {
-        if (!firstName || !username || !email || !password || !phone) {
+        if (!firstName || !username || !email || !password || !phone || !gender || !dateOfBirth || !country || !city || !address) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
@@ -33,6 +33,11 @@ const registerUser = async (req, res) => {
             username,
             email,
             phone,
+            gender,
+            dateOfBirth,
+            country,
+            city,
+            address,
             password: await hashPassword(password),
             role: role || 'user'
         });
@@ -75,7 +80,12 @@ const loginUser = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 role: user.role,
-                phone: user.phone
+                phone: user.phone,
+                gender: user.gender,
+                dateOfBirth: user.dateOfBirth,
+                country: user.country,
+                city: user.city,
+                address: user.address
             }
         });
     
