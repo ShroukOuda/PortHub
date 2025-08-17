@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 
+const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const portfolioRoutes = require('./routes/portfolioRoutes');
 const projectRoutes = require('./routes/projectRoutes');
@@ -18,7 +19,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 
-
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/portfolios', portfolioRoutes);
