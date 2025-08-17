@@ -50,8 +50,12 @@
 
     <!-- Auth Buttons -->
     <div class="hidden md:flex gap-4 items-center">
-      <a href="#" class="text-[#91729c] hover:text-[#432161] transition-colors duration-200 font-medium">Login</a>
-      <a href="#" class="bg-[#91729c] hover:bg-[#432161] text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
+      <a 
+      [routerLink]="['/login']" 
+      class="text-[#91729c] hover:text-[#432161] transition-colors duration-200 font-medium">Login</a>
+      <a 
+      [routerLink]="['/signup']"
+      class="bg-[#91729c] hover:bg-[#432161] text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
         Signup
       </a>
     </div>
