@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Iusers } from '../../../../core/models/iusers';
+import { Iuser } from '../../../../core/models/iuser';
 
 
 @Component({
@@ -10,85 +10,83 @@ import { Iusers } from '../../../../core/models/iusers';
   styleUrls: ['./users.css']
 })
 export class Users {
-  users: Iusers[] = [
-      {
-    id: 1,
-    name: "Sarah Johnson",
-    email: "sarah.johnson@example.com",
-    phone: "+1-555-0123",
-    bio: "Full-stack developer passionate about creating innovative web solutions.",
-    avatarUrl: "https://i.pravatar.cc/150?img=32",
-    address: "123 Tech Street, San Francisco, CA",
-    gender: "Female",
-    age: 28,
-    image: "https://i.pravatar.cc/150?img=32",
-    skills: ["JavaScript", "React", "Node.js", "MongoDB"]
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    email: "michael.chen@example.com",
-    phone: "+1-555-0124",
-    bio: "UI/UX Designer with 5+ years of experience in creating beautiful digital experiences.",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=687&q=80",
-    address: "456 Design Ave, New York, NY",
-    gender: "Male",
-    age: 32,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=687&q=80",
-    skills: ["Figma", "Adobe XD", "Prototyping", "User Research"]
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    email: "emily.rodriguez@example.com",
-    phone: "+1-555-0125",
-    bio: "DevOps Engineer specializing in cloud infrastructure and automation.",
-    avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=1170&q=80",
-    address: "789 Cloud Street, Seattle, WA",
-    gender: "Female",
-    age: 29,
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=1170&q=80",
-    skills: ["AWS", "Docker", "Kubernetes", "Terraform"]
-  },
-  {
-    id: 4,
-    name: "David Thompson",
-    email: "david.thompson@example.com",
-    phone: "+1-555-0126",
-    bio: "Data Scientist turning complex data into actionable business insights.",
-    avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=1170&q=80",
-    address: "321 Data Drive, Boston, MA",
-    gender: "Male",
-    age: 35,
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=1170&q=80",
-    skills: ["Python", "Machine Learning", "SQL", "Tableau"]
-  },
-  {
-    id: 5,
-    name: "Aisha Karim",
-    email: "aisha.karim@example.com",
-    phone: "+1-555-0127",
-    bio: "Frontend developer crafting accessible and responsive web interfaces.",
-    avatarUrl: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=870&q=80",
-    address: "101 Interface Blvd, Austin, TX",
-    gender: "Female",
-    age: 26,
-    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=870&q=80",
-    skills: ["HTML", "CSS", "JavaScript", "Angular"]
-  },
-  {
-    id: 6,
-    name: "Liam Nguyen",
-    email: "liam.nguyen@example.com",
-    phone: "+1-555-0128",
-    bio: "Mobile app developer with expertise in Flutter and cross-platform solutions.",
-    avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=870&q=80",
-    address: "202 Mobile Lane, Denver, CO",
-    gender: "Male",
-    age: 30,
-    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=870&q=80",
-    skills: ["Flutter", "Dart", "Firebase", "UI Design"]
-  }
+  users: Iuser[] = [
+    {
+      _id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      username: 'johndoe',
+      email: 'john.doe@example.com',
+      phone: '+1234567890',
+      password: 'hashedPassword123',
+      profilePicture: '',
+      bio: 'Full-stack developer with 5+ years of experience in modern web technologies.',
+      gender: 'male',
+      dateOfBirth: '1990-05-15',
+      country: 'United States',
+      city: 'New York',
+      address: '123 Main Street, Apartment 4B',
+      role: 'user'
+    },
+    {
+      _id: '2',
+      firstName: 'Jane',
+      lastName: 'Smith',
+      username: 'janesmith',
+      email: 'jane.smith@example.com',
+      phone: '+0987654321',
+      password: 'hashedPassword456',
+      profilePicture: 'jane-profile.jpg',
+      bio: 'Creative UI/UX designer passionate about creating intuitive user experiences.',
+      gender: 'female',
+      dateOfBirth: '1992-08-22',
+      country: 'Canada',
+      city: 'Toronto',
+      address: '456 Oak Avenue, Suite 12',
+      role: 'user'
+    },
+    {
+      _id: '3',
+      firstName: 'Ali',
+      lastName: 'Hassan',
+      username: 'alihassan',
+      email: 'ali.hassan@example.com',
+      phone: '+201234567890',
+      password: 'hashedPassword789',
+      profilePicture: 'ali-profile.jpg',
+      bio: 'Backend developer specializing in .NET and cloud systems.',
+      gender: 'male',
+      dateOfBirth: '1995-02-12',
+      country: 'Egypt',
+      city: 'Cairo',
+      address: '78 Nile Street',
+      role: 'user'
+    },
+    {
+      _id: '4',
+      firstName: 'Emily',
+      lastName: 'Smith',
+      username: 'emilysmith',
+      email: 'emily.smith@example.com',
+      phone: '+1234567890',
+      password: 'hashedPassword789',
+      profilePicture: 'emily-profile.jpg',
+      bio: 'Graphic designer with a passion for creating stunning visuals.',
+      gender: 'female',
+      dateOfBirth: '1990-11-30',
+      country: 'United Kingdom',
+      city: 'London',
+      address: '789 Elm Street',
+      role: 'user'
+    }
   ]
+
+  getAge(dateOfBirth: string | Date): number {
+    const dob = typeof dateOfBirth === 'string' ? new Date(dateOfBirth) : dateOfBirth;
+    const diffMs = Date.now() - dob.getTime();
+    const ageDt = new Date(diffMs);
+    return Math.abs(ageDt.getUTCFullYear() - 1970);
+  }
+
 
 }

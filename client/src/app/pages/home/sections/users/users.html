@@ -8,19 +8,22 @@
       <div *ngFor="let user of users" class="bg-white shadow-md rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition duration-300">
         
         <!-- Avatar -->
-       <div class="relative flex justify-center mt-6">
-        <div class="w-28 h-28 rounded-full border-4 border-[#432161] overflow-hidden">
-          <img [src]="user.avatarUrl" [alt]="user.name" class="w-full h-full object-cover rounded-full" />
+        <div class="relative flex justify-center mt-6">
+          <div class="w-28 h-28 rounded-full border-4 border-[#432161] overflow-hidden">
+            <img [src]="user.profilePicture || 'default-avatar.png'" 
+                 [alt]="user.firstName + ' ' + user.lastName" 
+                 class="w-full h-full object-cover rounded-full" />
+          </div>
         </div>
-      </div>
-
 
         <!-- Content -->
         <div class="p-6">
           <!-- Name and Age -->
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-[#432161]">{{ user.name }}</h3>
-            <span class="text-xs bg-[#91729c] text-white px-2 py-1 rounded-full">{{ user.age }} yrs</span>
+            <h3 class="text-xl font-bold text-[#432161]">{{ user.firstName }} {{ user.lastName }}</h3>
+            <span class="text-xs bg-[#91729c] text-white px-2 py-1 rounded-full">
+              {{ getAge(user.dateOfBirth) }} yrs
+            </span>
           </div>
 
           <!-- Bio -->
@@ -41,16 +44,6 @@
               </svg>
               {{ user.address.split(',')[0] }}
             </div>
-          </div>
-
-          <!-- Skills -->
-          <div *ngIf="user.skills && user.skills.length > 0" class="mb-4">
-            <h4 class="text-sm font-semibold text-[#432161] mb-2">Skills</h4>
-            <ul class="flex flex-wrap gap-2">
-              <li *ngFor="let skill of user.skills" class="px-3 py-1 text-xs bg-[#f3f0f5] text-[#432161] font-medium rounded-full">
-                {{ skill }}
-              </li>
-            </ul>
           </div>
 
           <!-- Portfolio Link -->
