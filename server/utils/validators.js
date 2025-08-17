@@ -5,7 +5,7 @@ const isValidEmail = (email) => {
 }
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-const isValidPassword = async (password) => {
+const isValidPassword = (password) => {
     return passwordRegex.test(password);
 }
 
