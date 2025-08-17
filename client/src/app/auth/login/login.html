@@ -1,0 +1,130 @@
+<body class="min-h-screen bg-gradient-main relative overflow-hidden p-10">
+    
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 pattern-bg opacity-20"></div>
+    
+    <!-- Floating Elements -->
+    <div class="absolute top-20 left-10 floating-element">
+        <div class="w-16 h-16 glassmorphism rounded-full"></div>
+    </div>
+    <div class="absolute top-40 right-20 floating-element">
+        <div class="w-12 h-12 glassmorphism rounded-xl rotate-45"></div>
+    </div>
+    <div class="absolute bottom-20 left-1/4 floating-element">
+        <div class="w-20 h-20 glassmorphism rounded-full"></div>
+    </div>
+    <div class="absolute bottom-40 right-1/3 floating-element">
+        <div class="w-8 h-8 glassmorphism rounded-full"></div>
+    </div>
+    
+    <div class="relative min-h-screen flex items-center justify-center px-6 py-12">
+        <div class="w-full max-w-md">
+            
+            <!-- Logo/Brand -->
+            <div class="text-center mb-10 fade-in">
+                <h1 class="text-4xl font-black text-white mb-2">PortHub</h1>
+                <p class="text-white/80">Welcome back to your creative space</p>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="bg-white/10 glassmorphism rounded-3xl p-8 backdrop-blur-xl fade-in stagger-1">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-2">Sign In</h2>
+                    <p class="text-white/70">Enter your credentials to access your portfolio</p>
+                </div>
+                
+                <form class="space-y-6" id="loginForm">
+                    <div class="fade-in stagger-2">
+                        <label class="block text-sm font-semibold text-white/90 mb-2">
+                            <i class="fas fa-envelope mr-2"></i>Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            class="w-full px-4 py-4 rounded-xl bg-white/20 border-2 border-white/20 text-white placeholder-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="fade-in stagger-3">
+                        <label class="block text-sm font-semibold text-white/90 mb-2">
+                            <i class="fas fa-lock mr-2"></i>Password
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password"
+                                class="w-full px-4 py-4 rounded-xl bg-white/20 border-2 border-white/20 text-white placeholder-white/60 focus:bg-white/30 focus:border-white/50 transition-all duration-300"
+                                placeholder="Enter your password"
+                                required
+                            >
+                            <button 
+                                type="button" 
+                                onclick="togglePassword()"
+                                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                            >
+                                <i class="fas fa-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between fade-in stagger-4">
+                        <label class="flex items-center text-white/80 cursor-pointer">
+                            <input type="checkbox" class="sr-only">
+                            <div class="w-5 h-5 bg-white/20 rounded border-2 border-white/30 mr-3 flex items-center justify-center checkbox">
+                                <i class="fas fa-check text-white text-xs opacity-0 transition-opacity duration-200"></i>
+                            </div>
+                            <span class="text-sm">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-white/80 hover:text-white transition-colors">Forgot password?</a>
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full bg-white text-brand-dark py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-[1.02] shadow-xl fade-in stagger-5"
+                    >
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Sign In
+                    </button>
+                </form>
+                
+                <!-- Divider -->
+                <div class="flex items-center my-8 fade-in stagger-6">
+                    <div class="flex-1 h-px bg-white/20"></div>
+                    <span class="px-4 text-white/60 text-sm">or continue with</span>
+                    <div class="flex-1 h-px bg-white/20"></div>
+                </div>
+                
+                <!-- Social Login -->
+                <div class="space-y-3 fade-in stagger-6">
+                    <button class="w-full bg-white/10 border-2 border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition-all duration-300 social-btn">
+                        <i class="fab fa-google mr-3 text-lg"></i>
+                        Continue with Google
+                    </button>
+                    <button class="w-full bg-white/10 border-2 border-white/20 text-white py-3 rounded-xl font-medium hover:bg-white/20 transition-all duration-300 social-btn">
+                        <i class="fab fa-github mr-3 text-lg"></i>
+                        Continue with GitHub
+                    </button>
+                </div>
+                
+                <!-- Sign Up Link -->
+                <div class="text-center mt-8 fade-in stagger-6">
+                    <p class="text-white/70">
+                        Don't have an account? 
+                        <a 
+                        [routerLink]="['/signup']"
+                        class="text-white font-semibold hover:underline transition-all duration-300">
+                            Create one now
+                        </a>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="text-center mt-8 fade-in stagger-6">
+                <p class="text-white/60 text-sm">
+                    © 2025 PortHub. Empowering creative professionals worldwide.
+                </p>
+            </div>
+        </div>
+    </div>
