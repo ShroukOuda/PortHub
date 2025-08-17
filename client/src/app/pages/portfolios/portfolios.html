@@ -1,1 +1,105 @@
-<p>portfolios works!</p>
+<!-- portfolios.html -->
+<div class="min-h-screen bg-gradient-to-br from-[#91729c] to-[#432161] p-5">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h2 class="text-4xl font-light text-white mb-2 drop-shadow-lg flex items-center justify-center gap-3">
+        <fa-icon [icon]="getIcons().user" class="text-white"></fa-icon>
+        PortHub - Portfolio Network
+      </h2>
+    </div>
+    
+    <!-- Loading State -->
+    <div *ngIf="users.length === 0" class="text-center text-white">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white mb-4"></div>
+      <p class="text-lg">Loading portfolios...</p>
+    </div>
+
+    <!-- Users Grid -->
+    <div *ngIf="users.length > 0" 
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      
+      <div *ngFor="let user of users; trackBy: trackByUserId" 
+           class="bg-white rounded-2xl p-6 shadow-xl hover:transform hover:-translate-y-2 transition-all duration-300 relative overflow-hidden border border-[#91729c]/20">
+        
+        <!-- Top gradient border -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#91729c] to-[#432161]"></div>
+        
+        <!-- Card Header -->
+        <div class="flex items-center mb-5">
+          <img *ngIf="user.profilePicture; else noImage" 
+               [src]="user.profilePicture" 
+               [alt]="user.firstName + ' ' + (user.lastName || '')"
+               class="w-16 h-16 rounded-full object-cover border-3 border-[#91729c] mr-4"
+               (error)="onImageError($event)">
+          
+          <ng-template #noImage>
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#91729c] to-[#432161] flex items-center justify-center text-white text-xl mr-4">
+              <fa-icon [icon]="getIcons().user" class="text-white"></fa-icon>
+            </div>
+          </ng-template>
+          
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-[#432161] mb-1">
+              {{ user.firstName }} {{ user.lastName || '' }}
+            </h3>
+            <p class="text-[#91729c] font-medium">&#64;{{ user.username }}</p>
+          </div>
+        </div>
+        
+        <!-- User Details -->
+        <div class="space-y-4 mb-5">
+          <!-- Email -->
+          <div class="flex items-center bg-gradient-to-r from-[#91729c]/5 to-[#432161]/5 p-3 rounded-lg border border-[#91729c]/20 hover:border-[#91729c]/40 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-[#91729c] to-[#432161] rounded-lg mr-3">
+              <fa-icon [icon]="getIcons().email" class="text-white text-xs"></fa-icon>
+            </div>
+            <span class="text-sm text-gray-700 truncate">{{ user.email }}</span>
+          </div>
+
+          <!-- Phone -->
+          <div *ngIf="user.phone" class="flex items-center bg-gradient-to-r from-[#91729c]/5 to-[#432161]/5 p-3 rounded-lg border border-[#91729c]/20 hover:border-[#91729c]/40 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-[#91729c] to-[#432161] rounded-lg mr-3">
+              <fa-icon [icon]="getIcons().phone" class="text-white text-xs"></fa-icon>
+            </div>
+            <span class="text-sm text-gray-700 truncate">{{ user.phone }}</span>
+          </div>
+
+          <!-- Location -->
+          <div *ngIf="user.country || user.city" class="flex items-center bg-gradient-to-r from-[#91729c]/5 to-[#432161]/5 p-3 rounded-lg border border-[#91729c]/20 hover:border-[#91729c]/40 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-[#91729c] to-[#432161] rounded-lg mr-3">
+              <fa-icon [icon]="getIcons().location" class="text-white text-xs"></fa-icon>
+            </div>
+            <span class="text-sm text-gray-700 truncate">
+              <span *ngIf="user.city">{{ user.city }}</span>
+              <span *ngIf="user.city && user.country">, </span>
+              <span *ngIf="user.country">{{ user.country }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Bio Section -->
+        <div *ngIf="user.bio" class="bg-gray-50 p-4 rounded-xl mb-5 border-l-4 border-[#91729c]">
+          <p class="text-gray-600 text-sm italic leading-relaxed">{{ user.bio }}</p>
+        </div>
+        
+        <!-- Card Footer -->
+        <div class="pt-4 border-t border-gray-100">
+          <button 
+              (click)="viewPortfolio(user.username || user.email)"
+              class="w-full border-2 border-[#91729c] text-[#91729c] px-5 py-3 rounded-full font-semibold hover:bg-[#91729c] hover:text-white transition-all duration-300 flex items-center justify-center space-x-2 hover:scale-105">
+              <fa-icon [icon]="getIcons().briefcase"></fa-icon>
+              <span>View Portfolio</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- No Users Message (when loaded but empty) -->
+    <div *ngIf="users.length === 0" class="text-center text-white mt-16">
+      <fa-icon [icon]="getIcons().userSlash" class="text-5xl mb-5 opacity-50"></fa-icon>
+      <p class="text-xl">No portfolios available at the moment.</p>
+    </div>
+  </div>
+</div>
