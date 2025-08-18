@@ -4,11 +4,13 @@ const { hashPassword, comparedPassword } = require('../utils/hash');
 const { generateToken } = require('../utils/jwt');
 const { isValidEmail, isValidPassword } = require('../utils/validators');
 
+
 const registerUser = async (req, res) => {
-    const { firstName, lastName, username, email, password, phone, gender, dateOfBirth, country, city, address, role } = req.body;
+    const profilePicture = req.file ? req.file.path : null; // Handle profile picture upload
+    const { firstName, lastName, username, email, password, phone, gender, dateOfBirth, bio, country, city, address, role, jobTitle } = req.body;
 
     try {
-        if (!firstName || !username || !email || !password || !phone || !gender || !dateOfBirth || !country || !city || !address) {
+        if (!firstName || !username || !email || !password || !phone || !gender || !bio ||  !dateOfBirth || !country || !city || !address || !jobTitle) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
@@ -38,6 +40,9 @@ const registerUser = async (req, res) => {
             country,
             city,
             address,
+            bio,
+            profilePicture,
+            jobTitle,
             password: await hashPassword(password),
             role: role || 'user'
         });
@@ -85,7 +90,10 @@ const loginUser = async (req, res) => {
                 dateOfBirth: user.dateOfBirth,
                 country: user.country,
                 city: user.city,
-                address: user.address
+                address: user.address,
+                bio: user.bio,
+                profilePicture: user.profilePicture,
+                jobTitle: user.jobTitle
             }
         });
     
