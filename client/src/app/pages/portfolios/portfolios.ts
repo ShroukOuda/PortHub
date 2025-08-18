@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Iuser } from '../../core/models/iuser';
 import { UserService } from '../../core/services/user-service';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,7 @@ import { faUsers, faUser, faEnvelope, faPhone, faMapMarkerAlt, faBriefcase, faUs
 
 @Component({
   selector: 'app-portfolios',
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, RouterLink],
   templateUrl: './portfolios.html',
   styleUrl: './portfolios.css'
 })
@@ -67,7 +67,8 @@ export class Portfolios implements OnInit {
       location: faMapMarkerAlt,
       briefcase: faBriefcase,
       user: faUser,
-      userSlash: faUserSlash
+      userSlash: faUserSlash,
+      users: faUsers
     };
   }
 }
