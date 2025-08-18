@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 
+
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const portfolioRoutes = require('./routes/portfolioRoutes');
@@ -13,10 +14,12 @@ const experienceRoutes = require('./routes/experienceRoutes');
 const educationRoutes = require('./routes/educationRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const certificateRoutes = require('./routes/certificateRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use('/uploads', express.static('uploads'));
 
 
 app.use('/api/auth', authRoutes);
@@ -29,5 +32,6 @@ app.use('/api/experiences', experienceRoutes);
 app.use('/api/educations', educationRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/certificates', certificateRoutes);
+app.use('/api/uploads', uploadRoutes);
 
 module.exports = app;
