@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
+
 const {
-    createTestimonial,
-    getTestimonialsByPortfolioId,
-    getTestimonialById,
-    updateTestimonial,
-    deleteTestimonial
-} = require('../controllers/testimonialController');
+    createCertificate,
+    getCertificatesByPortfolioId,
+    getCertificateById,
+    updateCertificate,
+    deleteCertificate
+} = require('../controllers/certificateController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
-router.post('/', authMiddleware, roleMiddleware(['user']), createTestimonial);
-router.get('/:portfolioId', getTestimonialsByPortfolioId);
-router.get('/testimonial/:testimonialId', getTestimonialById);
-router.put('/testimonial/:testimonialId', authMiddleware, roleMiddleware(['user']), updateTestimonial);
-router.delete('/testimonial/:testimonialId', authMiddleware, roleMiddleware(['user']), deleteTestimonial);
+router.post('/', authMiddleware, roleMiddleware(['user']), createCertificate);
+router.get('/:portfolioId', getCertificatesByPortfolioId);
+router.get('/certificate/:certificateId', getCertificateById);
+router.put('/certificate/:certificateId', authMiddleware, roleMiddleware(['user']), updateCertificate);
+router.delete('/certificate/:certificateId', authMiddleware, roleMiddleware(['user']), deleteCertificate);
 
 module.exports = router;
