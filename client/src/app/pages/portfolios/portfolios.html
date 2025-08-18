@@ -28,7 +28,7 @@
         <!-- Card Header -->
         <div class="flex items-center mb-5">
           <img *ngIf="user.profilePicture; else noImage" 
-               [src]="user.profilePicture" 
+               [src]="'http://localhost:3000/' + user.profilePicture" 
                [alt]="user.firstName + ' ' + (user.lastName || '')"
                class="w-16 h-16 rounded-full object-cover border-3 border-[#91729c] mr-4"
                (error)="onImageError($event)">

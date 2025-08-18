@@ -13,6 +13,7 @@ export interface Iuser {
     country: string;
     city: string;
     address: string;
+    jobTitle?: string; // Added jobTitle field
     role?: 'user' | 'admin';
     createdAt?: Date | string;
     updatedAt?: Date | string;
