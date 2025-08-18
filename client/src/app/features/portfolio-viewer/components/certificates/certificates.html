@@ -1,0 +1,50 @@
+<section
+  class="min-h-screen bg-[color:var(--background-color)] text-[color:var(--main-color)] px-4 md:px-16 py-24"
+>
+  <h2 class="text-4xl font-bold text-center mb-12 text-[color:var(--main-color)]">
+    Certificates
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 ml-10">
+    <div
+      *ngFor="let cert of certificates"
+      class="bg-[color:var(--card-bg)] rounded-lg p-4 shadow-md hover:shadow-lg transition"
+    >
+      <!-- Image -->
+      <img
+        *ngIf="cert.CertificateImage"
+        [src]="cert.CertificateImage"
+        alt="{{ cert.title }} Certificate"
+        class="w-full h-48 object-contain rounded mb-4"
+      />
+
+      <!-- Title & Description -->
+      <h3 class="text-xl font-semibold text-[color:var(--main-color)]">
+        {{ cert.title }}
+      </h3>
+      <p class="text-sm mt-2">{{ cert.description }}</p>
+
+      <!-- Details -->
+      <div class="mt-3 text-sm space-y-1">
+        <p><strong>Issuer:</strong> {{ cert.issuer }}</p>
+        <p><strong>Issued:</strong> {{ cert.issueDate | date: 'longDate' }}</p>
+        <p *ngIf="cert.expirationDate">
+          <strong>Expires:</strong> {{ cert.expirationDate | date: 'longDate' }}
+        </p>
+
+        <!-- Technologies -->
+        <div *ngIf="cert.technologies?.length">
+          <strong>Technologies:</strong>
+          <div class="flex flex-wrap gap-2 mt-1">
+            <span
+              *ngFor="let tech of cert.technologies"
+              class="px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded"
+            >
+              {{ tech }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

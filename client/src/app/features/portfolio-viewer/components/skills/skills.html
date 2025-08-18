@@ -1,0 +1,24 @@
+<div
+  class="grid min-h-screen md:grid-cols-4 gap-6 p-6 text-center bg-[color:var(--background-color)] mt-15"
+>
+  <div
+    *ngFor="let skill of skills"
+    class="flex flex-col items-center gap-2 bg-[color:var(--card-bg)] border border-[color:var(--main-color)] rounded-xl p-4 shadow-md hover:shadow-lg transition duration-300"
+  >
+    <!-- Icon -->
+    <i
+      *ngIf="skill.icon"
+      [class]="skill.icon + ' text-4xl text-[color:var(--main-color)]'"
+    ></i>
+
+    <!-- Skill Name -->
+    <span class="text-lg font-semibold text-[color:var(--main-color)]">
+      {{ skill.name }}
+    </span>
+
+    <!-- Skill Level -->
+    <span class="text-xs text-gray-400 italic">
+      {{ skill.level }}
+    </span>
+  </div>
+</div>

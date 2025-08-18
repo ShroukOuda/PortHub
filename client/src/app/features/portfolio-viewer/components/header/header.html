@@ -1,0 +1,92 @@
+<header 
+  class="fixed top-0 left-0 w-full h-16 z-50"
+  [style.backgroundColor]="'var(--background-color)'"
+  [style.color]="'var(--text-color)'"
+>
+  <div class="w-full h-full px-4 md:px-6 flex items-center justify-between">
+    <!-- Logo -->
+    <h1 class="text-2xl md:text-4xl font-bold flex items-center space-x-1 select-none">
+      <a
+        [routerLink]="['/home']"
+        class="hover:text-[color:var(--hover-color)] transition-colors duration-300 flex items-center space-x-1"
+        [style.color]="'var(--main-color)'"
+      >
+        <span class="relative" [style.color]="'var(--main-color)'">
+          S
+          <span class="absolute text-[0.5rem] text-white -top-1 left-2">a</span>
+        </span>
+        <span [style.color]="'var(--text-color)'">hrouk</span>
+      </a>
+    </h1>
+
+    <!-- Hamburger Toggle -->
+    <button class="md:hidden text-2xl" (click)="menuOpen = !menuOpen">
+      <i class="fas" [ngClass]="menuOpen ? 'fa-times' : 'fa-bars'"></i>
+    </button>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center space-x-10 text-lg">
+      <ng-container *ngFor="let link of navLinks">
+        <a
+          [routerLink]="[link.path]"
+          [routerLinkActive]="['underline', 'underline-offset-4']"
+          class="transition"
+          [ngStyle]="{
+            color: isActive(link.path) ? 'var(--hover-color)' : 'var(--text-color)'
+          }"
+        >
+          {{ link.label }}
+        </a>
+      </ng-container>
+
+      <a
+        [routerLink]="['/contact']"
+        [routerLinkActive]="['bg-[var(--hover-color)]']"
+        class="ml-4 px-4 py-2 rounded-full text-sm transition"
+        [style.backgroundColor]="hoverContact ? 'var(--hover-color)' : 'var(--main-color)'"
+        [style.color]="'var(--button-text-color)'"
+        (mouseover)="hoverContact = true"
+        (mouseleave)="hoverContact = false"
+      >
+        Contact
+      </a>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    class="md:hidden bg-[var(--background-color)] w-full absolute top-16 left-0 shadow-md transition-all duration-300"
+    *ngIf="menuOpen"
+  >
+    <ul class="flex flex-col space-y-4 p-4 text-lg">
+      <ng-container *ngFor="let link of navLinks">
+        <li>
+          <a
+            [routerLink]="[link.path]"
+            class="transition"
+            (click)="menuOpen = false"
+            [ngStyle]="{
+              color: isActive(link.path) ? 'var(--hover-color)' : 'var(--text-color)'
+            }"
+          >
+            {{ link.label }}
+          </a>
+        </li>
+      </ng-container>
+
+      <li>
+        <a
+          [routerLink]="['/contact']"
+          class="px-4 py-2 rounded-full text-sm transition text-center"
+          [style.backgroundColor]="hoverContact ? 'var(--hover-color)' : 'var(--main-color)'"
+          [style.color]="'var(--button-text-color)'"
+          (mouseover)="hoverContact = true"
+          (mouseleave)="hoverContact = false"
+          (click)="menuOpen = false"
+        >
+          Contact Me
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>

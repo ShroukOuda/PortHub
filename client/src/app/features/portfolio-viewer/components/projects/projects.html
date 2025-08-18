@@ -1,0 +1,73 @@
+<section
+  id="projects"
+  class="min-h-screen px-4 md:px-16 py-24"
+  style="background-color: var(--background-color); color: var(--text-color)"
+>
+  <h2 class="text-4xl md:text-6xl font-bold text-center mb-16"
+      style="color: var(--main-color)">
+    Projects
+  </h2>
+
+  <!-- Grid container centered -->
+  <div class="flex justify-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full md:w-5/6">
+      <div
+        *ngFor="let project of projects"
+        class="bg-[color:var(--card-bg)] border rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300"
+        style="border-color: var(--main-color);"
+      >
+        <!-- Project Image -->
+        <img
+          *ngIf="project.image"
+          [src]="project.image"
+          [alt]="project.title"
+          class="w-full h-48 object-cover"
+        />
+
+        <!-- Project Content -->
+        <div class="p-4">
+          <h3 class="text-xl font-bold mb-2" style="color: var(--hover-color)">
+            {{ project.title }}
+          </h3>
+          <p class="text-sm mb-4 text-[color:var(--text-color)]">
+            {{ project.description }}
+          </p>
+
+          <!-- Technologies -->
+          <div *ngIf="project.technologies?.length" class="text-xs text-gray-400 mb-3">
+            <strong>Tech:</strong> {{ project.technologies?.join(', ') }}
+          </div>
+
+          <!-- Links -->
+          <div class="flex space-x-4">
+            <!-- GitHub Link -->
+            <a
+              *ngIf="project.githubUrl"
+              [href]="project.githubUrl"
+              target="_blank"
+              class="inline-block underline underline-offset-2 transition"
+              style="color: var(--main-color)"
+              onmouseover="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--hover-color')"
+              onmouseout="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--main-color')"
+            >
+              GitHub →
+            </a>
+
+            <!-- Demo Link -->
+            <a
+              *ngIf="project.demoUrl"
+              [href]="project.demoUrl"
+              target="_blank"
+              class="inline-block underline underline-offset-2 transition"
+              style="color: var(--main-color)"
+              onmouseover="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--hover-color')"
+              onmouseout="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--main-color')"
+            >
+              Live Demo →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

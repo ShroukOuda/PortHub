@@ -1,0 +1,44 @@
+<section
+  id="testimonials"
+  class="bg-[color:var(--background-color)] text-white py-16 px-4 md:px-16"
+>
+  <h2
+    class="text-4xl md:text-6xl font-bold text-center mb-16"
+    style="color: var(--main-color)"
+  >
+    Testimonials
+  </h2>
+
+  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 ml-10">
+    <div
+      *ngFor="let testimonial of testimonials"
+      class="bg-[color:var(--card-bg)] rounded-2xl p-6 shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center text-center"
+    >
+      <!-- Author Image -->
+      <img
+        *ngIf="testimonial.authorImage"
+        [src]="testimonial.authorImage"
+        alt="{{ testimonial.author }}"
+        class="w-20 h-20 rounded-full object-cover mb-4 border-2 border-[color:var(--main-color)]"
+      />
+
+      <!-- Author -->
+      <h3 class="text-xl font-semibold text-[color:var(--main-color)]">
+        {{ testimonial.author }}
+      </h3>
+
+      <!-- Position -->
+      <p *ngIf="testimonial.position" class="text-sm text-gray-400 italic mb-2">
+        {{ testimonial.position }}
+      </p>
+
+      <!-- Feedback -->
+      <p class="text-sm text-gray-300 mb-4">"{{ testimonial.content }}"</p>
+
+      <!-- Date -->
+      <span *ngIf="testimonial.createdAt" class="text-xs text-gray-500">
+        {{ testimonial.createdAt | date: 'MMMM yyyy' }}
+      </span>
+    </div>
+  </div>
+</section>

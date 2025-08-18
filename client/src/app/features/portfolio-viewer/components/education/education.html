@@ -1,0 +1,44 @@
+<section id="education" class="min-h-screen px-4 md:px-16 py-24"
+         style="background-color: var(--background-color); color: var(--text-color)">
+  <h2 class="text-4xl md:text-6xl font-bold text-center mb-16"
+      style="color: var(--main-color)">
+    Education
+  </h2>
+
+  <div class="space-y-8 ml-10">
+    <div
+      *ngFor="let edu of education"
+      class="relative pl-6 rounded-xl shadow-md p-6 border-l-4"
+      style="background-color: var(--card-bg); border-color: var(--main-color);"
+    >
+      <!-- Timeline Dot -->
+      <div class="absolute -left-2 top-6 w-4 h-4 rounded-full"
+           style="background-color: var(--hover-color)"></div>
+
+      <!-- Degree & Field -->
+      <h3 class="text-xl font-bold mb-1" style="color: var(--main-color)">
+        {{ edu.degree }}
+        <span *ngIf="edu.fieldOfStudy"> in {{ edu.fieldOfStudy }}</span>
+      </h3>
+
+      <!-- Institution -->
+      <p class="text-sm font-semibold mb-1">
+        {{ edu.institution }}
+      </p>
+
+      <!-- Dates & Grade -->
+      <p class="text-sm italic mb-2" style="color: var(--hover-color)">
+        {{ edu.startDate | date:'MMM yyyy' }}
+        –
+        <span *ngIf="edu.endDate; else present">{{ edu.endDate | date:'MMM yyyy' }}</span>
+        <ng-template #present>Present</ng-template>
+        <span *ngIf="edu.grade"> | Grade: {{ edu.grade }}</span>
+      </p>
+
+      <!-- Description -->
+      <p class="text-sm" *ngIf="edu.description">
+        {{ edu.description }}
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<section
+  id="experience"
+  class="min-h-screen px-4 md:px-16 py-24"
+  style="background-color: var(--background-color); color: var(--text-color)"
+>
+  <h2 class="text-4xl md:text-6xl font-bold text-center mb-16"
+      style="color: var(--main-color)">
+    Experience
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 ml-10">
+    <div
+      *ngFor="let exp of experience"
+      class="bg-[color:var(--card-bg)] border border-[color:var(--main-color)] rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300"
+    >
+      <!-- Position & Company -->
+      <div class="mb-2">
+        <h3 class="text-xl font-bold" style="color: var(--hover-color)">
+          {{ exp.position }}
+        </h3>
+        <p class="text-sm font-medium text-[color:var(--text-color)]">
+          {{ exp.company }}
+        </p>
+      </div>
+
+      <!-- Dates -->
+      <div class="text-xs italic mb-2" style="color: var(--hover-color)">
+        {{ exp.startDate | date:'MMM yyyy' }}
+        –
+        <span *ngIf="exp.endDate; else present">{{ exp.endDate | date:'MMM yyyy' }}</span>
+        <ng-template #present>Present</ng-template>
+      </div>
+
+      <!-- Description -->
+      <p class="text-sm text-[color:var(--text-color)] mb-4" *ngIf="exp.description">
+        {{ exp.description }}
+      </p>
+    </div>
+  </div>
+</section>
