@@ -1,282 +1,316 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#91729c] to-[#432161] p-6">
-  <form 
-    class="w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6 border border-white/20"
-    #signupForm="ngForm"
-    (ngSubmit)="onSubmit(signupForm)"
-  >
-    <!-- Title -->
-    <h2 class="text-3xl font-bold text-white text-center mb-6">
-      <span class="bg-gradient-to-r from-[#91729c] to-[#432161] bg-clip-text text-transparent">Create Your Account</span>
-    </h2>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f5f0f7] via-[#ede5f0] to-[#e8dced] py-10 px-6 relative overflow-hidden">
+  <!-- Background Shapes -->
+  <div class="absolute top-0 left-0 w-72 h-72 bg-[#91729c]/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#432161]/10 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
 
-    <!-- First + Last Name -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2">
-          <i class="fas fa-user mr-2"></i>First Name
-        </label>
-        <input 
-          type="text" 
-          [(ngModel)]="formData.firstName" 
-          name="firstName"
-          required
-          #firstName="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-                 placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-          placeholder="John">
-        <div *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-sm">
-          First name is required
+  <div class="relative w-full max-w-2xl">
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center gap-2 mb-2">
+        <div class="w-10 h-10 bg-gradient-to-br from-[#91729c] to-[#432161] rounded-xl flex items-center justify-center">
+          <lucide-icon name="briefcase" [size]="20" class="text-white"></lucide-icon>
         </div>
+        <span class="text-2xl font-bold text-[#432161]">PortHub</span>
       </div>
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2">
-          <i class="fas fa-user mr-2"></i>Last Name
-        </label>
-        <input 
-          type="text" 
-          [(ngModel)]="formData.lastName" 
-          name="lastName"
-          required
-          #lastName="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-                 placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-          placeholder="Doe">
-        <div *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-sm">
-          Last name is required
+      <p class="text-gray-500 text-sm">Create your account and start building your portfolio</p>
+    </div>
+
+    <!-- Form Card -->
+    <form
+      class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 space-y-5"
+      #signupForm="ngForm"
+      (ngSubmit)="onSubmit(signupForm)"
+    >
+      <!-- First + Last Name -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="user" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>First Name
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="formData.firstName"
+            name="firstName"
+            required
+            #firstName="ngModel"
+            class="signup-input"
+            placeholder="John">
+          <div *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-xs mt-1">
+            First name is required
+          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Username -->
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2">
-        <i class="fas fa-user-tag mr-2"></i>Username
-      </label>
-      <input 
-        type="text" 
-        [(ngModel)]="formData.username" 
-        name="username"
-        required
-        #username="ngModel"
-        (blur)="checkUsername()"
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-               placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-        placeholder="johnny_dev">
-      <div *ngIf="username.invalid && username.touched" class="text-red-500 text-sm">
-        Username is required
-      </div>
-      <div *ngIf="usernameExists" class="text-red-500 text-sm">
-        Username already exists
-      </div>
-    </div>
-
-    <!-- Email -->
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2">
-        <i class="fas fa-envelope mr-2"></i>Email Address
-      </label>
-      <input 
-        type="email" 
-        [(ngModel)]="formData.email" 
-        name="email"
-        required
-        email
-        #email="ngModel"
-        (blur)="checkEmail()"
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-               placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-        placeholder="john@example.com">
-      <div *ngIf="email.invalid && email.touched" class="text-red-500 text-sm">
-        <div *ngIf="email.errors?.['required']">Email is required</div>
-        <div *ngIf="email.errors?.['email']">Invalid email format</div>
-      </div>
-      <div *ngIf="emailExists" class="text-red-500 text-sm">
-        Email already exists
-      </div>
-    </div>
-
-    <!-- Phone + DOB -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2">
-          <i class="fas fa-phone mr-2"></i>Phone
-        </label>
-        <input 
-          type="text" 
-          [(ngModel)]="formData.phone" 
-          name="phone"
-          required
-          #phone="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-                 placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-          placeholder="+20123456789">
-        <div *ngIf="phone.invalid && phone.touched" class="text-red-500 text-sm">
-          Phone is required
-        </div>
-      </div>
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2">
-          <i class="fas fa-calendar mr-2"></i>Date of Birth
-        </label>
-        <input 
-          type="date" 
-          [(ngModel)]="formData.dateOfBirth" 
-          name="dateOfBirth"
-          required
-          #dateOfBirth="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-                 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all">
-        <div *ngIf="dateOfBirth.invalid && dateOfBirth.touched" class="text-red-500 text-sm">
-          Date of birth is required
-        </div>
-      </div>
-    </div>
-
-    <!-- Country + City + Address -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2"><i class="fas fa-flag mr-2"></i>Country</label>
-        <input type="text" [(ngModel)]="formData.country" name="country" required #country="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 
-                 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-          placeholder="Egypt">
-        <div *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
-          Country is required
-        </div>
-      </div>
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2"><i class="fas fa-city mr-2"></i>City</label>
-        <input type="text" [(ngModel)]="formData.city" name="city" required #city="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 
-                 focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-          placeholder="Cairo">
-        <div *ngIf="city.invalid && city.touched" class="text-red-500 text-sm">
-          City is required
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2">
-        <i class="fas fa-map-marker-alt mr-2"></i>Address
-      </label>
-      <input type="text" [(ngModel)]="formData.address" name="address" required #address="ngModel"
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 
-               focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-        placeholder="Street, Building, Apt">
-      <div *ngIf="address.invalid && address.touched" class="text-red-500 text-sm">
-        Address is required
-      </div>
-    </div>
-
-   <!-- Profile Picture -->
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2">Profile Picture</label>
-      <input 
-        type="file" 
-        (change)="onFileSelected($event)" 
-        name="profilePicture" 
-        required
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none"
-      />
-      <div *ngIf="!formData.profilePicture && signupForm.submitted" class="text-red-500 text-sm">
-        Profile picture is required
-      </div>
-    </div>
-
-    <!-- Bio -->
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2"><i class="fas fa-info-circle mr-2"></i>Bio</label>
-      <textarea [(ngModel)]="formData.bio" name="bio" rows="3" required #bio="ngModel"
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 
-               focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all"
-        placeholder="Tell us something about yourself..."></textarea>
-      <div *ngIf="bio.invalid && bio.touched" class="text-red-500 text-sm">
-        Bio is required
-      </div>
-    </div>
-
-    <!-- Password + Confirm -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2">
-          <i class="fas fa-lock mr-2"></i>Password
-        </label>
-        <input 
-          type="password" 
-          name="password" 
-          [(ngModel)]="formData.password"
-          required
-          minlength="8"
-          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{8,}$"
-          #password="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none"
-        />
-        <div *ngIf="password.invalid && password.touched" class="text-red-500 text-sm">
-          <div *ngIf="password.errors?.['required']">Password is required</div>
-          <div *ngIf="password.errors?.['minlength']">At least 8 characters</div>
-          <div *ngIf="password.errors?.['pattern']">
-            Must include upper, lower, number, and special character
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="user" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Last Name
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="formData.lastName"
+            name="lastName"
+            required
+            #lastName="ngModel"
+            class="signup-input"
+            placeholder="Doe">
+          <div *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-xs mt-1">
+            Last name is required
           </div>
         </div>
       </div>
+
+      <!-- Username -->
       <div>
-        <label class="block text-sm font-semibold text-white/90 mb-2">
-          <i class="fas fa-lock mr-2"></i>Confirm Password
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          <lucide-icon name="user" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Username
         </label>
-        <input 
-          type="password" 
-          name="confirmPassword" 
-          [(ngModel)]="formData.confirmPassword"
+        <input
+          type="text"
+          [(ngModel)]="formData.username"
+          name="username"
           required
-          #confirmPassword="ngModel"
-          class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none"
-        />
-        <div *ngIf="confirmPassword.touched" class="text-red-500 text-sm">
-          <div *ngIf="confirmPassword.errors?.['required']">Confirm password is required</div>
-          <div *ngIf="formData.confirmPassword && formData.confirmPassword !== formData.password">
-            Passwords do not match
+          #username="ngModel"
+          (blur)="checkUsername()"
+          class="signup-input"
+          placeholder="johnny_dev">
+        <div *ngIf="username.invalid && username.touched" class="text-red-500 text-xs mt-1">
+          Username is required
+        </div>
+        <div *ngIf="usernameExists" class="text-red-500 text-xs mt-1">
+          Username already exists
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          <lucide-icon name="mail" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Email Address
+        </label>
+        <div class="relative">
+          <input
+            type="email"
+            [(ngModel)]="formData.email"
+            name="email"
+            required
+            email
+            #email="ngModel"
+            (blur)="checkEmail()"
+            class="signup-input"
+            placeholder="john&#64;example.com">
+          <div *ngIf="isValidatingEmail" class="absolute right-3 top-1/2 -translate-y-1/2">
+            <lucide-icon name="loader-circle" [size]="16" class="animate-spin text-[#91729c]"></lucide-icon>
+          </div>
+        </div>
+        <div *ngIf="email.invalid && email.touched" class="text-red-500 text-xs mt-1">
+          <div *ngIf="email.errors?.['required']">Email is required</div>
+          <div *ngIf="email.errors?.['email']">Invalid email format</div>
+        </div>
+        <div *ngIf="emailExists" class="text-red-500 text-xs mt-1">Email already exists</div>
+        <div *ngIf="emailInvalid && !email.invalid" class="text-red-500 text-xs mt-1">{{ emailValidationMessage }}</div>
+      </div>
+
+      <!-- Country -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          <lucide-icon name="globe" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Country
+        </label>
+        <div class="relative">
+          <select
+            [(ngModel)]="selectedCountry"
+            name="countrySelect"
+            required
+            (change)="onCountryChange()"
+            class="signup-input appearance-none cursor-pointer pr-10">
+            <option [ngValue]="null" disabled class="text-gray-500">Select your country</option>
+            <option *ngFor="let country of countries" [ngValue]="country">
+              {{ country.name }} ({{ country.dialCode }})
+            </option>
+          </select>
+          <lucide-icon name="chevron-down" [size]="16" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></lucide-icon>
+        </div>
+      </div>
+
+      <!-- Phone + DOB -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="phone" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Phone Number
+          </label>
+          <div class="flex gap-2">
+            <div class="flex items-center px-3 py-2.5 rounded-xl bg-gray-100 border-2 border-gray-200 text-gray-700 font-medium text-sm min-w-[72px] justify-center">
+              {{ selectedCountry?.dialCode || '+__' }}
+            </div>
+            <div class="relative flex-1">
+              <input
+                type="tel"
+                [(ngModel)]="phoneNumber"
+                name="phoneNumber"
+                required
+                #phone="ngModel"
+                (blur)="checkPhone()"
+                (input)="formatPhoneNumber()"
+                [disabled]="!selectedCountry"
+                class="signup-input disabled:opacity-50 disabled:cursor-not-allowed"
+                [placeholder]="getPhonePlaceholder()">
+              <div *ngIf="isValidatingPhone" class="absolute right-3 top-1/2 -translate-y-1/2">
+                <lucide-icon name="loader-circle" [size]="16" class="animate-spin text-[#91729c]"></lucide-icon>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedCountry" class="text-gray-400 text-xs mt-1">
+            Format: {{ selectedCountry.format }}
+          </div>
+          <div *ngIf="phone.invalid && phone.touched && selectedCountry" class="text-red-500 text-xs mt-1">
+            Phone number is required
+          </div>
+          <div *ngIf="phoneInvalid" class="text-red-500 text-xs mt-1">{{ phoneValidationMessage }}</div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="calendar" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Date of Birth
+          </label>
+          <input
+            type="date"
+            [(ngModel)]="formData.dateOfBirth"
+            name="dateOfBirth"
+            required
+            #dateOfBirth="ngModel"
+            class="signup-input">
+          <div *ngIf="dateOfBirth.invalid && dateOfBirth.touched" class="text-red-500 text-xs mt-1">
+            Date of birth is required
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Gender -->
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2">
-        <i class="fas fa-venus-mars mr-2"></i>Gender
-      </label>
-      <select [(ngModel)]="formData.gender" name="gender" required #gender="ngModel"
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white 
-               focus:ring-2 focus:ring-[#91729c] focus:outline-none transition-all">
-        <option value="" disabled selected hidden class="text-gray-800">Select Gender</option>
-        <option value="male" class="text-gray-800">Male</option>
-        <option value="female" class="text-gray-800">Female</option>
-        <option value="other" class="text-gray-800">Other</option>
-      </select>
-      <div *ngIf="gender.invalid && gender.touched" class="text-red-500 text-sm">
-        Gender is required
+      <!-- City + Address -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="building-2" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>City
+          </label>
+          <input type="text" [(ngModel)]="formData.city" name="city" required #city="ngModel"
+            class="signup-input" placeholder="Cairo">
+          <div *ngIf="city.invalid && city.touched" class="text-red-500 text-xs mt-1">City is required</div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="map-pin" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Address
+          </label>
+          <input type="text" [(ngModel)]="formData.address" name="address" required #address="ngModel"
+            class="signup-input" placeholder="Street, Building, Apt">
+          <div *ngIf="address.invalid && address.touched" class="text-red-500 text-xs mt-1">Address is required</div>
+        </div>
       </div>
-    </div>
 
-    <!-- Job Title -->
-    <div>
-      <label class="block text-sm font-semibold text-white/90 mb-2">
-        <i class="fas fa-briefcase mr-2"></i>Job Title
-      </label>
-      <input type="text" name="jobTitle" [(ngModel)]="formData.jobTitle" required #jobTitle="ngModel"
-        class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 focus:ring-2 focus:ring-[#91729c] focus:outline-none"
-      />
-      <div *ngIf="jobTitle.invalid && jobTitle.touched" class="text-red-500 text-sm">
-        Job title is required
+      <!-- Profile Picture -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          <lucide-icon name="camera" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Profile Picture
+        </label>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          name="profilePicture"
+          required
+          class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0
+                 file:text-sm file:font-medium file:bg-[#91729c]/10 file:text-[#432161]
+                 hover:file:bg-[#91729c]/20 cursor-pointer" />
+        <div *ngIf="!formData.profilePicture && signupForm.submitted" class="text-red-500 text-xs mt-1">
+          Profile picture is required
+        </div>
       </div>
-    </div>
 
-    <!-- Submit -->
-    <button type="submit" [disabled]="signupForm.invalid || usernameExists || emailExists"
-      class="w-full bg-gradient-to-r from-[#91729c] to-[#432161] text-white py-4 rounded-xl font-bold text-lg 
-             hover:shadow-2xl hover:scale-[1.02] transition-transform duration-300">
-      <i class="fas fa-user-plus mr-2"></i>Create Account
-    </button>
-  </form>
+      <!-- Bio -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          <lucide-icon name="info" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Bio
+        </label>
+        <textarea [(ngModel)]="formData.bio" name="bio" rows="3" required #bio="ngModel"
+          class="signup-input resize-none"
+          placeholder="Tell us something about yourself..."></textarea>
+        <div *ngIf="bio.invalid && bio.touched" class="text-red-500 text-xs mt-1">Bio is required</div>
+      </div>
+
+      <!-- Password + Confirm -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="lock" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Password
+          </label>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="formData.password"
+            required
+            minlength="8"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{8,}$"
+            #password="ngModel"
+            class="signup-input" />
+          <div *ngIf="password.invalid && password.touched" class="text-red-500 text-xs mt-1">
+            <div *ngIf="password.errors?.['required']">Password is required</div>
+            <div *ngIf="password.errors?.['minlength']">At least 8 characters</div>
+            <div *ngIf="password.errors?.['pattern']">
+              Must include upper, lower, number, and special character
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="lock" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Confirm Password
+          </label>
+          <input
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="formData.confirmPassword"
+            required
+            #confirmPassword="ngModel"
+            class="signup-input" />
+          <div *ngIf="confirmPassword.touched" class="text-red-500 text-xs mt-1">
+            <div *ngIf="confirmPassword.errors?.['required']">Confirm password is required</div>
+            <div *ngIf="formData.confirmPassword && formData.confirmPassword !== formData.password">
+              Passwords do not match
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gender + Job Title -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="user" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Gender
+          </label>
+          <select [(ngModel)]="formData.gender" name="gender" required #gender="ngModel"
+            class="signup-input appearance-none">
+            <option value="" disabled selected hidden>Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <div *ngIf="gender.invalid && gender.touched" class="text-red-500 text-xs mt-1">Gender is required</div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            <lucide-icon name="briefcase" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Job Title
+          </label>
+          <input type="text" name="jobTitle" [(ngModel)]="formData.jobTitle" required #jobTitle="ngModel"
+            class="signup-input" placeholder="Frontend Developer" />
+          <div *ngIf="jobTitle.invalid && jobTitle.touched" class="text-red-500 text-xs mt-1">Job title is required</div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" [disabled]="signupForm.invalid || usernameExists || emailExists"
+        class="w-full bg-gradient-to-r from-[#91729c] to-[#432161] text-white py-3 rounded-xl font-semibold text-sm
+               hover:shadow-lg hover:shadow-[#91729c]/25 transition-all duration-300 flex items-center justify-center gap-2
+               disabled:opacity-50 disabled:cursor-not-allowed">
+        <lucide-icon name="user-plus" [size]="16"></lucide-icon>
+        Create Account
+      </button>
+
+      <!-- Login link -->
+      <p class="text-center text-gray-500 text-xs">
+        Already have an account?
+        <a routerLink="/login" class="text-[#432161] font-semibold hover:underline">Sign in</a>
+      </p>
+    </form>
+  </div>
 </div>

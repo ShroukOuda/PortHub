@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth-service';
+import { AuthStateService } from '../../core/services/auth-state.service';
 import { FormsModule } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink, LucideAngularModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
@@ -15,7 +17,11 @@ export class Login {
     password: ''
   };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private authState: AuthStateService,
+    private router: Router
+  ) {}
 
   onLogin() {
     if (!this.loginData.login || !this.loginData.password) {
@@ -25,15 +31,28 @@ export class Login {
 
     this.authService.login(this.loginData).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res.accessToken);
-        localStorage.setItem('user', JSON.stringify(res.user));
+        // Use AuthStateService to manage auth state
+        this.authState.login(res.user, res.accessToken);
         alert('Login successful');
-        this.router.navigate(['/dashboard']); // or your desired page
+        // Redirect based on role
+        if (res.user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       },
       error: (err) => {
         console.error('Login failed', err);
         alert(err.error?.message || 'Login failed');
       }
     });
+  }
+
+  loginWithGoogle() {
+    this.authService.loginWithGoogle();
+  }
+
+  loginWithGitHub() {
+    this.authService.loginWithGitHub();
   }
 }
