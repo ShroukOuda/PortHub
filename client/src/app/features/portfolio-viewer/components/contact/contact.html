@@ -1,11 +1,19 @@
 <section id="contact" class="min-h-screen bg-[color:var(--background-color)] px-4 md:px-16 py-24 text-[color:var(--main-color)]">
-  <h2 class="text-4xl md:text-6xl font-bold text-center mb-10">Contact Me</h2>
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-sm font-medium"
+           style="background-color: color-mix(in srgb, var(--main-color) 15%, transparent); color: var(--main-color)">
+        <lucide-icon name="mail" [size]="16"></lucide-icon>
+        Get In Touch
+      </div>
+      <h2 class="text-4xl md:text-5xl font-bold" style="color: var(--main-color)">Contact Me</h2>
+    </div>
 
-  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 ml-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
     
-  
     <!-- Contact Form -->
-    <div class="bg-[color:var(--card-bg)] border rounded-xl p-6 md:p-8 shadow-md w-full md:w-[90%] mx-auto" style="border-color: var(--main-color)">
+    <div class="bg-[color:var(--card-bg)] border rounded-xl p-6 md:p-8 shadow-md w-full mx-auto" style="border-color: var(--main-color)">
       <form (submit)="sendEmail($event)" class="text-[color:var(--main-color)]">
         
         <!-- Name -->
@@ -15,6 +23,7 @@
             type="text"
             id="name"
             name="name"
+            [(ngModel)]="contactForm.name"
             required
             placeholder="Your Name"
             class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 text-[color:var(--main-color)]"
@@ -33,6 +42,7 @@
             type="email"
             id="email"
             name="email"
+            [(ngModel)]="contactForm.email"
             required
             placeholder="your@email.com"
             class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 text-[color:var(--main-color)]"
@@ -50,6 +60,7 @@
           <textarea
             id="message"
             name="message"
+            [(ngModel)]="contactForm.message"
             required
             rows="4"
             placeholder="Write your message..."
@@ -65,34 +76,127 @@
         <!-- Submit Button -->
         <button
           type="submit"
-          class="px-6 py-2 rounded-md font-semibold transition"
-          style="
-            background-color: var(--main-color);
-            color: var(--button-text-color);
-          "
-          onmouseover="this.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--hover-color')"
-          onmouseout="this.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color')"
+          class="contact-btn w-full px-6 py-3 rounded-md font-semibold transition-all duration-300 text-lg flex items-center justify-center gap-2"
+          style="background-color: var(--main-color); color: var(--button-text-color)"
         >
-          Send Message
+          <lucide-icon name="send" [size]="16"></lucide-icon> Send Message
         </button>
       </form>
     </div>
-      <!-- Contact Info -->
-    <div class="flex flex-col justify-end space-y-6 md:pl-4">
-      <div class="flex items-center gap-4">
-        <i class="fas fa-envelope text-3xl md:text-4xl text-[color:var(--hover-color)]"></i>
-        <span class="text-xl md:text-2xl">shroukouda2@gmail.com</span>
+
+    <!-- Contact Info -->
+    <div class="flex flex-col space-y-6 md:pl-4">
+      <!-- User Info Card -->
+      <div class="bg-[color:var(--card-bg)] border rounded-xl p-6 shadow-md" style="border-color: var(--main-color)">
+        <h3 class="text-2xl font-bold mb-6 text-[color:var(--hover-color)]">Get In Touch</h3>
+        
+        <!-- Email -->
+        @if (user?.email) {
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--hover-color)">
+              <lucide-icon name="mail" [size]="18" class=" text-xl" style="color: var(--button-text-color)"></lucide-icon>
+            </div>
+            <div>
+              <p class="text-sm opacity-70">Email</p>
+              <a [href]="'mailto:' + user!.email" class="text-lg hover:underline">{{ user!.email }}</a>
+            </div>
+          </div>
+        }
+
+        <!-- Phone -->
+        @if (user?.phone) {
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--hover-color)">
+              <lucide-icon name="phone" [size]="18" class=" text-xl" style="color: var(--button-text-color)"></lucide-icon>
+            </div>
+            <div>
+              <p class="text-sm opacity-70">Phone</p>
+              <a [href]="'tel:' + user!.phone" class="text-lg hover:underline">{{ user!.phone }}</a>
+            </div>
+          </div>
+        }
+
+        <!-- Location -->
+        @if (user?.city || user?.country) {
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--hover-color)">
+              <lucide-icon name="map-pin" [size]="18" class=" text-xl" style="color: var(--button-text-color)"></lucide-icon>
+            </div>
+            <div>
+              <p class="text-sm opacity-70">Location</p>
+              <span class="text-lg">{{ user?.city }}{{ user?.city && user?.country ? ', ' : '' }}{{ user?.country }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Job Title -->
+        @if (user?.jobTitle) {
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--hover-color)">
+              <lucide-icon name="briefcase" [size]="18" class=" text-xl" style="color: var(--button-text-color)"></lucide-icon>
+            </div>
+            <div>
+              <p class="text-sm opacity-70">Profession</p>
+              <span class="text-lg">{{ user!.jobTitle }}</span>
+            </div>
+          </div>
+        }
       </div>
-      <div class="flex items-center gap-4">
-        <i class="fas fa-phone text-3xl md:text-4xl text-[color:var(--hover-color)]"></i>
-        <span class="text-xl md:text-2xl">+20 100 000 0000</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <i class="fas fa-map-marker-alt text-3xl md:text-4xl text-[color:var(--hover-color)]"></i>
-        <span class="text-xl md:text-2xl">Gharbia, Egypt</span>
-      </div>
+
+      <!-- Social Links -->
+      @if (hasSocialLinks()) {
+        <div class="bg-[color:var(--card-bg)] border rounded-xl p-6 shadow-md" style="border-color: var(--main-color)">
+          <h3 class="text-2xl font-bold mb-6 text-[color:var(--hover-color)]">Connect With Me</h3>
+          <div class="flex flex-wrap gap-4">
+            @if (portfolio?.sociallinks?.github) {
+              <a [href]="portfolio!.sociallinks!.github" target="_blank" 
+                 class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                 style="background-color: var(--main-color); color: var(--button-text-color)">
+                <lucide-icon name="github" [size]="18" class=" text-2xl"></lucide-icon>
+              </a>
+            }
+            @if (portfolio?.sociallinks?.linkedin) {
+              <a [href]="portfolio!.sociallinks!.linkedin" target="_blank" 
+                 class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                 style="background-color: var(--main-color); color: var(--button-text-color)">
+                <lucide-icon name="linkedin" [size]="18" class=" text-2xl"></lucide-icon>
+              </a>
+            }
+            @if (portfolio?.sociallinks?.twitter) {
+              <a [href]="portfolio!.sociallinks!.twitter" target="_blank" 
+                 class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                 style="background-color: var(--main-color); color: var(--button-text-color)">
+                <lucide-icon name="twitter" [size]="18" class=" text-2xl"></lucide-icon>
+              </a>
+            }
+            @if (portfolio?.sociallinks?.facebook) {
+              <a [href]="portfolio!.sociallinks!.facebook" target="_blank" 
+                 class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                 style="background-color: var(--main-color); color: var(--button-text-color)">
+                <lucide-icon name="facebook" [size]="18" class=" text-2xl"></lucide-icon>
+              </a>
+            }
+            @if (portfolio?.sociallinks?.instagram) {
+              <a [href]="portfolio!.sociallinks!.instagram" target="_blank" 
+                 class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                 style="background-color: var(--main-color); color: var(--button-text-color)">
+                <lucide-icon name="instagram" [size]="18" class=" text-2xl"></lucide-icon>
+              </a>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Download CV Button -->
+      @if (portfolio?.cvUrl) {
+        <a [href]="portfolio!.cvUrl" target="_blank" download
+           class="flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-xl transition-all duration-300 hover:scale-105 shadow-lg"
+           style="background-color: var(--hover-color); color: var(--button-text-color)">
+          <lucide-icon name="download" [size]="18" class=" text-2xl"></lucide-icon>
+          Download My CV
+        </a>
+      }
     </div>
-
-
+    </div>
   </div>
 </section>

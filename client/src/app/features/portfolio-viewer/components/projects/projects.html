@@ -3,71 +3,87 @@
   class="min-h-screen px-4 md:px-16 py-24"
   style="background-color: var(--background-color); color: var(--text-color)"
 >
-  <h2 class="text-4xl md:text-6xl font-bold text-center mb-16"
-      style="color: var(--main-color)">
-    Projects
-  </h2>
-
-  <!-- Grid container centered -->
-  <div class="flex justify-center">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full md:w-5/6">
-      <div
-        *ngFor="let project of projects"
-        class="bg-[color:var(--card-bg)] border rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300"
-        style="border-color: var(--main-color);"
-      >
-        <!-- Project Image -->
-        <img
-          *ngIf="project.image"
-          [src]="project.image"
-          [alt]="project.title"
-          class="w-full h-48 object-cover"
-        />
-
-        <!-- Project Content -->
-        <div class="p-4">
-          <h3 class="text-xl font-bold mb-2" style="color: var(--hover-color)">
-            {{ project.title }}
-          </h3>
-          <p class="text-sm mb-4 text-[color:var(--text-color)]">
-            {{ project.description }}
-          </p>
-
-          <!-- Technologies -->
-          <div *ngIf="project.technologies?.length" class="text-xs text-gray-400 mb-3">
-            <strong>Tech:</strong> {{ project.technologies?.join(', ') }}
-          </div>
-
-          <!-- Links -->
-          <div class="flex space-x-4">
-            <!-- GitHub Link -->
-            <a
-              *ngIf="project.githubUrl"
-              [href]="project.githubUrl"
-              target="_blank"
-              class="inline-block underline underline-offset-2 transition"
-              style="color: var(--main-color)"
-              onmouseover="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--hover-color')"
-              onmouseout="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--main-color')"
-            >
-              GitHub →
-            </a>
-
-            <!-- Demo Link -->
-            <a
-              *ngIf="project.demoUrl"
-              [href]="project.demoUrl"
-              target="_blank"
-              class="inline-block underline underline-offset-2 transition"
-              style="color: var(--main-color)"
-              onmouseover="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--hover-color')"
-              onmouseout="this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--main-color')"
-            >
-              Live Demo →
-            </a>
-          </div>
-        </div>
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-sm font-medium"
+           style="background-color: color-mix(in srgb, var(--main-color) 15%, transparent); color: var(--main-color)">
+        <lucide-icon name="folder-open" [size]="16"></lucide-icon>
+        My Work
       </div>
+      <h2 class="text-4xl md:text-5xl font-bold" style="color: var(--main-color)">Projects</h2>
     </div>
+
+    @if (projects.length === 0) {
+      <div class="empty-state">
+        <lucide-icon name="folder-open" [size]="56" style="color: var(--main-color); opacity: 0.3" class="mb-4"></lucide-icon>
+        <p class="text-lg opacity-50">No projects added yet.</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (project of projects; track project._id || $index) {
+          <div class="project-card bg-[color:var(--card-bg)] border rounded-xl overflow-hidden shadow-md"
+               style="border-color: color-mix(in srgb, var(--main-color) 30%, transparent);">
+            <!-- Project Image -->
+            @if (project.image) {
+              <div class="project-image-wrapper overflow-hidden">
+                <img
+                  [src]="project.image"
+                  [alt]="project.title"
+                  class="project-image w-full h-48 object-cover"
+                />
+              </div>
+            } @else {
+              <div class="w-full h-48 flex items-center justify-center"
+                   style="background-color: color-mix(in srgb, var(--main-color) 10%, transparent)">
+                <lucide-icon name="image" [size]="48" style="color: var(--main-color); opacity: 0.3"></lucide-icon>
+              </div>
+            }
+
+            <!-- Project Content -->
+            <div class="p-5">
+              <h3 class="text-xl font-bold mb-2" style="color: var(--hover-color)">
+                {{ project.title }}
+              </h3>
+              <p class="text-sm mb-4 opacity-80 leading-relaxed" style="color: var(--text-color)">
+                {{ project.description }}
+              </p>
+
+              <!-- Technologies -->
+              @if (project.technologies?.length) {
+                <div class="flex flex-wrap gap-2 mb-4">
+                  @for (tech of project.technologies; track tech) {
+                    <span class="px-2.5 py-1 text-xs rounded-full font-medium"
+                          style="background-color: color-mix(in srgb, var(--main-color) 15%, transparent); color: var(--main-color)">
+                      {{ tech }}
+                    </span>
+                  }
+                </div>
+              }
+
+              <!-- Links -->
+              <div class="flex gap-4 pt-3 border-t" style="border-color: color-mix(in srgb, var(--main-color) 15%, transparent)">
+                @if (project.githubUrl) {
+                  <a [href]="project.githubUrl" target="_blank"
+                     class="project-link flex items-center gap-1.5 text-sm font-medium"
+                     style="color: var(--main-color)">
+                    <lucide-icon name="github" [size]="16"></lucide-icon>
+                    GitHub
+                  </a>
+                }
+                @if (project.demoUrl) {
+                  <a [href]="project.demoUrl" target="_blank"
+                     class="project-link flex items-center gap-1.5 text-sm font-medium"
+                     style="color: var(--main-color)">
+                    <lucide-icon name="external-link" [size]="16"></lucide-icon>
+                    Live Demo
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
   </div>
 </section>

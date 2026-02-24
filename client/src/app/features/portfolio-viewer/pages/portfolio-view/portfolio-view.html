@@ -1,11 +1,25 @@
-
-
 <!-- Header/Navbar -->
 <app-header></app-header>
 
-<!-- Home Section (Hero) -->
-<router-outlet></router-outlet>
+<!-- Loading State -->
+<div *ngIf="portfolioData?.loading" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#91729c] to-[#432161]">
+  <div class="text-center text-white">
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
+    <p class="text-xl">Loading portfolio...</p>
+  </div>
+</div>
 
-<!-- Vertical Social Links Bar with Line -->
+<!-- Error State -->
+<div *ngIf="portfolioData?.error" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#91729c] to-[#432161]">
+  <div class="text-center text-white">
+    <p class="text-xl mb-4">{{ portfolioData?.error }}</p>
+    <a routerLink="/portfolios" class="px-6 py-3 bg-white text-[#432161] rounded-full font-semibold hover:bg-gray-100">
+      Back to Portfolios
+    </a>
+  </div>
+</div>
 
-<!-- <app-social-links></app-social-links> -->
+<!-- Portfolio Content -->
+<div *ngIf="!portfolioData?.loading && !portfolioData?.error">
+  <router-outlet></router-outlet>
+</div>

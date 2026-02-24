@@ -1,6 +1,7 @@
 <section
   id="testimonials"
-  class="bg-[color:var(--background-color)] text-white py-16 px-4 md:px-16"
+  class="min-h-screen bg-[color:var(--background-color)] py-24 px-4 md:px-16"
+  style="color: var(--text-color)"
 >
   <h2
     class="text-4xl md:text-6xl font-bold text-center mb-16"
@@ -9,36 +10,61 @@
     Testimonials
   </h2>
 
-  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 ml-10">
-    <div
-      *ngFor="let testimonial of testimonials"
-      class="bg-[color:var(--card-bg)] rounded-2xl p-6 shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center text-center"
-    >
-      <!-- Author Image -->
-      <img
-        *ngIf="testimonial.authorImage"
-        [src]="testimonial.authorImage"
-        alt="{{ testimonial.author }}"
-        class="w-20 h-20 rounded-full object-cover mb-4 border-2 border-[color:var(--main-color)]"
-      />
-
-      <!-- Author -->
-      <h3 class="text-xl font-semibold text-[color:var(--main-color)]">
-        {{ testimonial.author }}
-      </h3>
-
-      <!-- Position -->
-      <p *ngIf="testimonial.position" class="text-sm text-gray-400 italic mb-2">
-        {{ testimonial.position }}
-      </p>
-
-      <!-- Feedback -->
-      <p class="text-sm text-gray-300 mb-4">"{{ testimonial.content }}"</p>
-
-      <!-- Date -->
-      <span *ngIf="testimonial.createdAt" class="text-xs text-gray-500">
-        {{ testimonial.createdAt | date: 'MMMM yyyy' }}
-      </span>
+  @if (testimonials.length === 0) {
+    <div class="empty-state">
+      <lucide-icon name="message-circle" [size]="48" style="color: var(--main-color)"></lucide-icon>
+      <p class="mt-4 text-lg opacity-50">No testimonials yet.</p>
     </div>
-  </div>
+  } @else {
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+      @for (testimonial of testimonials; track testimonial._id) {
+        <div class="testimonial-card bg-[color:var(--card-bg)] rounded-2xl p-6 shadow-lg hover:shadow-xl transition duration-300 flex flex-col relative overflow-hidden">
+          <!-- Quote Icon -->
+          <div class="absolute top-4 right-4 opacity-20">
+            <lucide-icon name="quote" [size]="32" style="color: var(--main-color)"></lucide-icon>
+          </div>
+
+          <!-- Feedback -->
+          <p class="text-sm mb-4 leading-relaxed italic flex-1 opacity-85">"{{ testimonial.content }}"</p>
+
+          <!-- Rating -->
+          @if (testimonial.rating) {
+            <div class="flex gap-1 mb-4">
+              @for (star of getStars(testimonial.rating); track $index) {
+                <lucide-icon name="star" [size]="16" [class.star-filled]="star === 1" [class.star-empty]="star === 0"></lucide-icon>
+              }
+            </div>
+          }
+
+          <!-- Author Info -->
+          <div class="flex items-center gap-3 pt-4 border-t" style="border-color: color-mix(in srgb, var(--main-color) 15%, transparent)">
+            @if (testimonial.authorImage && testimonial.authorImage !== 'default-author-image.png') {
+              <img
+                [src]="testimonial.authorImage"
+                [alt]="testimonial.author"
+                class="w-12 h-12 rounded-full object-cover border-2 border-[color:var(--main-color)] shrink-0"
+              />
+            } @else {
+              <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0"
+                   style="background: linear-gradient(135deg, var(--main-color), var(--hover-color))">
+                {{ testimonial.author?.charAt(0) }}
+              </div>
+            }
+            <div>
+              <h3 class="text-base font-semibold" style="color: var(--main-color)">
+                {{ testimonial.author }}
+              </h3>
+              @if (testimonial.position || testimonial.company) {
+                <p class="text-xs opacity-60">
+                  {{ testimonial.position }}
+                  @if (testimonial.position && testimonial.company) { at }
+                  {{ testimonial.company }}
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </section>

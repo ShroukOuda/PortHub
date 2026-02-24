@@ -1,37 +1,37 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProjectService } from '../../../../core/services/portfolio/project-service';
-import { ActivatedRoute } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
+import { Subscription } from 'rxjs';
+import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Iproject } from '../../../../core/models/iproject';
 
 @Component({
   selector: 'app-projects',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './projects.html',
+  styleUrl: './projects.css'
 })
-export class Projects implements OnInit {
-  projects: Iproject[] = [];
+export class Projects implements OnInit, OnDestroy {
+  portfolioData: PortfolioData | null = null;
+  private subscription: Subscription | null = null;
 
-  constructor(private projectService: ProjectService, private route: ActivatedRoute) {}
+  constructor(private portfolioDataService: PortfolioDataService) {}
 
   ngOnInit(): void {
-    const portfolioId = this.route.snapshot.paramMap.get('id');
-    if (portfolioId) {
-      this.loadProjects(portfolioId);
+    this.subscription = this.portfolioDataService.portfolioData$.subscribe(data => {
+      this.portfolioData = data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
-  loadProjects(portfolioId: string): void {
-    this.projectService.getProjectByPortfolioId(portfolioId).subscribe(
-      (data: Iproject[]) => {
-        this.projects = data;
-      },
-      (error) => {
-        console.error('Error loading projects', error);
-      }
-    );
+  get projects(): Iproject[] {
+    return this.portfolioData?.projects || [];
   }
- 
 }
 
 

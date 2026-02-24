@@ -1,37 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { ExperienceService } from '../../../../core/services/portfolio/experience-service';
+import { LucideAngularModule } from 'lucide-angular';
+import { Subscription } from 'rxjs';
+import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Iexperience } from '../../../../core/models/iexperience';
-
 
 @Component({
   selector: 'app-experience',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './experience.html',
   styleUrl: './experience.css'
 })
-export class Experience implements OnInit {
-  experience: Iexperience[] = [];
+export class Experience implements OnInit, OnDestroy {
+  portfolioData: PortfolioData | null = null;
+  private subscription: Subscription | null = null;
 
-  constructor(private experienceService: ExperienceService, private route: ActivatedRoute) {}
+  constructor(private portfolioDataService: PortfolioDataService) {}
 
   ngOnInit(): void {
-    const portfolioId = this.route.snapshot.paramMap.get('id');
-    if (portfolioId) {
-      this.loadExperience(portfolioId);
+    this.subscription = this.portfolioDataService.portfolioData$.subscribe(data => {
+      this.portfolioData = data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
-  loadExperience(portfolioId: string) {
-    this.experienceService.getExperiencesByPortfolioId(portfolioId).subscribe(
-      (data: Iexperience[]) => {
-        this.experience = data;
-      },
-      (error) => {
-        console.error('Error loading experience', error);
-      }
-    );
+  get experiences(): Iexperience[] {
+    return this.portfolioData?.experiences || [];
   }
 }
 

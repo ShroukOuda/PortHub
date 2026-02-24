@@ -2,28 +2,45 @@
   id="services"
   class="min-h-screen bg-[color:var(--background-color)] text-[color:var(--main-color)] px-4 md:px-16 py-24"
 >
-  <h2 class="text-4xl md:text-6xl font-bold text-center mb-16" style="color: var(--main-color)">
-    My Services
-  </h2>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 ml-10">
-    <div
-      *ngFor="let service of services"
-      class="bg-[color:var(--card-bg)] border rounded-2xl p-6 shadow-lg hover:shadow-xl transition duration-300"
-      style="border-color: var(--main-color);"
-    >
-      <!-- Icon (Font Awesome if provided) -->
-      <div *ngIf="service.icon" class="flex justify-center mb-4 text-5xl">
-        <i [ngClass]="service.icon" class="text-[color:var(--hover-color)]"></i>
+  <div class="max-w-6xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-sm font-medium"
+           style="background-color: color-mix(in srgb, var(--main-color) 15%, transparent); color: var(--main-color)">
+        <lucide-icon name="briefcase" [size]="16"></lucide-icon>
+        What I Do
       </div>
-
-      <!-- Name -->
-      <h3 class="text-2xl font-semibold text-center mb-2" style="color: var(--hover-color)">
-        {{ service.name }}
-      </h3>
-
-      <!-- Description -->
-      <p class="text-sm text-center mb-4">{{ service.description }}</p>
+      <h2 class="text-4xl md:text-5xl font-bold" style="color: var(--main-color)">My Services</h2>
     </div>
+
+    @if (services.length === 0) {
+      <div class="empty-state">
+        <lucide-icon name="briefcase" [size]="56" style="color: var(--main-color); opacity: 0.3" class="mb-4"></lucide-icon>
+        <p class="text-lg opacity-50">No services added yet.</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (service of services; track service._id || $index) {
+          <div class="service-card bg-[color:var(--card-bg)] border rounded-2xl p-8 shadow-lg text-center"
+               style="border-color: color-mix(in srgb, var(--main-color) 30%, transparent);">
+            <!-- Icon -->
+            @if (service.icon) {
+              <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                   style="background-color: color-mix(in srgb, var(--hover-color) 15%, transparent)">
+                <lucide-icon [name]="service.icon" [size]="32" style="color: var(--hover-color)"></lucide-icon>
+              </div>
+            }
+
+            <!-- Name -->
+            <h3 class="text-xl font-bold mb-3" style="color: var(--hover-color)">
+              {{ service.name }}
+            </h3>
+
+            <!-- Description -->
+            <p class="text-sm leading-relaxed opacity-80">{{ service.description }}</p>
+          </div>
+        }
+      </div>
+    }
   </div>
 </section>

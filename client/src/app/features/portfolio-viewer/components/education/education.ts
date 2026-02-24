@@ -1,35 +1,35 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { EducationService } from '../../../../core/services/portfolio/education-service';
+import { LucideAngularModule } from 'lucide-angular';
+import { Subscription } from 'rxjs';
+import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Ieducation } from '../../../../core/models/ieducation';
 
 @Component({
   selector: 'app-education',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './education.html',
   styleUrl: './education.css'
 })
-export class Education implements OnInit {
-  education: Ieducation[] = [];
+export class Education implements OnInit, OnDestroy {
+  portfolioData: PortfolioData | null = null;
+  private subscription: Subscription | null = null;
 
-  constructor(private educationService: EducationService, private route: ActivatedRoute) {}
+  constructor(private portfolioDataService: PortfolioDataService) {}
 
   ngOnInit(): void {
-    const portfolioId = this.route.snapshot.paramMap.get('id');
-    if (portfolioId) {
-      this.loadEducation(portfolioId);
+    this.subscription = this.portfolioDataService.portfolioData$.subscribe(data => {
+      this.portfolioData = data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
-  loadEducation(portfolioId: string) {
-    this.educationService.getEducationsByPortfolioId(portfolioId).subscribe(
-      (data: Ieducation[]) => {
-        this.education = data;
-      },
-      (error) => {
-        console.error('Error loading education', error);
-      }
-    );
+  get educations(): Ieducation[] {
+    return this.portfolioData?.educations || [];
   }
 }

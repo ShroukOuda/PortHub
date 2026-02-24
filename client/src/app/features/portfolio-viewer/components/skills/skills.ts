@@ -1,35 +1,56 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SkillService } from '../../../../core/services/portfolio/skill-service';
-import { ActivatedRoute } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
+import { Subscription } from 'rxjs';
+import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Iskill } from '../../../../core/models/iskill';
 
 @Component({
   selector: 'app-skills',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './skills.html',
   styleUrl: './skills.css'
 })
-export class Skills implements OnInit {
-  skills: Iskill[] = [];
+export class Skills implements OnInit, OnDestroy {
+  portfolioData: PortfolioData | null = null;
+  private subscription: Subscription | null = null;
 
-  constructor(private skillService: SkillService, private route: ActivatedRoute) {}
+  constructor(private portfolioDataService: PortfolioDataService) {}
 
   ngOnInit(): void {
-    const portfolioId = this.route.snapshot.paramMap.get('id');
-    if (portfolioId) {
-      this.loadSkills(portfolioId);
+    this.subscription = this.portfolioDataService.portfolioData$.subscribe(data => {
+      this.portfolioData = data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
-  loadSkills(portfolioId: string) {
-    this.skillService.getSkillByPortfolioId(portfolioId).subscribe(
-      (data: Iskill[]) => {
-        this.skills = data;
-      },
-      (error) => {
-        console.error('Error loading skills', error);
+  get skills(): Iskill[] {
+    return this.portfolioData?.skills || [];
+  }
+
+  get categorizedSkills(): { category: string; skills: Iskill[] }[] {
+    const groups: Record<string, Iskill[]> = {};
+    for (const skill of this.skills) {
+      if (skill.category) {
+        if (!groups[skill.category]) groups[skill.category] = [];
+        groups[skill.category].push(skill);
       }
-    );
+    }
+    const keys = Object.keys(groups);
+    if (keys.length <= 1) return [];
+    return keys.map(category => ({ category, skills: groups[category] }));
+  }
+
+  isUrl(value: string): boolean {
+    return value?.startsWith('http') || value?.startsWith('//');
+  }
+
+  isNumeric(value: any): boolean {
+    return typeof value === 'number' || (!isNaN(Number(value)) && value !== '' && value !== null && !['Beginner', 'Intermediate', 'Advanced'].includes(value));
   }
 }

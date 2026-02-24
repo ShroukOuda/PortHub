@@ -1,35 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { CertificateService } from '../../../../core/services/portfolio/certificate-service';
+import { LucideAngularModule } from 'lucide-angular';
+import { Subscription } from 'rxjs';
+import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Icertificate } from '../../../../core/models/icertificate';
 
 @Component({
   selector: 'app-certificates',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './certificates.html',
   styleUrl: './certificates.css'
 })
-export class Certificates implements OnInit {
-  certificates: Icertificate[] = [];
+export class Certificates implements OnInit, OnDestroy {
+  portfolioData: PortfolioData | null = null;
+  private subscription: Subscription | null = null;
 
-  constructor(private certificateService: CertificateService, private route: ActivatedRoute) {}
+  constructor(private portfolioDataService: PortfolioDataService) {}
 
   ngOnInit(): void {
-    const portfolioId = this.route.snapshot.paramMap.get('id');
-    if (portfolioId) {
-      this.loadCertificates(portfolioId);
+    this.subscription = this.portfolioDataService.portfolioData$.subscribe(data => {
+      this.portfolioData = data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
-  loadCertificates(portfolioId: string) {
-    this.certificateService.getCertificatesByPortfolioId(portfolioId).subscribe(
-      (data: Icertificate[]) => {
-        this.certificates = data;
-      },
-      (error) => {
-        console.error('Error loading certificates', error);
-      }
-    );
+  get certificates(): Icertificate[] {
+    return this.portfolioData?.certificates || [];
   }
 }

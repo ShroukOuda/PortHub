@@ -1,44 +1,73 @@
 <section id="education" class="min-h-screen px-4 md:px-16 py-24"
          style="background-color: var(--background-color); color: var(--text-color)">
-  <h2 class="text-4xl md:text-6xl font-bold text-center mb-16"
-      style="color: var(--main-color)">
-    Education
-  </h2>
-
-  <div class="space-y-8 ml-10">
-    <div
-      *ngFor="let edu of education"
-      class="relative pl-6 rounded-xl shadow-md p-6 border-l-4"
-      style="background-color: var(--card-bg); border-color: var(--main-color);"
-    >
-      <!-- Timeline Dot -->
-      <div class="absolute -left-2 top-6 w-4 h-4 rounded-full"
-           style="background-color: var(--hover-color)"></div>
-
-      <!-- Degree & Field -->
-      <h3 class="text-xl font-bold mb-1" style="color: var(--main-color)">
-        {{ edu.degree }}
-        <span *ngIf="edu.fieldOfStudy"> in {{ edu.fieldOfStudy }}</span>
-      </h3>
-
-      <!-- Institution -->
-      <p class="text-sm font-semibold mb-1">
-        {{ edu.institution }}
-      </p>
-
-      <!-- Dates & Grade -->
-      <p class="text-sm italic mb-2" style="color: var(--hover-color)">
-        {{ edu.startDate | date:'MMM yyyy' }}
-        –
-        <span *ngIf="edu.endDate; else present">{{ edu.endDate | date:'MMM yyyy' }}</span>
-        <ng-template #present>Present</ng-template>
-        <span *ngIf="edu.grade"> | Grade: {{ edu.grade }}</span>
-      </p>
-
-      <!-- Description -->
-      <p class="text-sm" *ngIf="edu.description">
-        {{ edu.description }}
-      </p>
+  <div class="max-w-4xl mx-auto">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 text-sm font-medium"
+           style="background-color: color-mix(in srgb, var(--main-color) 15%, transparent); color: var(--main-color)">
+        <lucide-icon name="graduation-cap" [size]="16"></lucide-icon>
+        My Journey
+      </div>
+      <h2 class="text-4xl md:text-5xl font-bold" style="color: var(--main-color)">Education</h2>
     </div>
+
+    @if (educations.length === 0) {
+      <div class="empty-state">
+        <lucide-icon name="graduation-cap" [size]="56" style="color: var(--main-color); opacity: 0.3" class="mb-4"></lucide-icon>
+        <p class="text-lg opacity-50">No education records added yet.</p>
+      </div>
+    } @else {
+      <div class="space-y-6">
+        @for (edu of educations; track edu._id || $index) {
+          <div class="education-card relative pl-8 rounded-xl shadow-md p-6 border-l-4 bg-[color:var(--card-bg)]"
+               style="border-color: var(--main-color);">
+            <!-- Timeline Dot -->
+            <div class="absolute -left-2.5 top-7 w-5 h-5 rounded-full border-3 timeline-dot"
+                 style="background-color: var(--hover-color); border: 3px solid var(--background-color)"></div>
+
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+              <div class="flex-1">
+                <!-- Degree & Field -->
+                <h3 class="text-xl font-bold mb-1" style="color: var(--main-color)">
+                  {{ edu.degree }}
+                  @if (edu.fieldOfStudy) {
+                    <span class="font-normal opacity-80"> in {{ edu.fieldOfStudy }}</span>
+                  }
+                </h3>
+
+                <!-- Institution -->
+                <div class="flex items-center gap-2 text-sm font-semibold mb-2">
+                  <lucide-icon name="building-2" [size]="14" style="color: var(--hover-color)"></lucide-icon>
+                  {{ edu.institution }}
+                </div>
+              </div>
+
+              <!-- Dates Badge -->
+              <div class="text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap"
+                   style="background-color: color-mix(in srgb, var(--hover-color) 15%, transparent); color: var(--hover-color)">
+                {{ edu.startDate | date:'MMM yyyy' }} –
+                @if (edu.endDate) {
+                  {{ edu.endDate | date:'MMM yyyy' }}
+                } @else {
+                  Present
+                }
+              </div>
+            </div>
+
+            @if (edu.grade) {
+              <div class="flex items-center gap-2 mt-2 text-sm">
+                <lucide-icon name="award" [size]="14" style="color: var(--hover-color)"></lucide-icon>
+                <span>Grade: <strong>{{ edu.grade }}</strong></span>
+              </div>
+            }
+
+            <!-- Description -->
+            @if (edu.description) {
+              <p class="text-sm mt-3 leading-relaxed opacity-80">{{ edu.description }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
   </div>
 </section>
