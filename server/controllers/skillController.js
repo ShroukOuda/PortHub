@@ -1,17 +1,46 @@
 const Skill = require('../models/Skill');
+const Portfolio = require('../models/Portfolio');
+
+// Get current user's skills
+const getMySkills = async (req, res) => {
+    try {
+        const userId = req.user._id || req.user.id;
+        const portfolio = await Portfolio.findOne({ userId });
+        
+        if (!portfolio) {
+            return res.status(200).json({ data: [] });
+        }
+
+        const skills = await Skill.find({ portfolioId: portfolio._id });
+        res.status(200).json({ data: skills });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching skills', error: error.message });
+    }
+};
 
 const createSkill = async (req, res) => {
-    const { portfolioId, name, level } = req.body;
+    const { name, level, category, icon } = req.body;
+    let { portfolioId } = req.body;
 
     try {
+        // If no portfolioId provided, get user's portfolio
+        if (!portfolioId && req.user) {
+            const portfolio = await Portfolio.findOne({ userId: req.user._id || req.user.id });
+            if (portfolio) {
+                portfolioId = portfolio._id;
+            }
+        }
+
         const newSkill = new Skill({
             portfolioId,
             name,
             level,
+            category,
+            icon
         });
 
         const savedSkill = await newSkill.save();
-        res.status(201).json(savedSkill);
+        res.status(201).json({ data: savedSkill });
     } catch (error) {
         res.status(500).json({ message: 'Error creating skill', error: error.message });
     }
@@ -29,14 +58,16 @@ const getSkillsByPortfolioId = async (req, res) => {
 }
 const updateSkill = async (req, res) => {
     const { skillId } = req.params;
-    const { name, level } = req.body;
+    const { name, level, category, icon } = req.body;
 
     try {
         const updatedSkill = await Skill.findByIdAndUpdate(skillId, {
             name,
-            level
+            level,
+            category,
+            icon
         }, { new: true });
-        res.status(200).json(updatedSkill);
+        res.status(200).json({ data: updatedSkill });
     } catch (error) {
         res.status(500).json({ message: 'Error updating skill', error: error.message });
     }
@@ -70,5 +101,6 @@ module.exports = {
     getSkillsByPortfolioId,
     createSkill,
     updateSkill,
-    deleteSkill
+    deleteSkill,
+    getMySkills
 }

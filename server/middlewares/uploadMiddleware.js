@@ -17,13 +17,26 @@ const uploadMiddleware = (type) => {
     }
   });
 
+  // Define allowed file types based on upload type
+  const allowedTypes = {
+    profiles: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+    cvs: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+  };
+
   return multer({
     storage,
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
     fileFilter: (req, file, cb) => {
-      // Allow only images and PDFs
-      if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') cb(null, true);
-      else cb(new Error('File type not allowed!'), false);
+      const allowed = allowedTypes[type] || [];
+      
+      // For profiles, also allow any image type
+      if (type === 'profiles' && file.mimetype.startsWith('image/')) {
+        cb(null, true);
+      } else if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error(`File type not allowed for ${type}!`), false);
+      }
     }
   });
 };

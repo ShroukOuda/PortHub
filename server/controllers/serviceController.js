@@ -1,33 +1,62 @@
 const Service = require('../models/Service');
+const Portfolio = require('../models/Portfolio');
+
+// Get current user's services
+const getMyServices = async (req, res) => {
+    try {
+        const userId = req.user._id || req.user.id;
+        const portfolio = await Portfolio.findOne({ userId });
+        
+        if (!portfolio) {
+            return res.status(200).json({ data: [] });
+        }
+
+        const services = await Service.find({ portfolioId: portfolio._id });
+        res.status(200).json({ data: services });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching services', error: error.message });
+    }
+};
 
 const createService = async (req, res) => {
-    const { portfolioId, name, description, icon } = req.body;
+    const { title, description, icon, price } = req.body;
+    let { portfolioId } = req.body;
 
     try {
+        // If no portfolioId provided, get user's portfolio
+        if (!portfolioId && req.user) {
+            const portfolio = await Portfolio.findOne({ userId: req.user._id || req.user.id });
+            if (portfolio) {
+                portfolioId = portfolio._id;
+            }
+        }
+
         const newService = new Service({
             portfolioId,
-            name,
-            description,
-            icon
+            name: title,
+            title: title,
+            description: description || '',
+            icon,
         });
 
         const savedService = await newService.save();
-        res.status(201).json(savedService);
+        res.status(201).json({ data: savedService });
     } catch (error) {
         res.status(500).json({ message: 'Error creating service', error: error.message });
     }
 }
 const updateService = async (req, res) => {
     const { serviceId } = req.params;
-    const { name, description, icon } = req.body;
+    const { name, title, description, icon } = req.body;
 
     try {
         const updatedService = await Service.findByIdAndUpdate(serviceId, {
-            name,
+            name: name || title,
+            title: title || name,
             description,
             icon
         }, { new: true });
-        res.status(200).json(updatedService);
+        res.status(200).json({ data: updatedService });
     } catch (error) {
         res.status(500).json({ message: 'Error updating service', error: error.message });
     }
@@ -71,5 +100,6 @@ module.exports = {
     updateService,
     deleteService,
     getServiceById,
-    getServicesByPortfolioId
+    getServicesByPortfolioId,
+    getMyServices
 };

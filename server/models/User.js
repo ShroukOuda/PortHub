@@ -32,12 +32,32 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
+        required: function() {
+            return !this.googleId && !this.githubId;
+        },
         trim: true
     },
     password: {
         type: String,
-        required: true,
+        required: function() {
+            // Password not required for OAuth users
+            return !this.googleId && !this.githubId;
+        },
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    githubId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    authProvider: {
+        type: String,
+        enum: ['local', 'google', 'github'],
+        default: 'local'
     },
     profilePicture: {
         type: String,
@@ -56,26 +76,36 @@ const UserSchema = new mongoose.Schema({
     },
     dateOfBirth: {
         type: Date,
-        required: true
+        required: function() {
+            return !this.googleId && !this.githubId;
+        }
     },
     country: {
         type: String,
-        required: true,
+        required: function() {
+            return !this.googleId && !this.githubId;
+        },
         trim: true
     },
     city: {
         type: String,
-        required: true,
+        required: function() {
+            return !this.googleId && !this.githubId;
+        },
         trim: true
     },
     address: {
         type: String,
-        required: true,
+        required: function() {
+            return !this.googleId && !this.githubId;
+        },
         trim: true
     },
     jobTitle: {
         type: String,
-        required: true,
+        required: function() {
+            return !this.googleId && !this.githubId;
+        },
         trim: true
     },
 
@@ -83,6 +113,24 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
+    },
+    
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    
+    profileImage: {
+        type: String,
+        default: ''
+    },
+    
+    // Password reset fields
+    resetCode: {
+        type: String
+    },
+    resetCodeExpiry: {
+        type: Date
     }
     
 }, {

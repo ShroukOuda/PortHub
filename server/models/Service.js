@@ -8,17 +8,22 @@ const ServiceSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 50,
+        required: false,
+        maxlength: 100,
+        trim: true
+    },
+    title: {
+        type: String,
+        required: false,
+        maxlength: 100,
         trim: true
     },
     description: {
         type: String,
-        required: true,
-        minlength: 10,
-        maxlength: 500,
-        trim: true
+        required: false,
+        maxlength: 1000,
+        trim: true,
+        default: ''
     },
     icon: {
         type: String,

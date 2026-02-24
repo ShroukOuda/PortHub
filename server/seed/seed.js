@@ -1,5 +1,8 @@
 const { MongoClient } = require('mongodb');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
+
+
 
 const { users} = require('./data/users');
 const { portfolios } = require('./data/portfolios');
@@ -14,6 +17,15 @@ const { experiences } = require('./data/experiences');
 const url = process.env.MONGO_URL;
 
 const dbName = process.env.DB_NAME;
+
+// Hash passwords for users
+const hashUserPasswords = async (usersData) => {
+    const saltRounds = 10;
+    return Promise.all(usersData.map(async (user) => ({
+        ...user,
+        password: await bcrypt.hash(user.password, saltRounds)
+    })));
+};
 
 const seedDatabase = async () => {
     const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -37,8 +49,11 @@ const seedDatabase = async () => {
 
         console.log('Collections cleared');
 
+        // Hash passwords before inserting users
+        const usersWithHashedPasswords = await hashUserPasswords(users);
+
         // Seed new data
-        await db.collection('users').insertMany(users);
+        await db.collection('users').insertMany(usersWithHashedPasswords);
         await db.collection('portfolios').insertMany(portfolios);
         await db.collection('testimonials').insertMany(testimonials);
         await db.collection('services').insertMany(services);

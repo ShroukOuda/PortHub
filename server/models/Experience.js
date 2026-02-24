@@ -7,40 +7,51 @@ const ExperienceSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required: true,
-        minlength: 2,
+        required: false,
         maxlength: 100,
         trim: true
     },
     company: {
         type: String,
-        required: true,
-        minlength: 2,
+        required: false,
         maxlength: 100,
         trim: true
     },
     startDate: {
         type: Date,
-        required: true
+        required: false
     },
     endDate: {
         type: Date,
         required: false
     },
+    current: {
+        type: Boolean,
+        default: false
+    },
     description: {
         type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 500,
-        trim: true
+        required: false,
+        maxlength: 1000,
+        trim: true,
+        default: ''
     },
     position: {
         type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 50,
+        required: false,
+        maxlength: 100,
         trim: true
-    }
+    },
+    location: {
+        type: String,
+        required: false,
+        maxlength: 100,
+        trim: true
+    },
+    technologies: [{
+        type: String,
+        trim: true
+    }]
 }, {
     timestamps: true,
 });

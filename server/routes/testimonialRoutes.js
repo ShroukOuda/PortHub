@@ -5,16 +5,20 @@ const {
     getTestimonialsByPortfolioId,
     getTestimonialById,
     updateTestimonial,
-    deleteTestimonial
+    deleteTestimonial,
+    getMyTestimonials
 } = require('../controllers/testimonialController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
-router.post('/', authMiddleware, roleMiddleware(['user']), createTestimonial);
-router.get('/:portfolioId', getTestimonialsByPortfolioId);
-router.get('/testimonial/:testimonialId', getTestimonialById);
-router.put('/testimonial/:testimonialId', authMiddleware, roleMiddleware(['user']), updateTestimonial);
-router.delete('/testimonial/:testimonialId', authMiddleware, roleMiddleware(['user']), deleteTestimonial);
+// User's own testimonials route
+router.get('/my', authMiddleware, getMyTestimonials);
+
+router.post('/', authMiddleware, roleMiddleware(['user', 'admin']), createTestimonial);
+router.get('/portfolio/:portfolioId', getTestimonialsByPortfolioId);
+router.get('/:testimonialId', getTestimonialById);
+router.put('/:testimonialId', authMiddleware, roleMiddleware(['user', 'admin']), updateTestimonial);
+router.delete('/:testimonialId', authMiddleware, roleMiddleware(['user', 'admin']), deleteTestimonial);
 
 module.exports = router;

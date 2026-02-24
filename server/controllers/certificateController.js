@@ -1,22 +1,56 @@
 const Certificate = require('../models/Certificate');
+const Portfolio = require('../models/Portfolio');
+
+// Get current user's certificates
+const getMyCertificates = async (req, res) => {
+    try {
+        const userId = req.user._id || req.user.id;
+        const portfolio = await Portfolio.findOne({ userId });
+        
+        if (!portfolio) {
+            return res.status(200).json({ data: [] });
+        }
+
+        const certificates = await Certificate.find({ portfolioId: portfolio._id }).sort({ issueDate: -1 });
+        res.status(200).json({ data: certificates });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching certificates', error: error.message });
+    }
+};
 
 const createCertificate = async (req, res) => {
-    const { portfolioId, title, description, technologies, issuer, issueDate, expirationDate, CertificateImage } = req.body;
+    const { title, name, description, technologies, issuer, issueDate, expirationDate, expiryDate, CertificateImage, credentialId, credentialUrl } = req.body;
+    let { portfolioId } = req.body;
 
     try {
+        // If no portfolioId provided, get user's portfolio
+        if (!portfolioId && req.user) {
+            const portfolio = await Portfolio.findOne({ userId: req.user._id || req.user.id });
+            if (portfolio) {
+                portfolioId = portfolio._id;
+            }
+        }
+
+        // Map name to title if title is not provided
+        const certificateTitle = title || name;
+        // Default description if not provided
+        const certificateDescription = description || `${certificateTitle} certification`;
+
         const newCertificate = new Certificate({
             portfolioId,
-            title,
-            description,
+            title: certificateTitle,
+            description: certificateDescription,
             technologies,
             issuer,
-            issueDate,
-            expirationDate,
-            CertificateImage
+            issueDate: issueDate || new Date(),
+            expirationDate: expirationDate || expiryDate || null,
+            CertificateImage,
+            credentialId,
+            credentialUrl
         });
 
         const savedCertificate = await newCertificate.save();
-        res.status(201).json(savedCertificate);
+        res.status(201).json({ data: savedCertificate });
     } catch (error) {
         res.status(500).json({ message: 'Error creating certificate', error: error.message });
     }
@@ -49,19 +83,22 @@ const getCertificateById = async (req, res) => {
 
 const updateCertificate = async (req, res) => {
     const { certificateId } = req.params;
-    const { title, description, technologies, issuer, issueDate, expirationDate, CertificateImage } = req.body;
+    const { title, name, description, technologies, issuer, issueDate, expirationDate, expiryDate, CertificateImage, credentialId, credentialUrl } = req.body;
 
     try {
-        const updatedCertificate = await Certificate.findByIdAndUpdate(certificateId, {
-            title,
-            description,
-            technologies,
-            issuer,
-            issueDate,
-            expirationDate,
-            CertificateImage
-        }, { new: true });
-        res.status(200).json(updatedCertificate);
+        const updateData = {};
+        if (title || name) updateData.title = title || name;
+        if (description) updateData.description = description;
+        if (technologies) updateData.technologies = technologies;
+        if (issuer) updateData.issuer = issuer;
+        if (issueDate) updateData.issueDate = issueDate;
+        if (expirationDate || expiryDate) updateData.expirationDate = expirationDate || expiryDate;
+        if (CertificateImage) updateData.CertificateImage = CertificateImage;
+        if (credentialId) updateData.credentialId = credentialId;
+        if (credentialUrl) updateData.credentialUrl = credentialUrl;
+
+        const updatedCertificate = await Certificate.findByIdAndUpdate(certificateId, updateData, { new: true });
+        res.status(200).json({ data: updatedCertificate });
     } catch (error) {
         res.status(500).json({ message: 'Error updating certificate', error: error.message });
     }
@@ -83,5 +120,6 @@ module.exports = {
     getCertificatesByPortfolioId,
     getCertificateById,
     updateCertificate,
-    deleteCertificate
+    deleteCertificate,
+    getMyCertificates
 };

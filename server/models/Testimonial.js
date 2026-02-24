@@ -14,8 +14,6 @@ const testimonialSchema = new mongoose.Schema({
     author: {
         type: String,
         required: true,
-        minlength: 2,
-        maxlength: 100,
         trim: true
     },
     authorImage: {
@@ -26,9 +24,19 @@ const testimonialSchema = new mongoose.Schema({
     position: {
         type: String,
         required: false,
-        minlength: 2,
-        maxlength: 100,
         trim: true
+    },
+    company: {
+        type: String,
+        required: false,
+        trim: true
+    },
+    rating: {
+        type: Number,
+        required: false,
+        min: 1,
+        max: 5,
+        default: 5
     },
 }, {
     timestamps: true,

@@ -6,16 +6,20 @@ const {
     getCertificatesByPortfolioId,
     getCertificateById,
     updateCertificate,
-    deleteCertificate
+    deleteCertificate,
+    getMyCertificates
 } = require('../controllers/certificateController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
-router.post('/', authMiddleware, roleMiddleware(['user']), createCertificate);
-router.get('/:portfolioId', getCertificatesByPortfolioId);
-router.get('/certificate/:certificateId', getCertificateById);
-router.put('/certificate/:certificateId', authMiddleware, roleMiddleware(['user']), updateCertificate);
-router.delete('/certificate/:certificateId', authMiddleware, roleMiddleware(['user']), deleteCertificate);
+// User's own certificates route
+router.get('/my', authMiddleware, getMyCertificates);
+
+router.post('/', authMiddleware, roleMiddleware(['user', 'admin']), createCertificate);
+router.get('/portfolio/:portfolioId', getCertificatesByPortfolioId);
+router.get('/:certificateId', getCertificateById);
+router.put('/:certificateId', authMiddleware, roleMiddleware(['user', 'admin']), updateCertificate);
+router.delete('/:certificateId', authMiddleware, roleMiddleware(['user', 'admin']), deleteCertificate);
 
 module.exports = router;

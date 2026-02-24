@@ -5,16 +5,20 @@ const {
     getEducationByPortfolioId,
     getEducationById,
     updateEducation,
-    deleteEducation
+    deleteEducation,
+    getMyEducation
 } = require('../controllers/educationController');
 
 const roleMiddleware = require('../middlewares/roleMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
 
-router.post('/', authMiddleware, roleMiddleware(['user']), createEducation);
+// User's own education route
+router.get('/my', authMiddleware, getMyEducation);
+
+router.post('/', authMiddleware, roleMiddleware(['user', 'admin']), createEducation);
 router.get('/portfolio/:portfolioId', getEducationByPortfolioId);
 router.get('/:educationId', getEducationById);
-router.put('/:educationId', authMiddleware, roleMiddleware(['user']), updateEducation);
-router.delete('/:educationId', authMiddleware, roleMiddleware(['user']), deleteEducation);
+router.put('/:educationId', authMiddleware, roleMiddleware(['user', 'admin']), updateEducation);
+router.delete('/:educationId', authMiddleware, roleMiddleware(['user', 'admin']), deleteEducation);
 
 module.exports = router;

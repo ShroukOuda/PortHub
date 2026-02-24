@@ -1,6 +1,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const passport = require('./config/passport');
 const corsOptions = require('./config/corsOptions');
 
 
@@ -15,11 +16,15 @@ const educationRoutes = require('./routes/educationRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const certificateRoutes = require('./routes/certificateRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use('/uploads', express.static('uploads'));
+
+// Initialize Passport
+app.use(passport.initialize());
 
 
 app.use('/api/auth', authRoutes);
@@ -33,5 +38,6 @@ app.use('/api/educations', educationRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/uploads', uploadRoutes);
+app.use('/api/admin', adminRoutes);
 
 module.exports = app;

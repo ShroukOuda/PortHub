@@ -21,6 +21,18 @@ const PortfolioSchema = new mongoose.Schema({
         maxlength: 500, 
         trim: true
     },
+    tagline: {
+        type: String,
+        maxlength: 200,
+        trim: true,
+        default: ''
+    },
+    bio: {
+        type: String,
+        maxlength: 1000,
+        trim: true,
+        default: ''
+    },
 
     AboutImage: {
         type: String,
@@ -49,6 +61,49 @@ const PortfolioSchema = new mongoose.Schema({
             default: ''
         }
     },
+    theme: {
+        primaryColor: {
+            type: String,
+            default: '#91729c'
+        },
+        secondaryColor: {
+            type: String,
+            default: '#432161'
+        },
+        backgroundColor: {
+            type: String,
+            default: '#1a1a2e'
+        },
+        textColor: {
+            type: String,
+            default: '#ffffff'
+        },
+        accentColor: {
+            type: String,
+            default: '#e9c46a'
+        },
+        fontFamily: {
+            type: String,
+            default: 'Inter'
+        }
+    },
+    isPublic: {
+        type: Boolean,
+        default: true
+    },
+    cvUrl: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    views: {
+        type: Number,
+        default: 0
+    },
+    viewHistory: [{
+        date: { type: Date, required: true },
+        count: { type: Number, default: 1 }
+    }]
 }, {
     timestamps: true,
 });

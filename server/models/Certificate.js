@@ -9,15 +9,11 @@ const CertificateSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        minlength: 2,
-        maxlength: 100,
         trim: true
     },
     description: {
         type: String,
-        required: true,
-        minlength: 10,
-        maxlength: 500,
+        required: false,
         trim: true
     },
     technologies: {
@@ -28,13 +24,11 @@ const CertificateSchema = new mongoose.Schema({
     issuer: {
         type: String,
         required: true,
-        minlength: 2,
-        maxlength: 100,
         trim: true
     },
     issueDate: {
         type: Date,
-        required: true,
+        required: false,
         default: Date.now,
     },
     expirationDate: {
@@ -46,6 +40,16 @@ const CertificateSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: 'default-certificate-image.png',
+        trim: true
+    },
+    credentialId: {
+        type: String,
+        required: false,
+        trim: true
+    },
+    credentialUrl: {
+        type: String,
+        required: false,
         trim: true
     },
 }, {

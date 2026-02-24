@@ -14,10 +14,15 @@ const SkillSchema = new mongoose.Schema({
         trim: true
     },
     level: {
+        type: mongoose.Schema.Types.Mixed, // Accept both string and number
+        required: false,
+        default: 50
+    },
+    category: {
         type: String,
-        required: true,
-        enum: ['Beginner', 'Intermediate', 'Advanced'],
-        default: 'Beginner'
+        required: false,
+        trim: true,
+        default: 'Technical'
     },
     icon: {
         type: String,

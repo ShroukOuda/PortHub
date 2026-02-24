@@ -5,15 +5,19 @@ const {
     updateProject,
     deleteProject,
     getProjectById,
-    getAllProjectsByPortfolioId
+    getAllProjectsByPortfolioId,
+    getMyProjects
 } = require('../controllers/projectController');
 
 const roleMiddleware = require('../middlewares/roleMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
 
-router.post('/', authMiddleware, roleMiddleware(['user']), createProject); // Create a new project
-router.put('/:projectId', authMiddleware, roleMiddleware(['user']), updateProject); // Update a project by ID
-router.delete('/:projectId', authMiddleware, roleMiddleware(['user']), deleteProject); // Delete a project by ID
+// User's own projects route (must be before parameterized routes)
+router.get('/my', authMiddleware, getMyProjects);
+
+router.post('/', authMiddleware, roleMiddleware(['user', 'admin']), createProject); // Create a new project
+router.put('/:projectId', authMiddleware, roleMiddleware(['user', 'admin']), updateProject); // Update a project by ID
+router.delete('/:projectId', authMiddleware, roleMiddleware(['user', 'admin']), deleteProject); // Delete a project by ID
 router.get('/:projectId', getProjectById); // Get a project by ID
 router.get('/portfolio/:portfolioId', getAllProjectsByPortfolioId); // Get all projects by portfolio ID
 

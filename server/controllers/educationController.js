@@ -1,8 +1,36 @@
 const Education = require('../models/Education');
+const Portfolio = require('../models/Portfolio');
+
+// Get current user's education
+const getMyEducation = async (req, res) => {
+    try {
+        const userId = req.user._id || req.user.id;
+        const portfolio = await Portfolio.findOne({ userId });
+        
+        if (!portfolio) {
+            return res.status(200).json({ data: [] });
+        }
+
+        const education = await Education.find({ portfolioId: portfolio._id }).sort({ startDate: -1 });
+        res.status(200).json({ data: education });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching education', error: error.message });
+    }
+};
+
 const createEducation = async (req, res) => {
-    const { portfolioId, institution, degree, fieldOfStudy, startDate, endDate, description } = req.body;
+    const { institution, degree, fieldOfStudy, startDate, endDate, description, gpa } = req.body;
+    let { portfolioId } = req.body;
 
     try {
+        // If no portfolioId provided, get user's portfolio
+        if (!portfolioId && req.user) {
+            const portfolio = await Portfolio.findOne({ userId: req.user._id || req.user.id });
+            if (portfolio) {
+                portfolioId = portfolio._id;
+            }
+        }
+
         const newEducation = new Education({
             portfolioId,
             institution,
@@ -10,11 +38,12 @@ const createEducation = async (req, res) => {
             fieldOfStudy,
             startDate,
             endDate,
-            description
+            description,
+            gpa
         });
 
         const savedEducation = await newEducation.save();
-        res.status(201).json(savedEducation);
+        res.status(201).json({ data: savedEducation });
     } catch (error) {
         res.status(500).json({ message: 'Error creating education', error: error.message });
     }
@@ -31,7 +60,7 @@ const getEducationByPortfolioId = async (req, res) => {
 }
 const updateEducation = async (req, res) => {
     const { educationId } = req.params;
-    const { institution, degree, fieldOfStudy, startDate, endDate, description } = req.body;
+    const { institution, degree, fieldOfStudy, startDate, endDate, description, grade, gpa, current } = req.body;
 
     try {
         const updatedEducation = await Education.findByIdAndUpdate(educationId, {
@@ -40,9 +69,12 @@ const updateEducation = async (req, res) => {
             fieldOfStudy,
             startDate,
             endDate,
-            description
+            description,
+            grade,
+            gpa,
+            current
         }, { new: true });
-        res.status(200).json(updatedEducation);
+        res.status(200).json({ data: updatedEducation });
     } catch (error) {
         res.status(500).json({ message: 'Error updating education', error: error.message });
     }
@@ -76,5 +108,6 @@ module.exports = {
     getEducationByPortfolioId,
     updateEducation,
     deleteEducation,
-    getEducationById
+    getEducationById,
+    getMyEducation
 };

@@ -7,45 +7,50 @@ const EducationSchema = new mongoose.Schema({
     },
     institution: {
         type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 100,
+        required: false,
+        maxlength: 200,
         trim: true
     },
     degree: {
         type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 100,
+        required: false,
+        maxlength: 200,
         trim: true
     },
     fieldOfStudy: {
         type: String,
         required: false,
-        minlength: 2,
-        maxlength: 100,
+        maxlength: 200,
         trim: true
     },
     startDate: {
         type: Date,
-        required: true
+        required: false
     },
     endDate: {
         type: Date,
         required: false
     },
+    current: {
+        type: Boolean,
+        default: false
+    },
     description: {
         type: String,
         required: false,
-        minlength: 2,
-        maxlength: 500,
+        maxlength: 1000,
         trim: true
     },
     grade: {
         type: String,
         required: false,
-        minlength: 1,
-        maxlength: 10,
+        maxlength: 50,
+        trim: true
+    },
+    gpa: {
+        type: String,
+        required: false,
+        maxlength: 20,
         trim: true
     }
 }, {
