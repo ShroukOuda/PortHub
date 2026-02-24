@@ -1,36 +1,109 @@
-<footer class="bg-gray-100 pt-12 pb-8 px-10 tracking-wide">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Removed logo block -->
+<footer class="footer">
+  <!-- Wave Divider -->
+  <div class="wave-divider">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1380,80 1440,60 L1440,120 L0,120 Z" fill="currentColor"/>
+    </svg>
+  </div>
 
-      <div class="lg:flex lg:items-center">
-        <ul class="flex space-x-6">
-          <!-- Social icons -->
-          <!-- ... same content unchanged -->
-        </ul>
+  <div class="footer-content">
+    <div class="max-w-7xl mx-auto px-6">
+      <!-- Main Footer Grid -->
+      <div class="footer-grid">
+
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <a [routerLink]="['/']" class="brand-logo">PortHub</a>
+          <p class="brand-description">
+            Build stunning portfolios in minutes. Showcase your skills, projects, and experience 
+            with beautifully crafted templates and powerful customization tools.
+          </p>
+          <!-- Social Links -->
+          <div class="social-links">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+              <lucide-icon name="github" [size]="18"></lucide-icon>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+              <lucide-icon name="twitter" [size]="18"></lucide-icon>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+              <lucide-icon name="linkedin" [size]="18"></lucide-icon>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+              <lucide-icon name="instagram" [size]="18"></lucide-icon>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links-group">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a [routerLink]="['/']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Home
+            </a></li>
+            <li><a [routerLink]="['/about']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> About
+            </a></li>
+            <li><a [routerLink]="['/portfolios']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Portfolios
+            </a></li>
+            <li><a [routerLink]="['/contact']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Contact
+            </a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div class="footer-links-group">
+          <h4 class="footer-heading">Get Started</h4>
+          <ul class="footer-links">
+            <li><a [routerLink]="['/signup']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Create Account
+            </a></li>
+            <li><a [routerLink]="['/login']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Sign In
+            </a></li>
+            <li><a [routerLink]="['/portfolios']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Browse Portfolios
+            </a></li>
+            <li><a [routerLink]="['/dashboard']" class="footer-link">
+              <lucide-icon name="chevron-right" [size]="14"></lucide-icon> Dashboard
+            </a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="footer-links-group">
+          <h4 class="footer-heading">Contact</h4>
+          <ul class="footer-contact">
+            <li>
+              <lucide-icon name="mail" [size]="16" class="contact-icon"></lucide-icon>
+              <a href="mailto:support&#64;porthub.com" class="footer-link">support&#64;porthub.com</a>
+            </li>
+            <li>
+              <lucide-icon name="map-pin" [size]="16" class="contact-icon"></lucide-icon>
+              <span>Cairo, Egypt</span>
+            </li>
+            <li>
+              <lucide-icon name="globe" [size]="16" class="contact-icon"></lucide-icon>
+              <a href="/" class="footer-link">www.porthub.com</a>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div>
-        <h4 class="text-base mb-4 text-gray-800">Useful links</h4>
-        <ul class="space-y-4">
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">Featured</a></li>
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">New Arrivals</a></li>
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">New Arrivals</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-base mb-4 text-gray-800">Information</h4>
-        <ul class="space-y-4">
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">About Us</a></li>
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">Terms &amp; Conditions</a></li>
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">Privacy Policy</a></li>
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">Sale</a></li>
-          <li><a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900 text-sm">Documentation</a></li>
-        </ul>
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <p class="copyright">
+          &copy; {{ currentYear }} <strong>PortHub</strong>. All rights reserved.
+        </p>
+        <div class="footer-bottom-links">
+          <a href="javascript:void(0)">Privacy Policy</a>
+          <span class="separator">•</span>
+          <a href="javascript:void(0)">Terms of Service</a>
+        </div>
       </div>
     </div>
-
-    <p class="text-gray-500 text-sm mt-10">© ReadymadeUI. All rights reserved.</p>
   </div>
 </footer>

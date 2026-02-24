@@ -1,18 +1,40 @@
-.hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.hover-lift:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(147, 114, 156, 0.2);
-}
-.sidebar-image {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
 .gradient-text {
-    background: linear-gradient(135deg, #91729c 0%, #432161 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: linear-gradient(135deg, #91729c 0%, #432161 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.audience-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid rgba(145, 114, 156, 0.1);
+  transition: all 0.3s ease;
+}
+
+.audience-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(67, 33, 97, 0.1);
+  border-color: rgba(145, 114, 156, 0.2);
+}
+
+.audience-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(145, 114, 156, 0.1), rgba(67, 33, 97, 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #432161;
+}
+
+.audience-card:hover .audience-icon {
+  background: linear-gradient(135deg, #91729c, #432161);
+  color: white;
 }

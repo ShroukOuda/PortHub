@@ -1,0 +1,24 @@
+.hero-gradient {
+  background: linear-gradient(135deg, #91729c 0%, #432161 100%);
+}
+
+.pattern-bg {
+  background-image: radial-gradient(circle at 25px 25px, rgba(255,255,255,0.1) 2px, transparent 0),
+                    radial-gradient(circle at 75px 75px, rgba(255,255,255,0.05) 1px, transparent 0);
+  background-size: 100px 100px;
+}
+
+.portfolio-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-4px);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -1,24 +1,60 @@
-<!-- Hero Section After Header -->
-<section class="relative h-screen bg-cover bg-center flex items-center  justify-center text-white bg-[url('/bg2.jpg')]">
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-bg"></div>
+  
+  <!-- Floating shapes -->
+  <div class="hero-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
 
-  <!-- Content -->
-  <div class="relative z-10 text-center">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Welcome to PortHub</h1>
-    <p class="text-lg max-w-2xl mx-auto md:text-2xl mb-6">
-      Discover amazing portfolios from talented creators around the world.
-      Join our community and share your own work with the world.
+  <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+    <div class="hero-badge">
+      <lucide-icon name="sparkles" [size]="14"></lucide-icon>
+      <span>The #1 Portfolio Builder</span>
+    </div>
+    
+    <h1 class="hero-title">
+      Build Your <span class="hero-highlight">Professional</span> Portfolio
+    </h1>
+    
+    <p class="hero-subtitle">
+      Showcase your skills, projects, and experience with a stunning 
+      personalized portfolio. Stand out to clients and employers.
     </p>
 
-    <!-- Buttons -->
-    <div class="flex justify-center gap-5 flex-wrap">
-      <a href="#"
-         class="bg-[#91729c] hover:bg-[#432161] text-white px-6 py-2 rounded-lg text-sm font-medium transition duration-200">
-        Explore Portfolios
-      </a>
-      <a href="#"
-         class="bg-transparent border border-white hover:bg-white hover:text-[#432161] text-white px-6 py-2 rounded-lg text-sm font-medium transition duration-200">
+    <div class="hero-actions">
+      <a (click)="navigateToPortfolio()" class="hero-btn-primary">
+        <lucide-icon name="rocket" [size]="18"></lucide-icon>
         Create Your Portfolio
       </a>
+      <a [routerLink]="['/portfolios']" class="hero-btn-secondary">
+        <lucide-icon name="eye" [size]="18"></lucide-icon>
+        Explore Portfolios
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-number">{{ totalUsers() }}+</span>
+        <span class="hero-stat-label">Registered Users</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-number">{{ totalPortfolios() }}+</span>
+        <span class="hero-stat-label">Public Portfolios</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-number">{{ totalCountries() }}+</span>
+        <span class="hero-stat-label">Countries</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-number">100%</span>
+        <span class="hero-stat-label">Free to Use</span>
+      </div>
     </div>
   </div>
 </section>

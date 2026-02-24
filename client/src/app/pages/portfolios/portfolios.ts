@@ -1,74 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Iuser } from '../../core/models/iuser';
 import { UserService } from '../../core/services/user-service';
-import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faUsers, faUser, faEnvelope, faPhone, faMapMarkerAlt, faBriefcase, faUserSlash } from '@fortawesome/free-solid-svg-icons';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-portfolios',
-  imports: [CommonModule, FontAwesomeModule, RouterLink],
+  imports: [LucideAngularModule, RouterLink],
   templateUrl: './portfolios.html',
   styleUrl: './portfolios.css'
 })
 export class Portfolios implements OnInit {
-  users: Iuser[] = [];
-  isLoading: boolean = true;
+  users = signal<Iuser[]>([]);
+  filteredUsers = signal<Iuser[]>([]);
+  isLoading = signal(true);
+  searchQuery = signal('');
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) { }
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUsers();
   }
 
   loadUsers(): void {
-    this.isLoading = true;
-    this.userService.getUser().subscribe({
+    this.isLoading.set(true);
+    this.userService.getPublicUsers().subscribe({
       next: (users) => {
-        this.users = users;
-        this.isLoading = false;
-        console.log('Users fetched successfully:', users);
+        this.users.set(users);
+        this.filteredUsers.set(users);
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.error('Error fetching users:', error);
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }
 
-  viewPortfolio(identifier: string): void {
-    // Navigate to portfolio page - adjust route as needed
-    this.router.navigate(['/portfolio', identifier]);
+  onSearch(event: Event): void {
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
+    this.searchQuery.set(query);
+    if (!query) {
+      this.filteredUsers.set(this.users());
+    } else {
+      this.filteredUsers.set(
+        this.users().filter(u =>
+          (u.firstName + ' ' + (u.lastName || '')).toLowerCase().includes(query) ||
+          (u.jobTitle || '').toLowerCase().includes(query) ||
+          (u.username || '').toLowerCase().includes(query)
+        )
+      );
+    }
   }
 
-  trackByUserId(index: number, user: Iuser): any {
-    return user._id || user.email || index;
-  }
-
-  onImageError(event: any): void {
-    // Hide broken image and show default icon
-    event.target.style.display = 'none';
+  onImageError(event: Event): void {
+    (event.target as HTMLElement).style.display = 'none';
   }
 
   getInitials(user: Iuser): string {
-    const firstName = user.firstName || '';
-    const lastName = user.lastName || '';
-    return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
-  }
-
-  getIcons() {
-    return {
-      email: faEnvelope,
-      phone: faPhone,
-      location: faMapMarkerAlt,
-      briefcase: faBriefcase,
-      user: faUser,
-      userSlash: faUserSlash,
-      users: faUsers
-    };
+    const first = user.firstName?.charAt(0) || '';
+    const last = user.lastName?.charAt(0) || '';
+    return (first + last).toUpperCase();
   }
 }

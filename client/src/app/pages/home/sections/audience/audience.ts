@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-audience',
-  imports: [],
+  imports: [LucideAngularModule],
   templateUrl: './audience.html',
   styleUrl: './audience.css'
 })

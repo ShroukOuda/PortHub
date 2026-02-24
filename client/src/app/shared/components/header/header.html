@@ -1,72 +1,165 @@
-<header class="fixed top-0 left-0 w-full z-50 bg-white shadow-md py-4 px-6 mb-10">
-  <div class="max-w-7xl mx-auto flex items-center justify-between">
+<header class="header" [class.scrolled]="isScrolled()">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-4">
     <!-- Logo -->
-    <a 
-      [routerLink]="['/']"
-      (click)="scrollToTop()"
-   
-      class="text-3xl font-bold text-[#91729c] hover:text-[#432161] transition-colors duration-200">
-      PortHub
+    <a [routerLink]="['/']" class="header-logo">
+      <lucide-icon name="layers" [size]="24" class="logo-icon"></lucide-icon>
+      <span>PortHub</span>
     </a>
 
     <!-- Navigation Links -->
-    <nav class="hidden md:flex items-center gap-10 font-sans text-xl">
-      <a 
-        [routerLink]="['/']"
-        routerLinkActive="text-[#432161] font-semibold underline decoration-2"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="scrollToTop()"
-        class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
-        Home
-      </a>
-
-      <a 
-        [routerLink]="['/about']"
-        routerLinkActive="text-[#432161] font-semibold underline decoration-2"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="scrollToTop()"
-        class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
-        About
-      </a>
-
-      <a 
-        [routerLink]="['/portfolios']"
-        routerLinkActive="text-[#432161] font-semibold underline decoration-2"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="scrollToTop()"
-        class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
-        Portfolios
-      </a>
-
-      <a 
-        [routerLink]="['/contact']"
-        routerLinkActive="text-[#432161] font-semibold underline decoration-2"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="scrollToTop()"
-        class="block text-[#91729c] hover:text-[#432161] transition-colors duration-200">
-        Contact
-      </a>
+    <nav class="hidden lg:flex items-center gap-1">
+      <a [routerLink]="['/']"
+         routerLinkActive="nav-active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="nav-link">Home</a>
+      <a [routerLink]="['/about']"
+         routerLinkActive="nav-active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="nav-link">About</a>
+      <a [routerLink]="['/portfolios']"
+         routerLinkActive="nav-active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="nav-link">Portfolios</a>
+      <a [routerLink]="['/contact']"
+         routerLinkActive="nav-active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="nav-link">Contact</a>
     </nav>
 
-    <!-- Auth Buttons -->
-    <div class="hidden md:flex gap-4 items-center">
-      <a 
-      [routerLink]="['/login']" 
-      class="text-[#91729c] hover:text-[#432161] transition-colors duration-200 font-medium">Login</a>
-      <a 
-      [routerLink]="['/signup']"
-      class="bg-[#91729c] hover:bg-[#432161] text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
-        Signup
-      </a>
+    <!-- Auth Buttons / User Menu -->
+    <div class="hidden lg:flex gap-3 items-center">
+      @if (isLoggedIn()) {
+        <div class="relative group">
+          <button class="avatar-btn focus:outline-none">
+            @if (currentUser()?.profileImage) {
+              <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName"
+                   class="w-9 h-9 rounded-full object-cover ring-2 ring-[#91729c]/30">
+            } @else {
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#91729c] to-[#432161] flex items-center justify-center text-white text-sm font-semibold">
+                {{ currentUser()?.firstName?.charAt(0) || 'U' }}
+              </div>
+            }
+            <lucide-icon name="chevron-down" [size]="14" class="text-gray-400 ml-1"></lucide-icon>
+          </button>
+
+          <div class="dropdown-menu">
+            <div class="px-4 py-3 border-b border-gray-100">
+              <div class="flex items-center gap-3">
+                @if (currentUser()?.profileImage) {
+                  <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName"
+                       class="w-10 h-10 rounded-full object-cover ring-2 ring-[#91729c]/20">
+                } @else {
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#91729c] to-[#432161] flex items-center justify-center text-white font-semibold">
+                    {{ currentUser()?.firstName?.charAt(0) || 'U' }}
+                  </div>
+                }
+                <div>
+                  <div class="font-semibold text-sm text-gray-900">{{ currentUser()?.firstName }}</div>
+                  <div class="text-xs text-gray-500">&#64;{{ currentUser()?.username || 'username' }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="py-1">
+              @if (isAdmin) {
+                <a [routerLink]="['/admin']" class="dropdown-item">
+                  <lucide-icon name="shield" [size]="16"></lucide-icon>
+                  <span>Admin</span>
+                </a>
+              }
+              <a [routerLink]="['/dashboard']" class="dropdown-item">
+                <lucide-icon name="layout-dashboard" [size]="16"></lucide-icon>
+                <span>Dashboard</span>
+              </a>
+              <a [routerLink]="['/portfolio-view', currentUser()?.id || currentUser()?._id]"
+                 target="_blank" rel="noopener noreferrer" class="dropdown-item">
+                <lucide-icon name="briefcase" [size]="16"></lucide-icon>
+                <span>My Portfolio</span>
+                <lucide-icon name="external-link" [size]="12" class="ml-auto text-gray-400"></lucide-icon>
+              </a>
+              <a [routerLink]="['/dashboard/profile']" class="dropdown-item">
+                <lucide-icon name="user" [size]="16"></lucide-icon>
+                <span>My Profile</span>
+              </a>
+            </div>
+
+            <div class="border-t border-gray-100">
+              <button (click)="logout()" class="dropdown-item text-red-600 w-full">
+                <lucide-icon name="log-out" [size]="16"></lucide-icon>
+                <span>Sign out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <a [routerLink]="['/login']"
+           class="text-[#432161] hover:text-[#91729c] transition-colors duration-200 font-medium text-sm">
+          Login
+        </a>
+        <a [routerLink]="['/signup']"
+           class="bg-gradient-to-r from-[#91729c] to-[#432161] hover:from-[#432161] hover:to-[#91729c] text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
+          Get Started
+        </a>
+      }
     </div>
 
     <!-- Mobile Menu Button -->
-    <button class="md:hidden text-[#91729c] focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-           stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
+    <button class="lg:hidden text-[#432161] focus:outline-none p-2" (click)="toggleMobileMenu()">
+      @if (mobileMenuOpen()) {
+        <lucide-icon name="x" [size]="24"></lucide-icon>
+      } @else {
+        <lucide-icon name="menu" [size]="24"></lucide-icon>
+      }
     </button>
   </div>
+
+  <!-- Mobile Menu -->
+  @if (mobileMenuOpen()) {
+    <div class="lg:hidden mobile-menu">
+      <nav class="flex flex-col gap-1 px-4 py-4">
+        <a [routerLink]="['/']" routerLinkActive="mobile-nav-active" [routerLinkActiveOptions]="{exact: true}"
+           (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <lucide-icon name="house" [size]="18"></lucide-icon> Home
+        </a>
+        <a [routerLink]="['/about']" routerLinkActive="mobile-nav-active"
+           (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <lucide-icon name="info" [size]="18"></lucide-icon> About
+        </a>
+        <a [routerLink]="['/portfolios']" routerLinkActive="mobile-nav-active"
+           (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <lucide-icon name="briefcase" [size]="18"></lucide-icon> Portfolios
+        </a>
+        <a [routerLink]="['/contact']" routerLinkActive="mobile-nav-active"
+           (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <lucide-icon name="mail" [size]="18"></lucide-icon> Contact
+        </a>
+
+        @if (isLoggedIn()) {
+          <div class="border-t border-gray-100 my-2"></div>
+          <a [routerLink]="['/dashboard']" routerLinkActive="mobile-nav-active"
+             (click)="toggleMobileMenu()" class="mobile-nav-link">
+            <lucide-icon name="layout-dashboard" [size]="18"></lucide-icon> Dashboard
+          </a>
+          @if (isAdmin) {
+            <a [routerLink]="['/admin']" routerLinkActive="mobile-nav-active"
+               (click)="toggleMobileMenu()" class="mobile-nav-link">
+              <lucide-icon name="shield" [size]="18"></lucide-icon> Admin Panel
+            </a>
+          }
+          <button (click)="logout()" class="mobile-nav-link text-red-600 text-left">
+            <lucide-icon name="log-out" [size]="18"></lucide-icon> Logout
+          </button>
+        } @else {
+          <div class="border-t border-gray-100 my-2"></div>
+          <a [routerLink]="['/login']" (click)="toggleMobileMenu()" class="mobile-nav-link">
+            <lucide-icon name="log-in" [size]="18"></lucide-icon> Login
+          </a>
+          <a [routerLink]="['/signup']" (click)="toggleMobileMenu()"
+             class="mt-2 bg-gradient-to-r from-[#91729c] to-[#432161] text-white px-5 py-3 rounded-xl text-center font-semibold text-sm">
+            Get Started Free
+          </a>
+        }
+      </nav>
+    </div>
+  }
 </header>

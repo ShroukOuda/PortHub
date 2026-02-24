@@ -1,55 +1,63 @@
-<section class="py-20 px-6 md:px-12 relative overflow-hidden">
-   <!-- What You Can Create Section -->
-    <div class="mb-20">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-            <!-- Sidebar Image -->
-            <div class="lg:w-1/2 w-full">
-                <div class="sidebar-image h-80 rounded-2xl shadow-xl hover-lift bg-[url('/port_create.jpg')] bg-cover bg-center">
-
-                </div>
-            </div>
-            
-            <!-- Content -->
-            <div class="lg:w-2/3 w-full">
-                <h3 class="text-4xl font-bold gradient-text mb-8">What You Can Create</h3>
-                <div class="space-y-6">
-                    <div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-lg hover-lift">
-                        <div class="w-3 h-3 gradient-bg rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <span class="font-bold text-lg" style="color: #432161;">Comprehensive Portfolios:</span>
-                            <span class="text-gray-700 ml-2">Highlight your unique value and journey with stunning layouts.</span>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-lg hover-lift">
-                        <div class="w-3 h-3 gradient-bg rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <span class="font-bold text-lg" style="color: #432161;">Service Showcases:</span>
-                            <span class="text-gray-700 ml-2">Add detailed offerings, pricing, and booking options.</span>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-lg hover-lift">
-                        <div class="w-3 h-3 gradient-bg rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <span class="font-bold text-lg" style="color: #432161;">Project Galleries:</span>
-                            <span class="text-gray-700 ml-2">Show rich media, case studies, and project breakdowns.</span>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-lg hover-lift">
-                        <div class="w-3 h-3 gradient-bg rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <span class="font-bold text-lg" style="color: #432161;">Experience Timeline:</span>
-                            <span class="text-gray-700 ml-2">Highlight roles, achievements, and career milestones.</span>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-lg hover-lift">
-                        <div class="w-3 h-3 gradient-bg rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <span class="font-bold text-lg" style="color: #432161;">Skills Matrix:</span>
-                            <span class="text-gray-700 ml-2">Showcase skills with levels, certifications, and endorsements.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <span class="text-[#91729c] font-semibold text-sm uppercase tracking-wider">Features</span>
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-3 mb-4">
+        What You Can <span class="gradient-text">Build</span>
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Everything you need to create a comprehensive professional portfolio
+      </p>
     </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <lucide-icon name="folder-open" [size]="24"></lucide-icon>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Project Showcase</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Add projects with descriptions, tech stacks, images, and live demo links.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <lucide-icon name="code" [size]="24"></lucide-icon>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Skills & Expertise</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">List your technical and soft skills with proficiency levels and categories.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <lucide-icon name="concierge-bell" [size]="24"></lucide-icon>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Services Offered</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Highlight the services you provide so potential clients know what you offer.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <lucide-icon name="briefcase" [size]="24"></lucide-icon>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Experience & Education</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Display work history, degrees, and certifications in a clean timeline.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <lucide-icon name="message-circle" [size]="24"></lucide-icon>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Testimonials</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Share feedback and reviews from clients, colleagues, or mentors.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <lucide-icon name="award" [size]="24"></lucide-icon>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Certificates</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Showcase your professional certifications and achievements.</p>
+      </div>
+    </div>
+  </div>
 </section>
