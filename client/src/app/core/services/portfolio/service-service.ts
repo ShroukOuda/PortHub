@@ -8,7 +8,7 @@ import { Iservice } from '../../models/iservice';
   providedIn: 'root'
 })
 export class ServiceService {
-  private apiUrl = `${environment.apiUrl}/services`;
+  private apiUrl = `${environment.apiUrl}/api/services`;
 
   constructor(private http: HttpClient) {}
 

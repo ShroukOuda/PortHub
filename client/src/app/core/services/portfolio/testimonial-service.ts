@@ -8,7 +8,7 @@ import { Itestimonial } from '../../models/itestimonial';
   providedIn: 'root'
 })
 export class TestimonialService {
-  private apiUrl = `${environment.apiUrl}/testimonials`;
+  private apiUrl = `${environment.apiUrl}/api/testimonials`;
 
   constructor(private http: HttpClient) {}
 
@@ -18,6 +18,10 @@ export class TestimonialService {
 
   getTestimonialByPortfolioId(portfolioId: string): Observable<Itestimonial[]> {
     return this.http.get<Itestimonial[]>(`${this.apiUrl}/portfolio/${portfolioId}`);
+  }
+
+  getTestimonialById(testimonialId: string): Observable<Itestimonial> {
+    return this.http.get<Itestimonial>(`${this.apiUrl}/${testimonialId}`);
   }
 
   addTestimonial(testimonial: Itestimonial): Observable<Itestimonial> {

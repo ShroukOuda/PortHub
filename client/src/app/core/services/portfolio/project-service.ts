@@ -8,7 +8,7 @@ import { Iproject } from '../../models/iproject';
   providedIn: 'root'
 })
 export class ProjectService {
-  private apiUrl = `${environment.apiUrl}/projects`;
+  private apiUrl = `${environment.apiUrl}/api/projects`;
 
   constructor(private http: HttpClient) {}
 

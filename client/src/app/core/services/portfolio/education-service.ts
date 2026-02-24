@@ -9,7 +9,7 @@ import { Ieducation } from '../../models/ieducation';
   providedIn: 'root'
 })
 export class EducationService {
-  private apiUrl = `${environment.apiUrl}/educations`;
+  private apiUrl = `${environment.apiUrl}/api/educations`;
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,7 @@ export class EducationService {
   }
 
   getEducationsByPortfolioId(portfolioId: string): Observable<Ieducation[]> {
-    return this.http.get<Ieducation[]>(`${this.apiUrl}/${portfolioId}`);
+    return this.http.get<Ieducation[]>(`${this.apiUrl}/portfolio/${portfolioId}`);
   }
 
   addEducation(education: Ieducation): Observable<Ieducation> {

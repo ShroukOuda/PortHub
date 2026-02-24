@@ -8,7 +8,7 @@ import { Iexperience } from '../../models/iexperience';
   providedIn: 'root'
 })
 export class ExperienceService {
-  private apiUrl = `${environment.apiUrl}/experiences`;
+  private apiUrl = `${environment.apiUrl}/api/experiences`;
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class ExperienceService {
   }
 
   getExperiencesByPortfolioId(portfolioId: string): Observable<Iexperience[]> {
-    return this.http.get<Iexperience[]>(`${this.apiUrl}/${portfolioId}`);
+    return this.http.get<Iexperience[]>(`${this.apiUrl}/portfolio/${portfolioId}`);
   }
 
   addExperience(experience: Iexperience): Observable<Iexperience> {

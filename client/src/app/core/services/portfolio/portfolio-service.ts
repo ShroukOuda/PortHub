@@ -8,7 +8,7 @@ import { Iportfolio } from '../../models/iportfolio';
   providedIn: 'root'
 })
 export class PortfolioService {
-  private apiUrl = `${environment.apiUrl}/portfolios`;
+  private apiUrl = `${environment.apiUrl}/api/portfolios`;
 
   constructor(private http: HttpClient) {}
 
@@ -34,6 +34,10 @@ export class PortfolioService {
 
   deletePortfolio(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  trackView(portfolioId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${portfolioId}/view`, {});
   }
 
 }

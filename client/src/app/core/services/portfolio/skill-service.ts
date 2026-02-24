@@ -8,7 +8,7 @@ import { Iskill } from '../../models/iskill';
   providedIn: 'root'
 })
 export class SkillService {
-  private apiUrl = `${environment.apiUrl}/skills`;
+  private apiUrl = `${environment.apiUrl}/api/skills`;
 
   constructor(private http: HttpClient) {}
 

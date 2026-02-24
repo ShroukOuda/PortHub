@@ -8,7 +8,7 @@ import { Icertificate } from '../../models/icertificate';
   providedIn: 'root'
 })
 export class CertificateService {
-  private apiUrl = `${environment.apiUrl}/certificates`;
+  private apiUrl = `${environment.apiUrl}/api/certificates`;
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +17,11 @@ export class CertificateService {
   }
 
   getCertificatesByPortfolioId(portfolioId: string): Observable<Icertificate[]> {
-    return this.http.get<Icertificate[]>(`${this.apiUrl}/${portfolioId}`);
+    return this.http.get<Icertificate[]>(`${this.apiUrl}/portfolio/${portfolioId}`);
+  }
+
+  getCertificateById(certificateId: string): Observable<Icertificate> {
+    return this.http.get<Icertificate>(`${this.apiUrl}/${certificateId}`);
   }
 
   addCertificate(certificate: Icertificate): Observable<Icertificate> {
