@@ -1,0 +1,88 @@
+/* Service-specific card styles */
+.service-card {
+  text-align: center;
+  padding: 1.75rem 1.5rem;
+}
+
+.service-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #91729c, #432161);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover .service-icon {
+  transform: scale(1.08);
+  box-shadow: 0 4px 20px rgba(145, 114, 156, 0.4);
+}
+
+.service-card h3 {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.service-description {
+  color: #a0a0b0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Override base item-actions for centered card layout */
+.service-card .item-actions {
+  padding: 1rem 0 0;
+  margin: 0;
+  border-top: 1px solid rgba(145, 114, 156, 0.1);
+  justify-content: center;
+}
+
+/* Icon Preview in Modal */
+.icon-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.preview-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #91729c, #432161);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.help-text {
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+  display: block;
+}
+
+/* Responsive service grid */
+@media (max-width: 768px) {
+  .service-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .service-icon {
+    width: 60px;
+    height: 60px;
+  }
+}

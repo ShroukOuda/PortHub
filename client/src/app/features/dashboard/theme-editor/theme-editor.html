@@ -1,0 +1,234 @@
+<div class="theme-editor-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1><lucide-icon name="paintbrush" [size]="18"></lucide-icon> Theme & Colors</h1>
+      <p>Customize the look and feel of your portfolio</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="resetToDefault()">
+        <lucide-icon name="undo-2" [size]="16"></lucide-icon>
+        Reset
+      </button>
+      <button class="btn btn-primary" (click)="saveTheme()" [disabled]="saving() || !hasPortfolio()">
+        @if (saving()) {
+          <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon>
+          Saving...
+        } @else {
+          <lucide-icon name="save" [size]="16"></lucide-icon>
+          Save Theme
+        }
+      </button>
+    </div>
+  </header>
+
+  @if (message()) {
+    <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+      @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> } @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+      {{ message()?.text }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading theme settings...</p>
+    </div>
+  } @else {
+    @if (!hasPortfolio()) {
+      <div class="no-portfolio-warning">
+        <lucide-icon name="triangle-alert" [size]="18"></lucide-icon>
+        <h3>No Portfolio Found</h3>
+        <p>Please create your portfolio first before customizing the theme.</p>
+        <a routerLink="/dashboard/portfolio" class="btn btn-primary">
+          <lucide-icon name="plus" [size]="16"></lucide-icon>
+          Create Portfolio
+        </a>
+      </div>
+    }
+
+    <div class="editor-content" [class.disabled]="!hasPortfolio()">
+      <!-- Theme Presets -->
+      <section class="presets-section">
+        <h2 class="section-title">Theme Presets</h2>
+        <p class="section-desc">Choose a preset to get started quickly</p>
+        <div class="presets-grid">
+          @for (preset of themePresets; track preset.name) {
+            <button 
+              class="preset-card" 
+              [class.selected]="selectedPreset() === preset.name"
+              (click)="selectPreset(preset)"
+              [style.--primary]="preset.primaryColor"
+              [style.--secondary]="preset.secondaryColor"
+              [style.--accent]="preset.accentColor"
+              [style.--bg]="preset.backgroundColor">
+              <div class="preset-preview">
+                <div class="preview-header"></div>
+                <div class="preview-content">
+                  <div class="preview-card"></div>
+                  <div class="preview-card"></div>
+                </div>
+              </div>
+              <span class="preset-name">{{ preset.name }}</span>
+            </button>
+          }
+        </div>
+      </section>
+
+      <!-- Color Customization -->
+      <section class="colors-section">
+        <h2 class="section-title">Custom Colors</h2>
+        <p class="section-desc">Fine-tune each color to match your brand</p>
+        <div class="colors-grid">
+          <div class="color-item">
+            <label>Primary Color</label>
+            <div class="color-input">
+              <input 
+                type="color" 
+                [value]="currentTheme().primaryColor"
+                (input)="updateColor('primaryColor', $any($event.target).value)">
+              <input 
+                type="text" 
+                [value]="currentTheme().primaryColor"
+                (change)="updateColor('primaryColor', $any($event.target).value)">
+            </div>
+          </div>
+
+          <div class="color-item">
+            <label>Secondary Color</label>
+            <div class="color-input">
+              <input 
+                type="color" 
+                [value]="currentTheme().secondaryColor"
+                (input)="updateColor('secondaryColor', $any($event.target).value)">
+              <input 
+                type="text" 
+                [value]="currentTheme().secondaryColor"
+                (change)="updateColor('secondaryColor', $any($event.target).value)">
+            </div>
+          </div>
+
+          <div class="color-item">
+            <label>Accent Color</label>
+            <div class="color-input">
+              <input 
+                type="color" 
+                [value]="currentTheme().accentColor"
+                (input)="updateColor('accentColor', $any($event.target).value)">
+              <input 
+                type="text" 
+                [value]="currentTheme().accentColor"
+                (change)="updateColor('accentColor', $any($event.target).value)">
+            </div>
+          </div>
+
+          <div class="color-item">
+            <label>Background Color</label>
+            <div class="color-input">
+              <input 
+                type="color" 
+                [value]="currentTheme().backgroundColor"
+                (input)="updateColor('backgroundColor', $any($event.target).value)">
+              <input 
+                type="text" 
+                [value]="currentTheme().backgroundColor"
+                (change)="updateColor('backgroundColor', $any($event.target).value)">
+            </div>
+          </div>
+
+          <div class="color-item">
+            <label>Text Color</label>
+            <div class="color-input">
+              <input 
+                type="color" 
+                [value]="currentTheme().textColor"
+                (input)="updateColor('textColor', $any($event.target).value)">
+              <input 
+                type="text" 
+                [value]="currentTheme().textColor"
+                (change)="updateColor('textColor', $any($event.target).value)">
+            </div>
+          </div>
+
+          <div class="color-item">
+            <label>Card Background</label>
+            <div class="color-input">
+              <input 
+                type="color" 
+                [value]="currentTheme().cardBackground"
+                (input)="updateColor('cardBackground', $any($event.target).value)">
+              <input 
+                type="text" 
+                [value]="currentTheme().cardBackground"
+                (change)="updateColor('cardBackground', $any($event.target).value)">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Font Selection -->
+      <section class="font-section">
+        <h2 class="section-title">Typography</h2>
+        <p class="section-desc">Select a font family for your portfolio</p>
+        <div class="font-options">
+          @for (font of fontOptions; track font.value) {
+            <button 
+              class="font-option" 
+              [class.selected]="currentTheme().fontFamily === font.value"
+              (click)="updateFont(font.value)"
+              [style.font-family]="font.value">
+              <span class="font-preview">Aa</span>
+              <span class="font-name">{{ font.label }}</span>
+            </button>
+          }
+        </div>
+      </section>
+
+      <!-- Live Preview -->
+      <section class="preview-section">
+        <h2 class="section-title">Live Preview</h2>
+        <p class="section-desc">See how your portfolio will look</p>
+        <div 
+          class="live-preview"
+          [style.--primary]="currentTheme().primaryColor"
+          [style.--secondary]="currentTheme().secondaryColor"
+          [style.--accent]="currentTheme().accentColor"
+          [style.--bg]="currentTheme().backgroundColor"
+          [style.--text]="currentTheme().textColor"
+          [style.--card-bg]="currentTheme().cardBackground"
+          [style.font-family]="currentTheme().fontFamily">
+          <div class="preview-nav">
+            <div class="preview-logo">Portfolio</div>
+            <div class="preview-links">
+              <span>Home</span>
+              <span>About</span>
+              <span>Projects</span>
+              <span>Contact</span>
+            </div>
+          </div>
+          <div class="preview-hero">
+            <h2>Hello, I'm <span class="highlight">John Doe</span></h2>
+            <p>A passionate developer creating amazing experiences</p>
+            <button class="preview-btn">View My Work</button>
+          </div>
+          <div class="preview-cards">
+            <div class="preview-card-item">
+              <div class="card-icon"><lucide-icon name="code" [size]="18"></lucide-icon></div>
+              <h3>Web Development</h3>
+              <p>Building modern web applications</p>
+            </div>
+            <div class="preview-card-item">
+              <div class="card-icon"><lucide-icon name="smartphone" [size]="18"></lucide-icon></div>
+              <h3>Mobile Apps</h3>
+              <p>Cross-platform solutions</p>
+            </div>
+            <div class="preview-card-item">
+              <div class="card-icon"><lucide-icon name="palette" [size]="24"></lucide-icon></div>
+              <h3>UI/UX Design</h3>
+              <p>Beautiful user interfaces</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  }
+</div>

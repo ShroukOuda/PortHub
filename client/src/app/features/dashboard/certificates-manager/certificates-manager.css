@@ -1,0 +1,99 @@
+.certificate-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.cert-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e9c46a, #f4a261);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a2e;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover .cert-icon {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(233, 196, 106, 0.3);
+}
+
+.cert-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cert-content h3 {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.issuer,
+.date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a0a0b0;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.issuer lucide-icon,
+.date lucide-icon {
+  color: #91729c;
+  flex-shrink: 0;
+}
+
+.credential-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #91729c;
+  font-size: 0.85rem;
+  margin-top: 0.6rem;
+  text-decoration: none;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(145, 114, 156, 0.1);
+  transition: all 0.3s ease;
+}
+
+.credential-link:hover {
+  background: rgba(145, 114, 156, 0.2);
+  color: #fff;
+}
+
+.certificate-card .item-actions {
+  padding: 0;
+  border-top: none;
+  margin-top: 0;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .certificate-card {
+    flex-direction: column;
+  }
+
+  .certificate-card .item-actions {
+    flex-direction: row;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,149 @@
+/* Lucide icon color override (base CSS uses 'i' selector) */
+.header-content h1 lucide-icon {
+  color: #91729c;
+}
+
+.empty-state lucide-icon {
+  color: #91729c;
+  margin-bottom: 1rem;
+}
+
+/* Testimonials Grid */
+.testimonials-grid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* Testimonial Card */
+.testimonial-card {
+  padding: 2rem;
+  padding-top: 2.5rem;
+}
+
+.quote-icon {
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+  color: rgba(145, 114, 156, 0.3);
+}
+
+.testimonial-content {
+  color: #c0c0d0;
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Star Rating */
+.rating {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.rating lucide-icon {
+  color: #3a3a4c;
+}
+
+.rating lucide-icon.filled {
+  color: #f4a261;
+}
+
+/* Client Info */
+.client-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.client-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.client-avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #91729c, #6c567b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.client-details h4 {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.client-details p {
+  color: #a0a0b0;
+  font-size: 0.85rem;
+}
+
+/* Card Actions */
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(145, 114, 156, 0.1);
+}
+
+.btn-sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+
+.btn-danger {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.btn-danger:hover {
+  background: rgba(231, 76, 60, 0.2);
+}
+
+/* Rating Input in Modal */
+.rating-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  color: #3a3a4c;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.star-btn:hover,
+.star-btn.active {
+  color: #f4a261;
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+}

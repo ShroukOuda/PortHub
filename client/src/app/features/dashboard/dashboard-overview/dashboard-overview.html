@@ -1,0 +1,245 @@
+<div class="overview-container">
+  <header class="overview-header">
+    <div class="welcome-section">
+      <h1>Welcome back, {{ (currentUser | async)?.firstName }}! 👋</h1>
+      <p>Here's what's happening with your portfolio</p>
+    </div>
+    <div class="header-actions">
+      @if (hasPortfolio()) {
+        <a [routerLink]="['/portfolio-view', (currentUser | async)?._id || (currentUser | async)?.id]" target="_blank" class="btn btn-preview">
+          <lucide-icon name="eye" [size]="18"></lucide-icon>
+          Preview Portfolio
+        </a>
+      } @else {
+        <a routerLink="/dashboard/portfolio" class="btn btn-primary">
+          <lucide-icon name="plus" [size]="16"></lucide-icon>
+          Create Portfolio
+        </a>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your dashboard...</p>
+    </div>
+  } @else {
+    <!-- Stats Grid -->
+    <section class="stats-section">
+      <h2 class="section-title">Portfolio Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon projects">
+            <lucide-icon name="code" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().projects }}</span>
+            <span class="stat-label">Projects</span>
+          </div>
+          <a routerLink="/dashboard/projects" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon skills">
+            <lucide-icon name="wrench" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().skills }}</span>
+            <span class="stat-label">Skills</span>
+          </div>
+          <a routerLink="/dashboard/skills" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon services">
+            <lucide-icon name="briefcase" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().services }}</span>
+            <span class="stat-label">Services</span>
+          </div>
+          <a routerLink="/dashboard/services" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon education">
+            <lucide-icon name="graduation-cap" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().education }}</span>
+            <span class="stat-label">Education</span>
+          </div>
+          <a routerLink="/dashboard/education" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon experience">
+            <lucide-icon name="building-2" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().experience }}</span>
+            <span class="stat-label">Experience</span>
+          </div>
+          <a routerLink="/dashboard/experience" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon certificates">
+            <lucide-icon name="award" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().certificates }}</span>
+            <span class="stat-label">Certificates</span>
+          </div>
+          <a routerLink="/dashboard/certificates" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon testimonials">
+            <lucide-icon name="quote" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().testimonials }}</span>
+            <span class="stat-label">Testimonials</span>
+          </div>
+          <a routerLink="/dashboard/testimonials" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts Section -->
+    @if (hasPortfolio()) {
+      <section class="charts-section">
+        <div class="charts-grid">
+          <!-- Views Trend Chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title-group">
+                <h3>
+                  <lucide-icon name="trending-up" [size]="18"></lucide-icon>
+                  Portfolio Views
+                </h3>
+                <span class="chart-subtitle">Last 30 days</span>
+              </div>
+              <div class="total-views-badge">
+                <lucide-icon name="eye" [size]="14"></lucide-icon>
+                <span>{{ portfolioViews() }}</span>
+              </div>
+            </div>
+            <div class="chart-body">
+              <canvas baseChart
+                [type]="'line'"
+                [data]="viewsChartData"
+                [options]="viewsChartOptions">
+              </canvas>
+            </div>
+          </div>
+
+          <!-- Content Distribution Chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title-group">
+                <h3>
+                  <lucide-icon name="pie-chart" [size]="18"></lucide-icon>
+                  Content Distribution
+                </h3>
+                <span class="chart-subtitle">Your portfolio breakdown</span>
+              </div>
+            </div>
+            <div class="chart-body doughnut">
+              <canvas baseChart
+                [type]="'doughnut'"
+                [data]="contentChartData"
+                [options]="contentChartOptions">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- Quick Actions -->
+    <section class="quick-actions-section">
+      <h2 class="section-title">Quick Actions</h2>
+      <div class="actions-grid">
+        @for (action of quickActions; track action.label) {
+          @if (action.external) {
+            <a [routerLink]="['/portfolio-view', (currentUser | async)?._id || (currentUser | async)?.id]" target="_blank" class="action-card" [style.--accent-color]="action.color">
+              <div class="action-icon">
+                <lucide-icon [name]="action.icon" [size]="24"></lucide-icon>
+              </div>
+              <span class="action-label">{{ action.label }}</span>
+            </a>
+          } @else {
+            <a [routerLink]="action.route" class="action-card" [style.--accent-color]="action.color">
+              <div class="action-icon">
+                <lucide-icon [name]="action.icon" [size]="24"></lucide-icon>
+              </div>
+              <span class="action-label">{{ action.label }}</span>
+            </a>
+          }
+        }
+      </div>
+    </section>
+
+    <!-- Getting Started -->
+    @if (!hasPortfolio()) {
+      <section class="getting-started">
+        <div class="getting-started-content">
+          <div class="icon">
+            <lucide-icon name="rocket" [size]="24"></lucide-icon>
+          </div>
+          <h2>Get Started with Your Portfolio</h2>
+          <p>Create your portfolio to showcase your work, skills, and experience to the world.</p>
+          <a routerLink="/dashboard/portfolio" class="btn btn-primary btn-lg">
+            <lucide-icon name="plus" [size]="16"></lucide-icon>
+            Create Your Portfolio
+          </a>
+        </div>
+      </section>
+    }
+
+    <!-- Tips Section -->
+    <section class="tips-section">
+      <h2 class="section-title">Tips to Improve Your Portfolio</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">
+            <lucide-icon name="lightbulb" [size]="24"></lucide-icon>
+          </div>
+          <h3>Add More Projects</h3>
+          <p>Showcase your best work with detailed project descriptions and live demos.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">
+            <lucide-icon name="palette" [size]="24"></lucide-icon>
+          </div>
+          <h3>Customize Your Theme</h3>
+          <p>Make your portfolio stand out with custom colors and styling.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">
+            <lucide-icon name="star" [size]="18"></lucide-icon>
+          </div>
+          <h3>Add Testimonials</h3>
+          <p>Build credibility with testimonials from clients and colleagues.</p>
+        </div>
+      </div>
+    </section>
+  }
+</div>

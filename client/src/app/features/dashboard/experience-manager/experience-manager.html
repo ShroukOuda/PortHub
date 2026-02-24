@@ -1,0 +1,106 @@
+<div class="manager-container">
+      <header class="page-header">
+        <div class="header-content">
+          <h1><lucide-icon name="building-2" [size]="18"></lucide-icon> Experience</h1>
+          <p>Manage your work experience</p>
+        </div>
+        <button class="btn btn-primary" (click)="openAddModal()">
+          <lucide-icon name="plus" [size]="16"></lucide-icon> Add Experience
+        </button>
+      </header>
+
+      @if (message()) {
+        <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+          @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> } @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+          {{ message()?.text }}
+        </div>
+      }
+
+      @if (loading()) {
+        <div class="loading-state"><div class="spinner"></div><p>Loading...</p></div>
+      } @else if (items().length === 0) {
+        <div class="empty-state">
+          <lucide-icon name="briefcase" [size]="18"></lucide-icon>
+          <h3>No Experience Yet</h3>
+          <p>Add your work experience.</p>
+          <button class="btn btn-primary" (click)="openAddModal()"><lucide-icon name="plus" [size]="16"></lucide-icon> Add Experience</button>
+        </div>
+      } @else {
+        <div class="timeline">
+          @for (item of items(); track item._id) {
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <h3>{{ item.title }}</h3>
+                  <span class="timeline-date">{{ item.startDate | date:'MMM yyyy' }} - {{ item.current ? 'Present' : (item.endDate | date:'MMM yyyy') }}</span>
+                </div>
+                <p class="company"><lucide-icon name="building-2" [size]="18"></lucide-icon> {{ item.company }}</p>
+                @if (item.location) {
+                  <p class="location"><lucide-icon name="map-pin" [size]="14"></lucide-icon> {{ item.location }}</p>
+                }
+                @if (item.description) {
+                  <p class="description">{{ item.description }}</p>
+                }
+                <div class="item-actions">
+                  <button class="action-btn edit" (click)="openEditModal(item)"><lucide-icon name="pencil" [size]="16"></lucide-icon></button>
+                  <button class="action-btn delete" (click)="delete(item)"><lucide-icon name="trash-2" [size]="16"></lucide-icon></button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (showModal()) {
+        <div class="modal-overlay" (click)="closeModal()">
+          <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h2>{{ editingItem() ? 'Edit Experience' : 'Add Experience' }}</h2>
+              <button class="close-btn" (click)="closeModal()"><lucide-icon name="x" [size]="20"></lucide-icon></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Job Title *</label>
+                <input type="text" [value]="formData().title" (input)="updateField('title', $any($event.target).value)" placeholder="e.g., Senior Developer">
+              </div>
+              <div class="form-group">
+                <label>Company *</label>
+                <input type="text" [value]="formData().company" (input)="updateField('company', $any($event.target).value)" placeholder="e.g., Google">
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" [value]="formData().location" (input)="updateField('location', $any($event.target).value)" placeholder="e.g., San Francisco, CA">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Start Date</label>
+                  <input type="date" [value]="formData().startDate" (input)="updateField('startDate', $any($event.target).value)">
+                </div>
+                <div class="form-group">
+                  <label>End Date</label>
+                  <input type="date" [value]="formData().endDate" (input)="updateField('endDate', $any($event.target).value)" [disabled]="formData().current">
+                </div>
+              </div>
+              <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" [checked]="formData().current" (change)="updateField('current', $any($event.target).checked)">
+                  I currently work here
+                </label>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea [value]="formData().description" (input)="updateField('description', $any($event.target).value)" placeholder="Describe your responsibilities..." rows="4"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+              <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+                @if (saving()) { <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> } @else { <lucide-icon name="save" [size]="16"></lucide-icon> }
+                {{ editingItem() ? 'Update' : 'Create' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>

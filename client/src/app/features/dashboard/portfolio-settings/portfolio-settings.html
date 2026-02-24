@@ -1,0 +1,243 @@
+<div class="settings-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1><lucide-icon name="palette" [size]="24"></lucide-icon> Portfolio Settings</h1>
+      <p>Configure your portfolio details and visibility</p>
+    </div>
+    <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+      @if (saving()) {
+        <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> Saving...
+      } @else {
+        <lucide-icon name="save" [size]="16"></lucide-icon> Save Changes
+      }
+    </button>
+  </header>
+
+  @if (message()) {
+    <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+      @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> } @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+      {{ message()?.text }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading settings...</p>
+    </div>
+  } @else {
+    <div class="settings-content">
+      <!-- Basic Info Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <lucide-icon name="info" [size]="18"></lucide-icon>
+          Basic Information
+        </h2>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Portfolio Title <span class="required">*</span></label>
+            <input 
+              type="text" 
+              [value]="formData().title"
+              (input)="updateField('title', $any($event.target).value)"
+              placeholder="e.g., John Doe - Full Stack Developer">
+            <span class="helper-text">This will be displayed as your portfolio's main title</span>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Tagline</label>
+            <input 
+              type="text" 
+              [value]="formData().tagline"
+              (input)="updateField('tagline', $any($event.target).value)"
+              placeholder="e.g., Building digital experiences that matter">
+            <span class="helper-text">A short catchy phrase about yourself</span>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Bio / About Me</label>
+            <textarea 
+              [value]="formData().bio"
+              (input)="updateField('bio', $any($event.target).value)"
+              placeholder="Tell visitors about yourself, your experience, and what drives you..."
+              rows="5"></textarea>
+            <span class="helper-text">This will appear in your About section</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Social Links Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <lucide-icon name="share-2" [size]="18"></lucide-icon>
+          Social Links
+        </h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label><lucide-icon name="linkedin" [size]="18"></lucide-icon> LinkedIn</label>
+            <input 
+              type="text" 
+              [value]="formData().socialLinks?.linkedin"
+              (input)="updateSocialLink('linkedin', $any($event.target).value)"
+              placeholder="https://linkedin.com/in/username">
+          </div>
+
+          <div class="form-group">
+            <label><lucide-icon name="github" [size]="18"></lucide-icon> GitHub</label>
+            <input 
+              type="text" 
+              [value]="formData().socialLinks?.github"
+              (input)="updateSocialLink('github', $any($event.target).value)"
+              placeholder="https://github.com/username">
+          </div>
+
+          <div class="form-group">
+            <label><lucide-icon name="twitter" [size]="18"></lucide-icon> Twitter / X</label>
+            <input 
+              type="text" 
+              [value]="formData().socialLinks?.twitter"
+              (input)="updateSocialLink('twitter', $any($event.target).value)"
+              placeholder="https://twitter.com/username">
+          </div>
+
+          <div class="form-group">
+            <label><lucide-icon name="facebook" [size]="18"></lucide-icon> Facebook</label>
+            <input 
+              type="text" 
+              [value]="formData().socialLinks?.facebook"
+              (input)="updateSocialLink('facebook', $any($event.target).value)"
+              placeholder="https://facebook.com/username">
+          </div>
+
+          <div class="form-group">
+            <label><lucide-icon name="instagram" [size]="18"></lucide-icon> Instagram</label>
+            <input 
+              type="text" 
+              [value]="formData().socialLinks?.instagram"
+              (input)="updateSocialLink('instagram', $any($event.target).value)"
+              placeholder="https://instagram.com/username">
+          </div>
+
+          <div class="form-group">
+            <label><lucide-icon name="globe" [size]="18"></lucide-icon> Personal Website</label>
+            <input 
+              type="text" 
+              [value]="formData().socialLinks?.website"
+              (input)="updateSocialLink('website', $any($event.target).value)"
+              placeholder="https://yourwebsite.com">
+          </div>
+        </div>
+      </section>
+
+      <!-- CV Upload Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <lucide-icon name="file-text" [size]="18"></lucide-icon>
+          Resume / CV
+        </h2>
+        <div class="cv-upload-area">
+          <div class="form-group full-width">
+            <label>CV/Resume URL</label>
+            <input 
+              type="text" 
+              [value]="formData().cvUrl || ''"
+              (input)="updateField('cvUrl', $any($event.target).value)"
+              placeholder="https://drive.google.com/file/d/your-cv-link or upload below">
+            <span class="helper-text">Paste a link to your CV (Google Drive, Dropbox, etc.) or upload a file</span>
+          </div>
+          
+          <div class="upload-box">
+            <input 
+              type="file" 
+              id="cvFile" 
+              accept=".pdf,.doc,.docx"
+              (change)="onCvFileSelected($event)"
+              class="hidden-input">
+            <label for="cvFile" class="upload-label">
+              <lucide-icon name="cloud-upload" [size]="16"></lucide-icon>
+              <span>{{ uploadingCv() ? 'Uploading...' : 'Click to upload CV' }}</span>
+              <span class="file-types">PDF, DOC, DOCX (Max 5MB)</span>
+            </label>
+          </div>
+
+          @if (formData().cvUrl) {
+            <div class="cv-preview">
+              <lucide-icon name="file-text" [size]="18"></lucide-icon>
+              <span>CV uploaded</span>
+              <a [href]="formData().cvUrl" target="_blank" class="preview-link">
+                <lucide-icon name="external-link" [size]="14"></lucide-icon> Preview
+              </a>
+              <button type="button" class="remove-btn" (click)="removeCv()">
+                <lucide-icon name="trash-2" [size]="16"></lucide-icon>
+              </button>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Visibility Section -->
+      <section class="settings-section">
+        <h2 class="section-title">
+          <lucide-icon name="eye" [size]="18"></lucide-icon>
+          Visibility
+        </h2>
+        <div class="visibility-options">
+          <label class="visibility-option" [class.selected]="formData().isPublic">
+            <input 
+              type="radio" 
+              name="visibility" 
+              [checked]="formData().isPublic"
+              (change)="updateField('isPublic', true)">
+            <div class="option-content">
+              <div class="option-icon">
+                <lucide-icon name="globe" [size]="18"></lucide-icon>
+              </div>
+              <div class="option-info">
+                <span class="option-title">Public</span>
+                <span class="option-desc">Anyone can view your portfolio</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="visibility-option" [class.selected]="!formData().isPublic">
+            <input 
+              type="radio" 
+              name="visibility" 
+              [checked]="!formData().isPublic"
+              (change)="updateField('isPublic', false)">
+            <div class="option-content">
+              <div class="option-icon">
+                <lucide-icon name="lock" [size]="18"></lucide-icon>
+              </div>
+              <div class="option-info">
+                <span class="option-title">Private</span>
+                <span class="option-desc">Only you can view your portfolio</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- Preview Link -->
+      @if (hasPortfolio()) {
+        <section class="settings-section preview-section">
+          <h2 class="section-title">
+            <lucide-icon name="link" [size]="16"></lucide-icon>
+            Portfolio Link
+          </h2>
+          <div class="preview-link-box">
+            <span class="link-text">{{ 'http://localhost:4200/portfolio-view/' + (formData().userId?._id || formData().userId) }}</span>
+            <button class="copy-btn" (click)="copyLink()">
+              <lucide-icon name="copy" [size]="16"></lucide-icon>
+              Copy
+            </button>
+          </div>
+          <button class="btn btn-preview" (click)="openPortfolio()">
+            <lucide-icon name="external-link" [size]="14"></lucide-icon>
+            Open Portfolio
+          </button>
+        </section>
+      }
+    </div>
+  }
+</div>

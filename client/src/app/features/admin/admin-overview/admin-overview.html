@@ -1,0 +1,288 @@
+<div class="overview-container">
+  <header class="overview-header">
+    <div class="welcome-section">
+      <h1>Admin Dashboard 🛡️</h1>
+      <p>Monitor and manage PortHub platform</p>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading dashboard data...</p>
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card users">
+          <div class="stat-icon">
+            <lucide-icon name="users" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalUsers }}</span>
+            <span class="stat-label">Total Users</span>
+          </div>
+          <a routerLink="/admin/users" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card portfolios">
+          <div class="stat-icon">
+            <lucide-icon name="briefcase" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalPortfolios }}</span>
+            <span class="stat-label">Total Portfolios</span>
+          </div>
+          <a routerLink="/admin/portfolios" class="stat-link">
+            <lucide-icon name="arrow-right" [size]="16"></lucide-icon>
+          </a>
+        </div>
+
+        <div class="stat-card public">
+          <div class="stat-icon">
+            <lucide-icon name="code" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalProjects }}</span>
+            <span class="stat-label">Total Projects</span>
+          </div>
+        </div>
+
+        <div class="stat-card private">
+          <div class="stat-icon">
+            <lucide-icon name="wrench" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalSkills }}</span>
+            <span class="stat-label">Total Skills</span>
+          </div>
+        </div>
+
+        <div class="stat-card views">
+          <div class="stat-icon">
+            <lucide-icon name="eye" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalViews }}</span>
+            <span class="stat-label">Total Views</span>
+          </div>
+        </div>
+
+        <div class="stat-card countries">
+          <div class="stat-icon">
+            <lucide-icon name="globe" [size]="18"></lucide-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ stats().totalCountries }}</span>
+            <span class="stat-label">Countries</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Country Breakdown -->
+    @if (stats().countryCounts.length > 0) {
+      <section class="country-breakdown-section">
+        <div class="activity-card">
+          <div class="card-header">
+            <h2><lucide-icon name="map-pin" [size]="18"></lucide-icon> Users by Country</h2>
+            <span class="country-total">{{ stats().totalCountries }} countries</span>
+          </div>
+          <div class="card-body">
+            <div class="country-list">
+              @for (item of stats().countryCounts; track item.country; let i = $index) {
+                <div class="country-item">
+                  <div class="country-rank" [class]="'rank-' + (i + 1)">{{ i + 1 }}</div>
+                  <div class="country-info">
+                    <span class="country-name">{{ item.country }}</span>
+                    <span class="country-users">{{ item.count }} {{ item.count === 1 ? 'user' : 'users' }}</span>
+                  </div>
+                  <div class="country-bar-wrap">
+                    <div class="country-bar" [style.width.%]="(item.count / stats().totalUsers) * 100"></div>
+                  </div>
+                  <span class="country-pct">{{ ((item.count / stats().totalUsers) * 100).toFixed(0) }}%</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- Charts Section -->
+    <section class="charts-section">
+      <div class="charts-grid">
+        <!-- Growth Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <h3>
+                <lucide-icon name="chart-bar" [size]="18"></lucide-icon>
+                Platform Growth
+              </h3>
+              <span class="chart-subtitle">Users &amp; Portfolios — Last 12 months</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [type]="'bar'"
+              [data]="growthChartData"
+              [options]="growthChartOptions">
+            </canvas>
+          </div>
+        </div>
+
+        <!-- Platform Views Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <h3>
+                <lucide-icon name="trending-up" [size]="18"></lucide-icon>
+                Portfolio Views
+              </h3>
+              <span class="chart-subtitle">Daily views — Last 30 days</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [type]="'line'"
+              [data]="viewsChartData"
+              [options]="viewsChartOptions">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top Portfolios -->
+    @if (stats().topPortfolios.length > 0) {
+      <section class="top-portfolios-section">
+        <div class="activity-card">
+          <div class="card-header">
+            <h2><lucide-icon name="trophy" [size]="18"></lucide-icon> Top Viewed Portfolios</h2>
+          </div>
+          <div class="card-body">
+            <div class="top-list">
+              @for (p of stats().topPortfolios; track p._id; let i = $index) {
+                <div class="top-item">
+                  <span class="rank" [class]="'rank-' + (i + 1)">#{{ i + 1 }}</span>
+                  <div class="top-info">
+                    <span class="top-title">{{ p.title || 'Untitled' }}</span>
+                    <span class="top-user">{{ p.userId?.firstName }} {{ p.userId?.lastName }}</span>
+                  </div>
+                  <div class="top-views">
+                    <lucide-icon name="eye" [size]="14"></lucide-icon>
+                    <span>{{ p.views }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- Recent Activity -->
+    <div class="activity-grid">
+      <!-- Recent Users -->
+      <section class="activity-card">
+        <div class="card-header">
+          <h2><lucide-icon name="user-plus" [size]="18"></lucide-icon> Recent Users</h2>
+          <a routerLink="/admin/users" class="view-all">View All</a>
+        </div>
+        <div class="card-body">
+          @if (stats().recentUsers.length === 0) {
+            <div class="empty-state">
+              <p>No users yet</p>
+            </div>
+          } @else {
+            <div class="users-list">
+              @for (user of stats().recentUsers; track user._id) {
+                <div class="user-item">
+                  <div class="user-avatar">
+                    @if (user.profileImage) {
+                      <img [src]="user.profileImage" [alt]="user.firstName">
+                    } @else {
+                      <lucide-icon name="user" [size]="20"></lucide-icon>
+                    }
+                  </div>
+                  <div class="user-info">
+                    <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+                    <span class="user-email">{{ user.email }}</span>
+                  </div>
+                  <span class="user-role" [class.admin]="user.role === 'admin'">
+                    {{ user.role || 'user' }}
+                  </span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Recent Portfolios -->
+      <section class="activity-card">
+        <div class="card-header">
+          <h2><lucide-icon name="folder-plus" [size]="18"></lucide-icon> Recent Portfolios</h2>
+          <a routerLink="/admin/portfolios" class="view-all">View All</a>
+        </div>
+        <div class="card-body">
+          @if (stats().recentPortfolios.length === 0) {
+            <div class="empty-state">
+              <p>No portfolios yet</p>
+            </div>
+          } @else {
+            <div class="portfolios-list">
+              @for (portfolio of stats().recentPortfolios; track portfolio._id) {
+                <div class="portfolio-item">
+                  <div class="portfolio-info">
+                    <span class="portfolio-title">{{ portfolio.title || 'Untitled Portfolio' }}</span>
+                    <span class="portfolio-tagline">{{ portfolio.tagline || 'No tagline' }}</span>
+                  </div>
+                  <div class="portfolio-status">
+                    @if (portfolio.isPublic !== false) {
+                      <span class="status public"><lucide-icon name="globe" [size]="18"></lucide-icon></span>
+                    } @else {
+                      <span class="status private"><lucide-icon name="lock" [size]="18"></lucide-icon></span>
+                    }
+                    <a [href]="'/portfolio-view/' + (portfolio.userId?._id || portfolio.userId)" target="_blank" class="view-btn">
+                      <lucide-icon name="external-link" [size]="14"></lucide-icon>
+                    </a>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions-grid">
+        <a routerLink="/admin/users" class="action-card">
+          <div class="action-icon users">
+            <lucide-icon name="user-cog" [size]="24"></lucide-icon>
+          </div>
+          <span>Manage Users</span>
+        </a>
+        <a routerLink="/admin/portfolios" class="action-card">
+          <div class="action-icon portfolios">
+            <lucide-icon name="list-todo" [size]="24"></lucide-icon>
+          </div>
+          <span>Manage Portfolios</span>
+        </a>
+        <a routerLink="/portfolios" class="action-card">
+          <div class="action-icon view">
+            <lucide-icon name="eye" [size]="18"></lucide-icon>
+          </div>
+          <span>View Public Portfolios</span>
+        </a>
+      </div>
+    </section>
+  }
+</div>

@@ -1,0 +1,98 @@
+<div class="portfolios-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1><lucide-icon name="briefcase" [size]="18"></lucide-icon> Portfolios Management</h1>
+      <p>View and manage all portfolios</p>
+    </div>
+    <div class="header-stats">
+      <span class="stat public"><lucide-icon name="globe" [size]="18"></lucide-icon> {{ getPublicCount() }} Public</span>
+      <span class="stat private"><lucide-icon name="lock" [size]="18"></lucide-icon> {{ getPrivateCount() }} Private</span>
+    </div>
+  </header>
+
+  @if (message()) {
+    <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+      @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> } @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+      {{ message()?.text }}
+    </div>
+  }
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="search-box">
+      <lucide-icon name="search" [size]="16"></lucide-icon>
+      <input 
+        type="text" 
+        placeholder="Search portfolios..."
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)">
+    </div>
+    <div class="filter-buttons">
+      <button 
+        class="filter-btn" 
+        [class.active]="visibilityFilter() === 'all'"
+        (click)="onVisibilityFilter('all')">
+        All
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="visibilityFilter() === 'public'"
+        (click)="onVisibilityFilter('public')">
+        <lucide-icon name="globe" [size]="18"></lucide-icon> Public
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="visibilityFilter() === 'private'"
+        (click)="onVisibilityFilter('private')">
+        <lucide-icon name="lock" [size]="18"></lucide-icon> Private
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading portfolios...</p>
+    </div>
+  } @else if (filteredPortfolios().length === 0) {
+    <div class="empty-state">
+      <lucide-icon name="folder-open" [size]="48"></lucide-icon>
+      <h3>No Portfolios Found</h3>
+      <p>{{ searchQuery() ? 'Try adjusting your search' : 'No portfolios created yet' }}</p>
+    </div>
+  } @else {
+    <div class="portfolios-grid">
+      @for (portfolio of filteredPortfolios(); track portfolio._id) {
+        <div class="portfolio-card">
+          <div class="card-header">
+            <div class="visibility-badge" [class.public]="portfolio.isPublic !== false" [class.private]="portfolio.isPublic === false">
+              @if (portfolio.isPublic !== false) {
+                <lucide-icon name="globe" [size]="18"></lucide-icon> Public
+              } @else {
+                <lucide-icon name="lock" [size]="18"></lucide-icon> Private
+              }
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>{{ portfolio.title || 'Untitled Portfolio' }}</h3>
+            <p class="tagline">{{ portfolio.tagline || 'No tagline provided' }}</p>
+            @if (portfolio.user) {
+              <div class="owner-info">
+                <lucide-icon name="user" [size]="20"></lucide-icon>
+                <span>{{ portfolio.user.firstName }} {{ portfolio.user.lastName }}</span>
+              </div>
+            }
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-view" (click)="viewPortfolio(portfolio)">
+              <lucide-icon name="eye" [size]="18"></lucide-icon> View
+            </button>
+            <button class="btn btn-delete" (click)="deletePortfolio(portfolio)">
+              <lucide-icon name="trash-2" [size]="16"></lucide-icon> Delete
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

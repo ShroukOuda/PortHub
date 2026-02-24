@@ -1,0 +1,97 @@
+<div class="manager-container">
+      <header class="page-header">
+        <div class="header-content">
+          <h1><lucide-icon name="award" [size]="18"></lucide-icon> Certificates</h1>
+          <p>Manage your certifications</p>
+        </div>
+        <button class="btn btn-primary" (click)="openAddModal()">
+          <lucide-icon name="plus" [size]="16"></lucide-icon> Add Certificate
+        </button>
+      </header>
+
+      @if (message()) {
+        <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+          @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> } @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+          {{ message()?.text }}
+        </div>
+      }
+
+      @if (loading()) {
+        <div class="loading-state"><div class="spinner"></div><p>Loading...</p></div>
+      } @else if (items().length === 0) {
+        <div class="empty-state">
+          <lucide-icon name="award" [size]="24"></lucide-icon>
+          <h3>No Certificates Yet</h3>
+          <p>Add your professional certifications.</p>
+          <button class="btn btn-primary" (click)="openAddModal()"><lucide-icon name="plus" [size]="16"></lucide-icon> Add Certificate</button>
+        </div>
+      } @else {
+        <div class="items-grid">
+          @for (item of items(); track item._id) {
+            <div class="item-card certificate-card">
+              <div class="cert-icon"><lucide-icon name="award" [size]="24"></lucide-icon></div>
+              <div class="cert-content">
+                <h3>{{ item.title }}</h3>
+                <p class="issuer"><lucide-icon name="building-2" [size]="18"></lucide-icon> {{ item.issuer }}</p>
+                <p class="date"><lucide-icon name="calendar" [size]="14"></lucide-icon> {{ item.issueDate | date:'MMM yyyy' }}</p>
+                @if (item.credentialUrl) {
+                  <a [href]="item.credentialUrl" target="_blank" class="credential-link">
+                    <lucide-icon name="external-link" [size]="14"></lucide-icon> View Credential
+                  </a>
+                }
+              </div>
+              <div class="item-actions">
+                <button class="action-btn edit" (click)="openEditModal(item)"><lucide-icon name="pencil" [size]="16"></lucide-icon></button>
+                <button class="action-btn delete" (click)="delete(item)"><lucide-icon name="trash-2" [size]="16"></lucide-icon></button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (showModal()) {
+        <div class="modal-overlay" (click)="closeModal()">
+          <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h2>{{ editingItem() ? 'Edit Certificate' : 'Add Certificate' }}</h2>
+              <button class="close-btn" (click)="closeModal()"><lucide-icon name="x" [size]="20"></lucide-icon></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Certificate Name *</label>
+                <input type="text" [value]="formData().title" (input)="updateField('title', $any($event.target).value)" placeholder="e.g., AWS Certified Developer">
+              </div>
+              <div class="form-group">
+                <label>Issuing Organization *</label>
+                <input type="text" [value]="formData().issuer" (input)="updateField('issuer', $any($event.target).value)" placeholder="e.g., Amazon Web Services">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Issue Date</label>
+                  <input type="date" [value]="formData().issueDate" (input)="updateField('issueDate', $any($event.target).value)">
+                </div>
+                <div class="form-group">
+                  <label>Expiry Date (optional)</label>
+                  <input type="date" [value]="formData().expiryDate" (input)="updateField('expiryDate', $any($event.target).value)">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Credential URL</label>
+                <input type="text" [value]="formData().credentialUrl" (input)="updateField('credentialUrl', $any($event.target).value)" placeholder="https://...">
+              </div>
+              <div class="form-group">
+                <label>Credential ID</label>
+                <input type="text" [value]="formData().credentialId" (input)="updateField('credentialId', $any($event.target).value)" placeholder="Certificate ID">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+              <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+                @if (saving()) { <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> } @else { <lucide-icon name="save" [size]="16"></lucide-icon> }
+                {{ editingItem() ? 'Update' : 'Create' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>

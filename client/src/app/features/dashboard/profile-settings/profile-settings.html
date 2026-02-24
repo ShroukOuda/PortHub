@@ -1,0 +1,274 @@
+<div class="profile-settings">
+  <!-- Header -->
+  <div class="page-header">
+    <h1><lucide-icon name="user-cog" [size]="18"></lucide-icon> Profile Settings</h1>
+    <p>Manage your personal information and account settings</p>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon>
+      <span>Loading profile...</span>
+    </div>
+  } @else {
+    <!-- Success/Error Messages -->
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        <lucide-icon name="circle-check" [size]="18"></lucide-icon>
+        {{ successMessage() }}
+      </div>
+    }
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        <lucide-icon name="circle-alert" [size]="18"></lucide-icon>
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <div class="settings-grid">
+      <!-- Profile Picture Section -->
+      <div class="settings-card profile-picture-card">
+        <h2><lucide-icon name="camera" [size]="18"></lucide-icon> Profile Picture</h2>
+        <div class="profile-picture-section">
+          <div class="avatar-preview">
+            @if (previewUrl) {
+              <img [src]="previewUrl" alt="Profile Picture">
+            } @else {
+              <div class="avatar-placeholder">
+                <lucide-icon name="user" [size]="20"></lucide-icon>
+              </div>
+            }
+          </div>
+          <div class="upload-controls">
+            <input type="file" id="profilePicture" (change)="onFileSelected($event)" accept="image/*" hidden>
+            <label for="profilePicture" class="btn btn-secondary">
+              <lucide-icon name="upload" [size]="18"></lucide-icon> Choose Photo
+            </label>
+            @if (selectedFile) {
+              <button class="btn btn-primary" (click)="uploadProfilePicture()" [disabled]="uploadingPhoto()">
+                @if (uploadingPhoto()) {
+                  <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> Uploading...
+                } @else {
+                  <lucide-icon name="cloud-upload" [size]="16"></lucide-icon> Upload
+                }
+              </button>
+            }
+            <p class="hint">JPG, PNG or GIF. Max 5MB.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="settings-card">
+        <h2><lucide-icon name="user" [size]="20"></lucide-icon> Personal Information</h2>
+        <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
+          <div class="form-grid">
+            <!-- First Name -->
+            <div class="form-group">
+              <label for="firstName">First Name *</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                [(ngModel)]="formData.firstName" 
+                name="firstName"
+                required
+                placeholder="Enter your first name">
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                [(ngModel)]="formData.lastName" 
+                name="lastName"
+                placeholder="Enter your last name">
+            </div>
+
+            <!-- Username (readonly) -->
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input 
+                type="text" 
+                id="username" 
+                [(ngModel)]="formData.username" 
+                name="username"
+                readonly
+                class="readonly"
+                placeholder="Username">
+              <span class="hint">Username cannot be changed</span>
+            </div>
+
+            <!-- Email (readonly) -->
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                [(ngModel)]="formData.email" 
+                name="email"
+                readonly
+                class="readonly"
+                placeholder="Email">
+              <span class="hint">Email cannot be changed</span>
+            </div>
+
+            <!-- Job Title -->
+            <div class="form-group full-width">
+              <label for="jobTitle">Job Title</label>
+              <input 
+                type="text" 
+                id="jobTitle" 
+                [(ngModel)]="formData.jobTitle" 
+                name="jobTitle"
+                placeholder="e.g., Full Stack Developer">
+            </div>
+
+            <!-- Bio -->
+            <div class="form-group full-width">
+              <label for="bio">Bio</label>
+              <textarea 
+                id="bio" 
+                [(ngModel)]="formData.bio" 
+                name="bio"
+                rows="4"
+                placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <select id="gender" [(ngModel)]="formData.gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+              <label for="dateOfBirth">Date of Birth</label>
+              <input 
+                type="date" 
+                id="dateOfBirth" 
+                [(ngModel)]="formData.dateOfBirth" 
+                name="dateOfBirth">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving() || profileForm.invalid">
+              @if (isSaving()) {
+                <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> Saving...
+              } @else {
+                <lucide-icon name="save" [size]="16"></lucide-icon> Save Changes
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="settings-card">
+        <h2><lucide-icon name="map-pin" [size]="14"></lucide-icon> Contact & Location</h2>
+        <form (ngSubmit)="saveProfile()" #contactForm="ngForm">
+          <div class="form-grid">
+            <!-- Country -->
+            <div class="form-group">
+              <label for="country">Country</label>
+              <div class="select-wrapper">
+                <select 
+                  id="countrySelect" 
+                  [(ngModel)]="selectedCountry" 
+                  name="countrySelect"
+                  (change)="onCountryChange()">
+                  <option [ngValue]="null">Select your country</option>
+                  @for (country of countries; track country.code) {
+                    <option [ngValue]="country">{{ country.name }} ({{ country.dialCode }})</option>
+                  }
+                </select>
+                <lucide-icon name="chevron-down" [size]="16"></lucide-icon>
+              </div>
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+              <label for="city">City</label>
+              <input 
+                type="text" 
+                id="city" 
+                [(ngModel)]="formData.city" 
+                name="city"
+                placeholder="Enter your city">
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group full-width">
+              <label for="phone">Phone Number</label>
+              <div class="phone-input">
+                <div class="dial-code">
+                  {{ selectedCountry?.dialCode || '+__' }}
+                </div>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  [(ngModel)]="phoneNumber" 
+                  name="phone"
+                  (blur)="updatePhoneNumber()"
+                  [disabled]="!selectedCountry"
+                  [placeholder]="getPhonePlaceholder()">
+              </div>
+              @if (selectedCountry) {
+                <span class="hint">Format: {{ selectedCountry.format }}</span>
+              }
+            </div>
+
+            <!-- Address -->
+            <div class="form-group full-width">
+              <label for="address">Address</label>
+              <input 
+                type="text" 
+                id="address" 
+                [(ngModel)]="formData.address" 
+                name="address"
+                placeholder="Street address">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              @if (isSaving()) {
+                <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> Saving...
+              } @else {
+                <lucide-icon name="save" [size]="16"></lucide-icon> Save Changes
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Account Info -->
+      <div class="settings-card account-info-card">
+        <h2><lucide-icon name="info" [size]="18"></lucide-icon> Account Information</h2>
+        <div class="account-details">
+          <div class="detail-item">
+            <span class="label">Account Status</span>
+            <span class="value status-active">
+              <lucide-icon name="circle-check" [size]="18"></lucide-icon> Active
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Role</span>
+            <span class="value">{{ currentUser()?.role || 'User' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Member Since</span>
+            <span class="value">{{ currentUser()?.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

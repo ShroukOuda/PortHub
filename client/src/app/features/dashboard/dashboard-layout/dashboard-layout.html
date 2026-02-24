@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <button class="menu-toggle" (click)="toggleMobileMenu()">
+      <lucide-icon name="menu" [size]="20"></lucide-icon>
+    </button>
+    <div class="logo">
+      <span class="logo-icon">P</span>
+      <span class="logo-text">ortHub</span>
+    </div>
+    <div class="user-avatar-mobile">
+      @if (currentUser()?.profileImage) {
+        <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName">
+      } @else {
+        <lucide-icon name="user" [size]="20"></lucide-icon>
+      }
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed()" [class.mobile-open]="mobileMenuOpen()">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">P</span>
+        @if (!sidebarCollapsed()) {
+          <span class="logo-text">ortHub</span>
+        }
+      </div>
+      <button class="collapse-btn desktop-only" (click)="toggleSidebar()">
+        <lucide-icon [name]="sidebarCollapsed() ? 'chevron-right' : 'chevron-left'" [size]="18"></lucide-icon>
+      </button>
+      <button class="close-btn mobile-only" (click)="toggleMobileMenu()">
+        <lucide-icon name="x" [size]="20"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="user-info" [class.compact]="sidebarCollapsed()">
+      <div class="avatar">
+        @if (currentUser()?.profileImage) {
+          <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName">
+        } @else {
+          <lucide-icon name="user" [size]="20"></lucide-icon>
+        }
+      </div>
+      @if (!sidebarCollapsed()) {
+        <div class="user-details">
+          <span class="user-name">{{ currentUser()?.firstName }} {{ currentUser()?.lastName }}</span>
+          <span class="user-role">{{ currentUser()?.role || 'User' }}</span>
+        </div>
+      }
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of menuItems; track item.route) {
+        <a [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact: item.route === '/dashboard'}" class="nav-item">
+          <lucide-icon [name]="item.icon" [size]="18"></lucide-icon>
+          @if (!sidebarCollapsed()) {
+            <span>{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <a routerLink="/" class="nav-item">
+        <lucide-icon name="globe" [size]="18"></lucide-icon>
+        @if (!sidebarCollapsed()) {
+          <span>View Site</span>
+        }
+      </a>
+      @if (portfolio()) {
+        <a [href]="'/portfolio-view/' + (portfolio()?.userId?._id || portfolio()?.userId)" target="_blank" class="nav-item">
+          <lucide-icon name="eye" [size]="18"></lucide-icon>
+          @if (!sidebarCollapsed()) {
+            <span>Preview Portfolio</span>
+          }
+        </a>
+      }
+      <button class="nav-item logout-btn" (click)="logout()">
+        <lucide-icon name="log-out" [size]="18"></lucide-icon>
+        @if (!sidebarCollapsed()) {
+          <span>Logout</span>
+        }
+      </button>
+    </div>
+  </aside>
+
+  <!-- Mobile Overlay -->
+  @if (mobileMenuOpen()) {
+    <div class="mobile-overlay" (click)="toggleMobileMenu()"></div>
+  }
+
+  <!-- Main Content -->
+  <main class="main-content" [class.expanded]="sidebarCollapsed()">
+    <router-outlet></router-outlet>
+  </main>
+</div>

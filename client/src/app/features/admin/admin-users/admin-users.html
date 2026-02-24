@@ -1,0 +1,118 @@
+<div class="users-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1><lucide-icon name="users" [size]="18"></lucide-icon> Users Management</h1>
+      <p>Manage all registered users</p>
+    </div>
+    <div class="header-stats">
+      <span class="stat">Total: {{ users().length }}</span>
+      <span class="stat">Admins: {{ getAdminCount() }}</span>
+    </div>
+  </header>
+
+  @if (message()) {
+    <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+      @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> } @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+      {{ message()?.text }}
+    </div>
+  }
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="search-box">
+      <lucide-icon name="search" [size]="16"></lucide-icon>
+      <input 
+        type="text" 
+        placeholder="Search users..."
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)">
+    </div>
+    <div class="filter-buttons">
+      <button 
+        class="filter-btn" 
+        [class.active]="roleFilter() === 'all'"
+        (click)="onRoleFilter('all')">
+        All
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="roleFilter() === 'user'"
+        (click)="onRoleFilter('user')">
+        Users
+      </button>
+      <button 
+        class="filter-btn" 
+        [class.active]="roleFilter() === 'admin'"
+        (click)="onRoleFilter('admin')">
+        Admins
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading users...</p>
+    </div>
+  } @else if (filteredUsers().length === 0) {
+    <div class="empty-state">
+      <lucide-icon name="user-x" [size]="48"></lucide-icon>
+      <h3>No Users Found</h3>
+      <p>{{ searchQuery() ? 'Try adjusting your search' : 'No users registered yet' }}</p>
+    </div>
+  } @else {
+    <div class="users-table-wrapper">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of filteredUsers(); track user._id) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar">
+                    @if (user.profileImage) {
+                      <img [src]="user.profileImage" [alt]="user.firstName">
+                    } @else {
+                      <span>{{ getUserInitials(user) }}</span>
+                    }
+                  </div>
+                  <div class="user-info">
+                    <span class="name">{{ user.firstName }} {{ user.lastName }}</span>
+                    <span class="job">{{ user.jobTitle || 'No title' }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.username }}</td>
+              <td>
+                <select 
+                  class="role-select" 
+                  [class.admin]="user.role === 'admin'"
+                  [value]="user.role || 'user'"
+                  (change)="changeRole(user, $any($event.target).value)">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="action-btn delete" (click)="deleteUser(user)" title="Delete User">
+                    <lucide-icon name="trash-2" [size]="16"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
