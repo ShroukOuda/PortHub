@@ -28,6 +28,11 @@ export class SkillsManagerComponent implements OnInit {
     category: 'Technical'
   });
 
+  // Icon upload
+  iconMode = signal<'url' | 'upload'>('url');
+  selectedIconFile = signal<File | null>(null);
+  iconPreview = signal<string | null>(null);
+
   categories = ['Technical', 'Soft Skills', 'Languages', 'Tools', 'Frameworks', 'Other'];
 
   ngOnInit() {
@@ -47,13 +52,19 @@ export class SkillsManagerComponent implements OnInit {
 
   openAddModal() {
     this.editingItem.set(null);
-    this.formData.set({ name: '', level: 80, category: 'Technical' });
+    this.formData.set({ name: '', level: 80, category: 'Technical', icon: '' });
+    this.iconMode.set('url');
+    this.selectedIconFile.set(null);
+    this.iconPreview.set(null);
     this.showModal.set(true);
   }
 
   openEditModal(item: ISkill) {
     this.editingItem.set(item);
-    this.formData.set({ name: item.name, level: item.level, category: item.category });
+    this.formData.set({ name: item.name, level: item.level, category: item.category, icon: item.icon || '' });
+    this.iconMode.set('url');
+    this.selectedIconFile.set(null);
+    this.iconPreview.set(null);
     this.showModal.set(true);
   }
 
@@ -66,6 +77,21 @@ export class SkillsManagerComponent implements OnInit {
     this.formData.update(data => ({ ...data, [field]: value }));
   }
 
+  onIconFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedIconFile.set(file);
+      const reader = new FileReader();
+      reader.onload = () => this.iconPreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeIconFile() {
+    this.selectedIconFile.set(null);
+    this.iconPreview.set(null);
+  }
+
   save() {
     if (!this.formData().name) {
       this.message.set({ type: 'error', text: 'Please fill in required fields.' });
@@ -75,8 +101,27 @@ export class SkillsManagerComponent implements OnInit {
     this.saving.set(true);
     this.message.set(null);
 
+    const saveData = { ...this.formData() };
+
+    if (this.selectedIconFile()) {
+      this.portfolioService.uploadImage(this.selectedIconFile()!, 'skills').subscribe({
+        next: (res: any) => {
+          saveData.icon = res.url || res.path || res.data?.url;
+          this._performSave(saveData);
+        },
+        error: () => {
+          this.saving.set(false);
+          this.message.set({ type: 'error', text: 'Icon upload failed.' });
+        }
+      });
+    } else {
+      this._performSave(saveData);
+    }
+  }
+
+  private _performSave(saveData: Partial<ISkill>) {
     if (this.editingItem()) {
-      this.portfolioService.updateSkill(this.editingItem()!._id!, this.formData()).subscribe({
+      this.portfolioService.updateSkill(this.editingItem()!._id!, saveData).subscribe({
         next: (updated) => {
           this.skills.update(list => list.map(s => s._id === updated._id ? updated : s));
           this.saving.set(false);
@@ -90,7 +135,7 @@ export class SkillsManagerComponent implements OnInit {
         }
       });
     } else {
-      this.portfolioService.createSkill(this.formData()).subscribe({
+      this.portfolioService.createSkill(saveData).subscribe({
         next: (created) => {
           this.skills.update(list => [...list, created]);
           this.saving.set(false);

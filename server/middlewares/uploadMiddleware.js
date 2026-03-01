@@ -20,7 +20,11 @@ const uploadMiddleware = (type) => {
   // Define allowed file types based on upload type
   const allowedTypes = {
     profiles: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-    cvs: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    cvs: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+    projects: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
+    skills: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
+    certificates: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+    testimonials: ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
   };
 
   return multer({
@@ -29,8 +33,9 @@ const uploadMiddleware = (type) => {
     fileFilter: (req, file, cb) => {
       const allowed = allowedTypes[type] || [];
       
-      // For profiles, also allow any image type
-      if (type === 'profiles' && file.mimetype.startsWith('image/')) {
+      // For image-based types, also allow any image type
+      const imageTypes = ['profiles', 'projects', 'skills', 'certificates', 'testimonials'];
+      if (imageTypes.includes(type) && file.mimetype.startsWith('image/')) {
         cb(null, true);
       } else if (allowed.includes(file.mimetype)) {
         cb(null, true);

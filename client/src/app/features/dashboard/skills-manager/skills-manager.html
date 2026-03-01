@@ -109,6 +109,43 @@
               <span>Expert</span>
             </div>
           </div>
+
+          <!-- Icon Upload -->
+          <div class="form-group">
+            <label>Skill Icon</label>
+            <div class="image-mode-toggle">
+              <label class="radio-label">
+                <input type="radio" name="iconMode" value="url" [checked]="iconMode() === 'url'" (change)="iconMode.set('url')"> URL
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="iconMode" value="upload" [checked]="iconMode() === 'upload'" (change)="iconMode.set('upload')"> Upload
+              </label>
+            </div>
+            @if (iconMode() === 'url') {
+              <input 
+                type="text" 
+                [value]="formData().icon"
+                (input)="updateFormField('icon', $any($event.target).value)"
+                placeholder="Icon URL or Lucide icon name (e.g., code, database)">
+            } @else {
+              <div class="file-upload-area">
+                @if (!iconPreview()) {
+                  <label class="upload-label">
+                    <lucide-icon name="upload" [size]="20"></lucide-icon>
+                    <span>Choose icon file</span>
+                    <input type="file" accept="image/*" (change)="onIconFileSelected($event)" hidden>
+                  </label>
+                } @else {
+                  <div class="image-preview">
+                    <img [src]="iconPreview()" alt="Icon preview">
+                    <button type="button" class="remove-image-btn" (click)="removeIconFile()">
+                      <lucide-icon name="x" [size]="14"></lucide-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>

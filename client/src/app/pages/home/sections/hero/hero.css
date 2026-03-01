@@ -12,7 +12,7 @@
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: url('/bg2.jpg') center/cover no-repeat;
+  background: url('/Home.jpg') center/cover no-repeat;
   z-index: 0;
 }
 

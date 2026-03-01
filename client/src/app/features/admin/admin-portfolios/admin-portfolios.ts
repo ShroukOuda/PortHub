@@ -28,7 +28,7 @@ export class AdminPortfoliosComponent implements OnInit {
 
   loadPortfolios() {
     this.loading.set(true);
-    this.adminService.getPortfolios().subscribe({
+    this.adminService.getPortfolios({ limit: 10000 }).subscribe({
       next: (response) => {
         this.portfolios.set(response.data);
         this.applyFilters();

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Iuser } from '../../core/models/iuser';
 import { UserService } from '../../core/services/user-service';
@@ -15,6 +15,36 @@ export class Portfolios implements OnInit {
   filteredUsers = signal<Iuser[]>([]);
   isLoading = signal(true);
   searchQuery = signal('');
+
+  // Pagination
+  currentPage = signal(1);
+  itemsPerPage = signal(12);
+
+  totalPages = computed(() => Math.ceil(this.filteredUsers().length / this.itemsPerPage()));
+
+  paginatedUsers = computed(() => {
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    return this.filteredUsers().slice(start, start + this.itemsPerPage());
+  });
+
+  pageNumbers = computed(() => {
+    const total = this.totalPages();
+    const current = this.currentPage();
+    const pages: (number | string)[] = [];
+
+    if (total <= 7) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (current > 3) pages.push('...');
+      for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+        pages.push(i);
+      }
+      if (current < total - 2) pages.push('...');
+      pages.push(total);
+    }
+    return pages;
+  });
 
   constructor(private userService: UserService) {}
 
@@ -40,6 +70,7 @@ export class Portfolios implements OnInit {
   onSearch(event: Event): void {
     const query = (event.target as HTMLInputElement).value.toLowerCase();
     this.searchQuery.set(query);
+    this.currentPage.set(1);
     if (!query) {
       this.filteredUsers.set(this.users());
     } else {
@@ -50,6 +81,14 @@ export class Portfolios implements OnInit {
           (u.username || '').toLowerCase().includes(query)
         )
       );
+    }
+  }
+
+  goToPage(page: number | string): void {
+    if (typeof page === 'string') return;
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+      window.scrollTo({ top: 300, behavior: 'smooth' });
     }
   }
 

@@ -83,6 +83,39 @@
                 <label>Credential ID</label>
                 <input type="text" [value]="formData().credentialId" (input)="updateField('credentialId', $any($event.target).value)" placeholder="Certificate ID">
               </div>
+
+              <!-- Certificate Image -->
+              <div class="form-group">
+                <label>Certificate Image</label>
+                <div class="image-mode-toggle">
+                  <label class="radio-label">
+                    <input type="radio" name="imageMode" value="url" [checked]="imageMode() === 'url'" (change)="imageMode.set('url')"> URL
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="imageMode" value="upload" [checked]="imageMode() === 'upload'" (change)="imageMode.set('upload')"> Upload
+                  </label>
+                </div>
+                @if (imageMode() === 'url') {
+                  <input type="text" [value]="formData().CertificateImage" (input)="updateField('CertificateImage', $any($event.target).value)" placeholder="https://example.com/certificate.jpg">
+                } @else {
+                  <div class="file-upload-area">
+                    @if (!imagePreview()) {
+                      <label class="upload-label">
+                        <lucide-icon name="upload" [size]="20"></lucide-icon>
+                        <span>Choose image file</span>
+                        <input type="file" accept="image/*" (change)="onImageFileSelected($event)" hidden>
+                      </label>
+                    } @else {
+                      <div class="image-preview">
+                        <img [src]="imagePreview()" alt="Certificate preview">
+                        <button type="button" class="remove-image-btn" (click)="removeImageFile()">
+                          <lucide-icon name="x" [size]="14"></lucide-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>

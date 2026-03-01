@@ -33,6 +33,9 @@ export class ProjectsManagerComponent implements OnInit {
   });
 
   techInput = signal('');
+  imageMode = signal<'url' | 'upload'>('url');
+  imagePreview = signal<string | null>(null);
+  selectedImageFile = signal<File | null>(null);
 
   ngOnInit() {
     this.loadProjects();
@@ -63,6 +66,9 @@ export class ProjectsManagerComponent implements OnInit {
       featured: false
     });
     this.techInput.set('');
+    this.imageMode.set('url');
+    this.imagePreview.set(null);
+    this.selectedImageFile.set(null);
     this.showModal.set(true);
   }
 
@@ -78,6 +84,9 @@ export class ProjectsManagerComponent implements OnInit {
       featured: project.featured
     });
     this.techInput.set('');
+    this.imageMode.set(project.imageUrl ? 'url' : 'url');
+    this.imagePreview.set(null);
+    this.selectedImageFile.set(null);
     this.showModal.set(true);
   }
 
@@ -111,6 +120,21 @@ export class ProjectsManagerComponent implements OnInit {
     }));
   }
 
+  onImageFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedImageFile.set(file);
+      const reader = new FileReader();
+      reader.onload = () => this.imagePreview.set(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImageFile() {
+    this.selectedImageFile.set(null);
+    this.imagePreview.set(null);
+  }
+
   saveProject() {
     if (!this.formData().title || !this.formData().description) {
       this.message.set({ type: 'error', text: 'Please fill in required fields.' });
@@ -120,8 +144,28 @@ export class ProjectsManagerComponent implements OnInit {
     this.saving.set(true);
     this.message.set(null);
 
+    const saveData = { ...this.formData() };
+
+    // If file is selected, upload first then save
+    if (this.selectedImageFile()) {
+      this.portfolioService.uploadImage(this.selectedImageFile()!, 'projects').subscribe({
+        next: (res: any) => {
+          saveData.imageUrl = res.url || res.filePath || res.data?.url;
+          this._performSave(saveData);
+        },
+        error: () => {
+          this.saving.set(false);
+          this.message.set({ type: 'error', text: 'Image upload failed.' });
+        }
+      });
+    } else {
+      this._performSave(saveData);
+    }
+  }
+
+  private _performSave(saveData: Partial<IProject>) {
     if (this.editingProject()) {
-      this.portfolioService.updateProject(this.editingProject()!._id!, this.formData()).subscribe({
+      this.portfolioService.updateProject(this.editingProject()!._id!, saveData).subscribe({
         next: (updated) => {
           this.projects.update(list => 
             list.map(p => p._id === updated._id ? updated : p)
@@ -137,7 +181,7 @@ export class ProjectsManagerComponent implements OnInit {
         }
       });
     } else {
-      this.portfolioService.createProject(this.formData()).subscribe({
+      this.portfolioService.createProject(saveData).subscribe({
         next: (created) => {
           this.projects.update(list => [...list, created]);
           this.saving.set(false);

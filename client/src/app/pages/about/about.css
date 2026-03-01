@@ -2,10 +2,11 @@
   background: linear-gradient(to bottom, #faf9fb, #f5f0f7);
 }
 
-.hero-gradient {
-  background: linear-gradient(135deg, #91729c 0%, #432161 100%);
-  position: relative;
-  overflow: hidden;
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('/AboutUs.jpg') center/cover no-repeat;
+  z-index: 0;
 }
 
 .floating-element {

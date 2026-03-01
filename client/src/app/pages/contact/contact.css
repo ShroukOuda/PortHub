@@ -2,10 +2,11 @@
   background: #faf9fb;
 }
 
-.hero-gradient {
-  background: linear-gradient(135deg, #91729c 0%, #432161 100%);
-  position: relative;
-  overflow: hidden;
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('/ContactUs.jpeg') center/cover no-repeat;
+  z-index: 0;
 }
 
 .floating-element {

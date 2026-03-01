@@ -96,9 +96,36 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Client Image URL</label>
-            <input type="text" [(ngModel)]="currentTestimonial.authorImage" name="authorImage"
-                   placeholder="https://example.com/photo.jpg">
+            <label>Client Image</label>
+            <div class="image-mode-toggle">
+              <label class="radio-label">
+                <input type="radio" name="imageMode" value="url" [checked]="imageMode === 'url'" (change)="imageMode = 'url'"> URL
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="imageMode" value="upload" [checked]="imageMode === 'upload'" (change)="imageMode = 'upload'"> Upload
+              </label>
+            </div>
+            @if (imageMode === 'url') {
+              <input type="text" [(ngModel)]="currentTestimonial.authorImage" name="authorImage"
+                     placeholder="https://example.com/photo.jpg">
+            } @else {
+              <div class="file-upload-area">
+                @if (!imagePreview) {
+                  <label class="upload-label">
+                    <lucide-icon name="upload" [size]="20"></lucide-icon>
+                    <span>Choose client photo</span>
+                    <input type="file" accept="image/*" (change)="onImageFileSelected($event)" hidden>
+                  </label>
+                } @else {
+                  <div class="image-preview">
+                    <img [src]="imagePreview" alt="Client photo preview">
+                    <button type="button" class="remove-image-btn" (click)="removeImageFile()">
+                      <lucide-icon name="x" [size]="14"></lucide-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
           </div>
           <div class="form-group">
             <label>Rating</label>

@@ -1,6 +1,6 @@
 <div class="portfolios-page">
   <!-- Hero Header -->
-  <section class="hero-gradient text-white py-20 relative overflow-hidden">
+  <section class="hero-bg text-white py-20 relative overflow-hidden">
     <div class="absolute inset-0 pattern-bg opacity-15"></div>
     <div class="relative max-w-5xl mx-auto px-6 text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-4">
@@ -24,8 +24,20 @@
     </div>
   </section>
 
+  <!-- Results Info -->
+  @if (!isLoading() && filteredUsers().length > 0) {
+    <div class="results-bar">
+      <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <span class="text-sm text-gray-500">
+          Showing {{ (currentPage() - 1) * itemsPerPage() + 1 }}–{{ currentPage() * itemsPerPage() > filteredUsers().length ? filteredUsers().length : currentPage() * itemsPerPage() }}
+          of {{ filteredUsers().length }} portfolios
+        </span>
+      </div>
+    </div>
+  }
+
   <!-- Main Content -->
-  <section class="py-12 bg-gradient-to-b from-gray-50 to-white min-h-[50vh]">
+  <section class="py-10 bg-gradient-to-b from-gray-50 to-white min-h-[50vh]">
     <div class="max-w-7xl mx-auto px-6">
 
       <!-- Loading -->
@@ -36,66 +48,67 @@
         </div>
       }
 
-      <!-- Users Grid -->
-      @if (!isLoading() && filteredUsers().length > 0) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          @for (user of filteredUsers(); track user._id || $index) {
-            <div class="portfolio-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
-              <!-- Card Top Accent -->
-              <div class="h-1.5 bg-gradient-to-r from-[#91729c] to-[#432161]"></div>
-
-              <div class="p-5">
-                <!-- Avatar + Name -->
-                <div class="flex items-center gap-3 mb-4">
+      <!-- Users Grid - Upwork Style Cards -->
+      @if (!isLoading() && paginatedUsers().length > 0) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          @for (user of paginatedUsers(); track user._id || $index) {
+            <div class="upwork-card">
+              <!-- Top Section: Avatar + Online dot -->
+              <div class="upwork-card-top">
+                <div class="avatar-wrapper">
                   @if (user.profilePicture) {
                     <img
                       [src]="'http://localhost:3000/' + user.profilePicture"
                       [alt]="user.firstName"
-                      class="w-12 h-12 rounded-full object-cover border-2 border-[#91729c]/30"
+                      class="avatar-img"
                       (error)="onImageError($event)"
                     />
                   } @else {
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#91729c] to-[#432161] flex items-center justify-center text-white text-sm font-bold">
+                    <div class="avatar-placeholder">
                       {{ getInitials(user) }}
                     </div>
                   }
-                  <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-[#432161] truncate">
-                      {{ user.firstName }} {{ user.lastName || '' }}
-                    </h3>
-                    <p class="text-xs text-[#91729c]">&#64;{{ user.username }}</p>
-                  </div>
+                  <span class="online-dot"></span>
                 </div>
+              </div>
 
-                <!-- Job Title -->
+              <!-- Name & Title -->
+              <div class="upwork-card-body">
+                <h3 class="user-name">{{ user.firstName }} {{ user.lastName || '' }}</h3>
                 @if (user.jobTitle) {
-                  <p class="text-sm text-gray-600 font-medium mb-2 flex items-center gap-1.5">
-                    <lucide-icon name="briefcase" [size]="13" class="text-[#91729c]"></lucide-icon>
-                    {{ user.jobTitle }}
-                  </p>
+                  <p class="user-title">{{ user.jobTitle }}</p>
                 }
 
                 <!-- Location -->
                 @if (user.country || user.city) {
-                  <p class="text-xs text-gray-400 mb-3 flex items-center gap-1.5">
-                    <lucide-icon name="map-pin" [size]="12" class="text-gray-400"></lucide-icon>
-                    @if (user.city) { {{ user.city }} }
-                    @if (user.city && user.country) { , }
-                    @if (user.country) { {{ user.country }} }
-                  </p>
+                  <div class="user-location">
+                    <lucide-icon name="map-pin" [size]="12"></lucide-icon>
+                    <span>
+                      @if (user.city) { {{ user.city }} }
+                      @if (user.city && user.country) { , }
+                      @if (user.country) { {{ user.country }} }
+                    </span>
+                  </div>
                 }
 
                 <!-- Bio -->
                 @if (user.bio) {
-                  <p class="text-xs text-gray-500 leading-relaxed mb-4 line-clamp-2">{{ user.bio }}</p>
+                  <p class="user-bio">{{ user.bio }}</p>
                 }
 
-                <!-- View Portfolio Button -->
+                <!-- Username tag -->
+                <div class="user-tag">
+                  <lucide-icon name="at-sign" [size]="12"></lucide-icon>
+                  {{ user.username }}
+                </div>
+              </div>
+
+              <!-- Footer CTA -->
+              <div class="upwork-card-footer">
                 <a
                   [routerLink]="['/portfolio-view', user._id]"
                   target="_blank"
-                  class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border-2 border-[#91729c] text-[#91729c] text-sm font-semibold
-                         hover:bg-[#91729c] hover:text-white transition-all duration-300">
+                  class="view-btn">
                   <lucide-icon name="eye" [size]="15"></lucide-icon>
                   View Portfolio
                 </a>
@@ -103,6 +116,29 @@
             </div>
           }
         </div>
+
+        <!-- Pagination -->
+        @if (totalPages() > 1) {
+          <nav class="pagination">
+            <button class="page-btn nav-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">
+              <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+            </button>
+
+            @for (page of pageNumbers(); track $index) {
+              @if (page === '...') {
+                <span class="page-ellipsis">…</span>
+              } @else {
+                <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+                  {{ page }}
+                </button>
+              }
+            }
+
+            <button class="page-btn nav-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">
+              <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+            </button>
+          </nav>
+        }
       }
 
       <!-- No results -->

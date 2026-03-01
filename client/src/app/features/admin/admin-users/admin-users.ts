@@ -28,7 +28,7 @@ export class AdminUsersComponent implements OnInit {
 
   loadUsers() {
     this.loading.set(true);
-    this.adminService.getUsers().subscribe({
+    this.adminService.getUsers({ limit: 10000 }).subscribe({
       next: (response) => {
         this.users.set(response.data);
         this.applyFilters();

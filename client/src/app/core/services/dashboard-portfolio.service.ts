@@ -35,6 +35,22 @@ export class DashboardPortfolioService {
     });
   }
 
+  private getAuthHeadersMultipart(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  // Upload image for any type (projects, skills, certificates, testimonials)
+  uploadImage(file: File, type: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${this.apiUrl}/api/uploads/${type}`, formData, {
+      headers: this.getAuthHeadersMultipart()
+    });
+  }
+
   // Get current user's portfolio
   getMyPortfolio(): Observable<IPortfolio | null> {
     this.loadingSubject.next(true);

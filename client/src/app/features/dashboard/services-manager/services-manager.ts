@@ -55,9 +55,12 @@ export class ServicesManagerComponent implements OnInit {
     if (!this.formData().title) { this.message.set({ type: 'error', text: 'Title is required.' }); return; }
     this.saving.set(true);
 
+    // Sync name and title for backward compatibility
+    const saveData = { ...this.formData(), name: this.formData().title };
+
     const operation = this.editingItem()
-      ? this.portfolioService.updateService(this.editingItem()!._id!, this.formData())
-      : this.portfolioService.createService(this.formData());
+      ? this.portfolioService.updateService(this.editingItem()!._id!, saveData)
+      : this.portfolioService.createService(saveData);
 
     operation.subscribe({
       next: (result) => {

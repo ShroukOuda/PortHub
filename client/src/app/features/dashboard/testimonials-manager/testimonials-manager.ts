@@ -21,6 +21,11 @@ export class TestimonialsManagerComponent implements OnInit {
   currentTestimonial: Partial<ITestimonial> = {};
   message: { type: 'success' | 'error'; text: string } | null = null;
 
+  // Image upload
+  imageMode: 'url' | 'upload' = 'url';
+  selectedImageFile: File | null = null;
+  imagePreview: string | null = null;
+
   constructor(private portfolioService: DashboardPortfolioService) {}
 
   ngOnInit(): void {
@@ -46,12 +51,18 @@ export class TestimonialsManagerComponent implements OnInit {
     this.currentTestimonial = {
       rating: 5
     };
+    this.imageMode = 'url';
+    this.selectedImageFile = null;
+    this.imagePreview = null;
     this.showModal = true;
   }
 
   editTestimonial(testimonial: ITestimonial): void {
     this.editMode = true;
     this.currentTestimonial = { ...testimonial };
+    this.imageMode = 'url';
+    this.selectedImageFile = null;
+    this.imagePreview = null;
     this.showModal = true;
   }
 
@@ -69,6 +80,23 @@ export class TestimonialsManagerComponent implements OnInit {
     this.saving = true;
     this.message = null;
 
+    if (this.selectedImageFile) {
+      this.portfolioService.uploadImage(this.selectedImageFile, 'testimonials').subscribe({
+        next: (res: any) => {
+          this.currentTestimonial.authorImage = res.url || res.path || res.data?.url;
+          this._performSave();
+        },
+        error: () => {
+          this.saving = false;
+          this.message = { type: 'error', text: 'Image upload failed.' };
+        }
+      });
+    } else {
+      this._performSave();
+    }
+  }
+
+  private _performSave(): void {
     if (this.editMode && this.currentTestimonial._id) {
       this.portfolioService.updateTestimonial(this.currentTestimonial._id, this.currentTestimonial).subscribe({
         next: (result) => {
@@ -124,6 +152,21 @@ export class TestimonialsManagerComponent implements OnInit {
 
   setRating(rating: number): void {
     this.currentTestimonial.rating = rating;
+  }
+
+  onImageFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedImageFile = file;
+      const reader = new FileReader();
+      reader.onload = () => this.imagePreview = reader.result as string;
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImageFile(): void {
+    this.selectedImageFile = null;
+    this.imagePreview = null;
   }
 
   getStars(rating: number = 5): number[] {
