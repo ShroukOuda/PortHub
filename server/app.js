@@ -17,6 +17,7 @@ const testimonialRoutes = require('./routes/testimonialRoutes');
 const certificateRoutes = require('./routes/certificateRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const skillDefinitionRoutes = require('./routes/skillDefinitionRoutes');
 
 const app = express();
 app.use(express.json());
@@ -39,5 +40,6 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/skill-definitions', skillDefinitionRoutes);
 
 module.exports = app;

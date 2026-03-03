@@ -154,6 +154,48 @@
             </canvas>
           </div>
         </div>
+
+        <!-- Country Distribution Chart -->
+        @if (stats().countryCounts.length > 0) {
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title-group">
+                <h3>
+                  <lucide-icon name="globe" [size]="18"></lucide-icon>
+                  Users by Country
+                </h3>
+                <span class="chart-subtitle">Distribution across {{ stats().totalCountries }} countries</span>
+              </div>
+            </div>
+            <div class="chart-body">
+              <canvas baseChart
+                [type]="'doughnut'"
+                [data]="countryChartData"
+                [options]="countryChartOptions">
+              </canvas>
+            </div>
+          </div>
+        }
+
+        <!-- Users vs Admins Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <h3>
+                <lucide-icon name="shield" [size]="18"></lucide-icon>
+                Users vs Admins
+              </h3>
+              <span class="chart-subtitle">Role distribution</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [type]="'pie'"
+              [data]="roleChartData"
+              [options]="roleChartOptions">
+            </canvas>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -203,8 +245,8 @@
               @for (user of stats().recentUsers; track user._id) {
                 <div class="user-item">
                   <div class="user-avatar">
-                    @if (user.profileImage) {
-                      <img [src]="user.profileImage" [alt]="user.firstName">
+                    @if (user.profilePicture || user.profileImage) {
+                      <img [src]="getAdminProfileUrl(user)" [alt]="user.firstName">
                     } @else {
                       <lucide-icon name="user" [size]="20"></lucide-icon>
                     }

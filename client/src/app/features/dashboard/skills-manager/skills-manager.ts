@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
 import { ISkill } from '../../../core/models/iskill';
 
 @Component({
@@ -14,13 +15,16 @@ import { ISkill } from '../../../core/models/iskill';
 })
 export class SkillsManagerComponent implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
+  private skillDefService = inject(SkillDefinitionService);
 
   loading = signal(true);
   saving = signal(false);
   skills = signal<ISkill[]>([]);
+  availableSkills = signal<SkillDefinition[]>([]);
   showModal = signal(false);
   editingItem = signal<ISkill | null>(null);
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
+  searchQuery = signal('');
 
   formData = signal<Partial<ISkill>>({
     name: '',
@@ -28,15 +32,9 @@ export class SkillsManagerComponent implements OnInit {
     category: 'Technical'
   });
 
-  // Icon upload
-  iconMode = signal<'url' | 'upload'>('url');
-  selectedIconFile = signal<File | null>(null);
-  iconPreview = signal<string | null>(null);
-
-  categories = ['Technical', 'Soft Skills', 'Languages', 'Tools', 'Frameworks', 'Other'];
-
   ngOnInit() {
     this.loadItems();
+    this.loadAvailableSkills();
   }
 
   loadItems() {
@@ -50,21 +48,32 @@ export class SkillsManagerComponent implements OnInit {
     });
   }
 
-  openAddModal() {
-    this.editingItem.set(null);
-    this.formData.set({ name: '', level: 80, category: 'Technical', icon: '' });
-    this.iconMode.set('url');
-    this.selectedIconFile.set(null);
-    this.iconPreview.set(null);
-    this.showModal.set(true);
+  loadAvailableSkills() {
+    this.skillDefService.getAll().subscribe({
+      next: (skills) => this.availableSkills.set(skills)
+    });
   }
 
-  openEditModal(item: ISkill) {
-    this.editingItem.set(item);
-    this.formData.set({ name: item.name, level: item.level, category: item.category, icon: item.icon || '' });
-    this.iconMode.set('url');
-    this.selectedIconFile.set(null);
-    this.iconPreview.set(null);
+  getFilteredAvailableSkills(): SkillDefinition[] {
+    const query = this.searchQuery().toLowerCase();
+    const existingNames = this.skills().map(s => s.name.toLowerCase());
+    return this.availableSkills()
+      .filter(s => !existingNames.includes(s.name.toLowerCase()))
+      .filter(s => !query || s.name.toLowerCase().includes(query) || s.category?.toLowerCase().includes(query));
+  }
+
+  getAvailableCategories(): string[] {
+    const cats = new Set(this.getFilteredAvailableSkills().map(s => s.category || 'Other'));
+    return Array.from(cats).sort();
+  }
+
+  getSkillsForCategory(category: string): SkillDefinition[] {
+    return this.getFilteredAvailableSkills().filter(s => (s.category || 'Other') === category);
+  }
+
+  openAddModal() {
+    this.editingItem.set(null);
+    this.searchQuery.set('');
     this.showModal.set(true);
   }
 
@@ -73,94 +82,47 @@ export class SkillsManagerComponent implements OnInit {
     this.editingItem.set(null);
   }
 
-  updateFormField(field: keyof ISkill, value: any) {
-    this.formData.update(data => ({ ...data, [field]: value }));
-  }
-
-  onIconFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.selectedIconFile.set(file);
-      const reader = new FileReader();
-      reader.onload = () => this.iconPreview.set(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeIconFile() {
-    this.selectedIconFile.set(null);
-    this.iconPreview.set(null);
-  }
-
-  save() {
-    if (!this.formData().name) {
-      this.message.set({ type: 'error', text: 'Please fill in required fields.' });
-      return;
-    }
-
+  selectSkill(skillDef: SkillDefinition) {
     this.saving.set(true);
-    this.message.set(null);
+    const newSkill: Partial<ISkill> = {
+      name: skillDef.name,
+      level: 80,
+      category: skillDef.category,
+      icon: skillDef.icon
+    };
 
-    const saveData = { ...this.formData() };
-
-    if (this.selectedIconFile()) {
-      this.portfolioService.uploadImage(this.selectedIconFile()!, 'skills').subscribe({
-        next: (res: any) => {
-          saveData.icon = res.url || res.path || res.data?.url;
-          this._performSave(saveData);
-        },
-        error: () => {
-          this.saving.set(false);
-          this.message.set({ type: 'error', text: 'Icon upload failed.' });
-        }
-      });
-    } else {
-      this._performSave(saveData);
-    }
+    this.portfolioService.createSkill(newSkill).subscribe({
+      next: (created) => {
+        this.skills.update(list => [...list, created]);
+        this.saving.set(false);
+        this.message.set({ type: 'success', text: `${skillDef.name} added!` });
+        setTimeout(() => this.message.set(null), 3000);
+      },
+      error: () => {
+        this.saving.set(false);
+        this.message.set({ type: 'error', text: 'Failed to add skill.' });
+      }
+    });
   }
 
-  private _performSave(saveData: Partial<ISkill>) {
-    if (this.editingItem()) {
-      this.portfolioService.updateSkill(this.editingItem()!._id!, saveData).subscribe({
-        next: (updated) => {
-          this.skills.update(list => list.map(s => s._id === updated._id ? updated : s));
-          this.saving.set(false);
-          this.closeModal();
-          this.message.set({ type: 'success', text: 'Skill updated successfully!' });
-          setTimeout(() => this.message.set(null), 3000);
-        },
-        error: () => {
-          this.saving.set(false);
-          this.message.set({ type: 'error', text: 'Failed to update skill.' });
-        }
-      });
-    } else {
-      this.portfolioService.createSkill(saveData).subscribe({
-        next: (created) => {
-          this.skills.update(list => [...list, created]);
-          this.saving.set(false);
-          this.closeModal();
-          this.message.set({ type: 'success', text: 'Skill created successfully!' });
-          setTimeout(() => this.message.set(null), 3000);
-        },
-        error: () => {
-          this.saving.set(false);
-          this.message.set({ type: 'error', text: 'Failed to create skill.' });
-        }
-      });
-    }
+  updateLevel(skill: ISkill, level: number) {
+    this.portfolioService.updateSkill(skill._id!, { level }).subscribe({
+      next: (updated) => {
+        this.skills.update(list => list.map(s => s._id === updated._id ? updated : s));
+      }
+    });
   }
 
   delete(item: ISkill) {
-    if (!confirm(`Are you sure you want to delete "${item.name}"?`)) return;
+    if (!confirm(`Remove "${item.name}" from your skills?`)) return;
 
     this.portfolioService.deleteSkill(item._id!).subscribe({
       next: () => {
         this.skills.update(list => list.filter(s => s._id !== item._id));
-        this.message.set({ type: 'success', text: 'Skill deleted successfully!' });
+        this.message.set({ type: 'success', text: 'Skill removed!' });
         setTimeout(() => this.message.set(null), 3000);
       },
-      error: () => this.message.set({ type: 'error', text: 'Failed to delete skill.' })
+      error: () => this.message.set({ type: 'error', text: 'Failed to remove skill.' })
     });
   }
 
@@ -175,6 +137,6 @@ export class SkillsManagerComponent implements OnInit {
   }
 
   getCategoryKeys(): string[] {
-    return Object.keys(this.getSkillsByCategory());
+    return Object.keys(this.getSkillsByCategory()).sort();
   }
 }

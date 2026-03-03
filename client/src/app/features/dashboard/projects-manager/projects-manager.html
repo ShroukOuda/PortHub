@@ -41,9 +41,9 @@
               <lucide-icon name="star" [size]="18"></lucide-icon> Featured
             </span>
           }
-          @if (project.imageUrl) {
+          @if (project.image && project.image !== 'default-project-image.png') {
             <div class="item-image">
-              <img [src]="project.imageUrl" [alt]="project.title">
+              <img [src]="project.image" [alt]="project.title">
             </div>
           }
           <div class="item-content">
@@ -128,8 +128,8 @@
               @if (imageMode() === 'url') {
                 <input 
                   type="text" 
-                  [value]="formData().imageUrl"
-                  (input)="updateFormField('imageUrl', $any($event.target).value)"
+                  [value]="formData().image"
+                  (input)="updateFormField('image', $any($event.target).value)"
                   placeholder="https://...">
               } @else {
                 <div class="file-upload-area">

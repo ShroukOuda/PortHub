@@ -1,0 +1,50 @@
+services:
+  # MongoDB
+  mongo:
+    image: mongo:7
+    container_name: porthub-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: porthub
+
+  # Express API Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: porthub-server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      PORT: 3000
+      MONGO_URL: mongodb://mongo:27017
+      DB_NAME: porthub
+      JWT_SECRET: ${JWT_SECRET:-porthub-secret-key}
+      NODE_ENV: production
+    volumes:
+      - server-uploads:/app/uploads
+
+  # Angular SSR Client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: porthub-client
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    depends_on:
+      - server
+    environment:
+      PORT: 4000
+
+volumes:
+  mongo-data:
+  server-uploads:

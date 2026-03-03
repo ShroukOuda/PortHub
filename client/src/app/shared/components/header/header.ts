@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import {Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { AuthStateService } from '../../../core/services/auth-state.service';
 import { IUser } from '../../../core/models/iuser';
+import { environment } from '../../../../environments/environment';
 import { filter } from 'rxjs/operators';
 
 
@@ -16,6 +17,7 @@ import { filter } from 'rxjs/operators';
 })
 export class Header implements OnInit {
   private authState = inject(AuthStateService);
+  private apiUrl = environment.apiUrl;
   
   isLoggedIn = signal(false);
   currentUser = signal<IUser | null>(null);
@@ -58,6 +60,14 @@ export class Header implements OnInit {
   logout() {
     this.authState.logout();
     this.mobileMenuOpen.set(false);
+  }
+
+  getProfileImageUrl(): string | null {
+    const user = this.currentUser();
+    const pic = user?.profilePicture || user?.profileImage;
+    if (!pic || pic === 'default-profile.png') return null;
+    if (pic.startsWith('http')) return pic;
+    return `${this.apiUrl}/${pic}`;
   }
 
 

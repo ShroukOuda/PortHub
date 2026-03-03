@@ -19,7 +19,7 @@ const getMyProjects = async (req, res) => {
 };
 
 const createProject = async (req, res) => {
-    const { title, description, technologies, images, demoUrl, githubUrl, featured } = req.body;
+    const { title, description, technologies, images, image, demoUrl, githubUrl, featured } = req.body;
     let { portfolioId } = req.body;
 
     try {
@@ -36,7 +36,7 @@ const createProject = async (req, res) => {
             title,
             description,
             technologies,
-            images,
+            image,
             demoUrl,
             githubUrl,
             featured

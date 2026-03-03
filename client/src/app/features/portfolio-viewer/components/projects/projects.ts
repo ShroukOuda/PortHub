@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Iproject } from '../../../../core/models/iproject';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-projects',
@@ -31,6 +32,17 @@ export class Projects implements OnInit, OnDestroy {
 
   get projects(): Iproject[] {
     return this.portfolioData?.projects || [];
+  }
+
+  hasProjectImage(project: Iproject): boolean {
+    return !!project.image && project.image !== 'default-project-image.png';
+  }
+
+  getProjectImageUrl(project: Iproject): string {
+    const img = project.image || '';
+    if (!img || img === 'default-project-image.png') return '';
+    if (img.startsWith('http://') || img.startsWith('https://')) return img;
+    return `${environment.apiUrl}/${img}`;
   }
 }
 

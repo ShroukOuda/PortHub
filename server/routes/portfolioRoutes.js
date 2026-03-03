@@ -10,7 +10,8 @@ const {
     getMyPortfolio,
     updatePortfolioTheme,
     trackPortfolioView,
-    getMyPortfolioStats
+    getMyPortfolioStats,
+    getFullPortfolioByUserId
 } = require('../controllers/portfolioController');
 
 const authMiddleware = require('../middlewares/authMiddleware');
@@ -24,6 +25,9 @@ router.patch('/:portfolioId/theme', authMiddleware, updatePortfolioTheme);
 
 // Public: track portfolio view (no auth needed)
 router.post('/:portfolioId/view', trackPortfolioView);
+
+// Public: get full portfolio data in single call (no auth, faster loading)
+router.get('/user/:userId/full', optionalAuthMiddleware, getFullPortfolioByUserId);
 
 router.post('/', authMiddleware, roleMiddleware(['user', 'admin']), createPortfolio);
 router.put('/:portfolioId', authMiddleware, roleMiddleware(['user', 'admin']), updatePortfolio);

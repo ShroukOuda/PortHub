@@ -17,10 +17,17 @@ export class AdminUsersComponent implements OnInit {
 
   loading = signal(true);
   users = signal<IUser[]>([]);
-  filteredUsers = signal<IUser[]>([]);
   searchQuery = signal('');
   roleFilter = signal('all');
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+  totalUsers = signal(0);
+  totalPages = signal(0);
+
+  private searchTimeout: any;
 
   ngOnInit() {
     this.loadUsers();
@@ -28,53 +35,67 @@ export class AdminUsersComponent implements OnInit {
 
   loadUsers() {
     this.loading.set(true);
-    this.adminService.getUsers({ limit: 10000 }).subscribe({
+    const params: any = {
+      page: this.currentPage(),
+      limit: this.pageSize()
+    };
+    const query = this.searchQuery().trim();
+    if (query) params.search = query;
+    if (this.roleFilter() !== 'all') params.role = this.roleFilter();
+
+    this.adminService.getUsers(params).subscribe({
       next: (response) => {
         this.users.set(response.data);
-        this.applyFilters();
+        this.totalUsers.set(response.pagination.total);
+        this.totalPages.set(response.pagination.pages);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
     });
   }
 
-  applyFilters() {
-    let filtered = this.users();
-
-    // Search filter
-    const query = this.searchQuery().toLowerCase();
-    if (query) {
-      filtered = filtered.filter(u => 
-        u.firstName?.toLowerCase().includes(query) ||
-        u.lastName?.toLowerCase().includes(query) ||
-        u.email?.toLowerCase().includes(query) ||
-        u.username?.toLowerCase().includes(query)
-      );
-    }
-
-    // Role filter
-    if (this.roleFilter() !== 'all') {
-      filtered = filtered.filter(u => u.role === this.roleFilter());
-    }
-
-    this.filteredUsers.set(filtered);
-  }
-
   onSearch(query: string) {
     this.searchQuery.set(query);
-    this.applyFilters();
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.currentPage.set(1);
+      this.loadUsers();
+    }, 400);
   }
 
   onRoleFilter(role: string) {
     this.roleFilter.set(role);
-    this.applyFilters();
+    this.currentPage.set(1);
+    this.loadUsers();
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.loadUsers();
+  }
+
+  getPageNumbers(): number[] {
+    const total = this.totalPages();
+    const current = this.currentPage();
+    const pages: number[] = [];
+    const maxVisible = 5;
+
+    if (total <= maxVisible) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      let start = Math.max(1, current - 2);
+      let end = Math.min(total, start + maxVisible - 1);
+      if (end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+      for (let i = start; i <= end; i++) pages.push(i);
+    }
+    return pages;
   }
 
   toggleUserStatus(user: IUser) {
     this.adminService.toggleUserStatus(user._id!).subscribe({
       next: (updated) => {
         this.users.update(list => list.map(u => u._id === updated._id ? updated : u));
-        this.applyFilters();
         this.message.set({ type: 'success', text: `User ${updated.isActive ? 'activated' : 'deactivated'}` });
         setTimeout(() => this.message.set(null), 3000);
       },
@@ -89,8 +110,7 @@ export class AdminUsersComponent implements OnInit {
 
     this.adminService.deleteUser(user._id!).subscribe({
       next: () => {
-        this.users.update(list => list.filter(u => u._id !== user._id));
-        this.applyFilters();
+        this.loadUsers();
         this.message.set({ type: 'success', text: 'User deleted successfully' });
         setTimeout(() => this.message.set(null), 3000);
       },
@@ -104,7 +124,6 @@ export class AdminUsersComponent implements OnInit {
     this.adminService.changeUserRole(user._id!, role).subscribe({
       next: (updated) => {
         this.users.update(list => list.map(u => u._id === updated._id ? updated : u));
-        this.applyFilters();
         this.message.set({ type: 'success', text: `User role changed to ${role}` });
         setTimeout(() => this.message.set(null), 3000);
       },

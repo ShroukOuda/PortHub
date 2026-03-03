@@ -2,7 +2,7 @@
   <header class="page-header">
     <div class="header-content">
       <h1><lucide-icon name="wrench" [size]="18"></lucide-icon> Skills</h1>
-      <p>Manage your skills and expertise</p>
+      <p>Select skills from the available list to showcase your expertise</p>
     </div>
     <button class="btn btn-primary" (click)="openAddModal()">
       <lucide-icon name="plus" [size]="16"></lucide-icon>
@@ -26,7 +26,7 @@
     <div class="empty-state">
       <lucide-icon name="wrench" [size]="48"></lucide-icon>
       <h3>No Skills Yet</h3>
-      <p>Add your skills to showcase your expertise.</p>
+      <p>Select skills from our library to showcase your expertise.</p>
       <button class="btn btn-primary" (click)="openAddModal()">
         <lucide-icon name="plus" [size]="16"></lucide-icon>
         Add Your First Skill
@@ -47,11 +47,11 @@
                 <div class="skill-bar">
                   <div class="skill-progress" [style.width.%]="skill.level"></div>
                 </div>
-                <div class="skill-actions">
-                  <button class="action-btn edit" (click)="openEditModal(skill)" title="Edit">
-                    <lucide-icon name="pencil" [size]="16"></lucide-icon>
-                  </button>
-                  <button class="action-btn delete" (click)="delete(skill)" title="Delete">
+                <div class="skill-controls">
+                  <input type="range" min="0" max="100" [value]="skill.level"
+                    (change)="updateLevel(skill, +$any($event.target).value)"
+                    class="level-slider">
+                  <button class="action-btn delete" (click)="delete(skill)" title="Remove">
                     <lucide-icon name="trash-2" [size]="16"></lucide-icon>
                   </button>
                 </div>
@@ -63,99 +63,45 @@
     </div>
   }
 
-  <!-- Modal -->
+  <!-- Select Skills Modal -->
   @if (showModal()) {
     <div class="modal-overlay" (click)="closeModal()">
-      <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal modal-lg" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>{{ editingItem() ? 'Edit Skill' : 'Add New Skill' }}</h2>
+          <h2>Select Skills</h2>
           <button class="close-btn" (click)="closeModal()">
             <lucide-icon name="x" [size]="20"></lucide-icon>
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label>Skill Name <span class="required">*</span></label>
-            <input 
-              type="text" 
-              [value]="formData().name"
-              (input)="updateFormField('name', $any($event.target).value)"
-              placeholder="e.g., JavaScript, React, Python">
+          <div class="search-box">
+            <lucide-icon name="search" [size]="16"></lucide-icon>
+            <input type="text" placeholder="Search available skills..."
+              [value]="searchQuery()"
+              (input)="searchQuery.set($any($event.target).value)">
           </div>
 
-          <div class="form-group">
-            <label>Category</label>
-            <select 
-              [value]="formData().category"
-              (change)="updateFormField('category', $any($event.target).value)">
-              @for (cat of categories; track cat) {
-                <option [value]="cat">{{ cat }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Proficiency Level: {{ formData().level }}%</label>
-            <input 
-              type="range" 
-              min="0" 
-              max="100" 
-              [value]="formData().level"
-              (input)="updateFormField('level', +$any($event.target).value)">
-            <div class="level-labels">
-              <span>Beginner</span>
-              <span>Intermediate</span>
-              <span>Advanced</span>
-              <span>Expert</span>
+          @if (getFilteredAvailableSkills().length === 0) {
+            <div class="empty-state compact">
+              <p>No more skills available. All skills have been added!</p>
             </div>
-          </div>
-
-          <!-- Icon Upload -->
-          <div class="form-group">
-            <label>Skill Icon</label>
-            <div class="image-mode-toggle">
-              <label class="radio-label">
-                <input type="radio" name="iconMode" value="url" [checked]="iconMode() === 'url'" (change)="iconMode.set('url')"> URL
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="iconMode" value="upload" [checked]="iconMode() === 'upload'" (change)="iconMode.set('upload')"> Upload
-              </label>
-            </div>
-            @if (iconMode() === 'url') {
-              <input 
-                type="text" 
-                [value]="formData().icon"
-                (input)="updateFormField('icon', $any($event.target).value)"
-                placeholder="Icon URL or Lucide icon name (e.g., code, database)">
-            } @else {
-              <div class="file-upload-area">
-                @if (!iconPreview()) {
-                  <label class="upload-label">
-                    <lucide-icon name="upload" [size]="20"></lucide-icon>
-                    <span>Choose icon file</span>
-                    <input type="file" accept="image/*" (change)="onIconFileSelected($event)" hidden>
-                  </label>
-                } @else {
-                  <div class="image-preview">
-                    <img [src]="iconPreview()" alt="Icon preview">
-                    <button type="button" class="remove-image-btn" (click)="removeIconFile()">
-                      <lucide-icon name="x" [size]="14"></lucide-icon>
-                    </button>
+          } @else {
+            <div class="available-skills">
+              @for (category of getAvailableCategories(); track category) {
+                <div class="avail-category">
+                  <h3>{{ category }}</h3>
+                  <div class="avail-chips">
+                    @for (skill of getSkillsForCategory(category); track skill._id) {
+                      <button class="avail-chip" (click)="selectSkill(skill)" [disabled]="saving()">
+                        <lucide-icon name="plus" [size]="14"></lucide-icon>
+                        {{ skill.name }}
+                      </button>
+                    }
                   </div>
-                }
-              </div>
-            }
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-          <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
-            @if (saving()) {
-              <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> Saving...
-            } @else {
-              <lucide-icon name="save" [size]="16"></lucide-icon> {{ editingItem() ? 'Update' : 'Create' }}
-            }
-          </button>
+                </div>
+              }
+            </div>
+          }
         </div>
       </div>
     </div>

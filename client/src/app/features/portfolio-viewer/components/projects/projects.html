@@ -15,7 +15,7 @@
     </div>
 
     @if (projects.length === 0) {
-      <div class="empty-state">
+      <div class="flex flex-col items-center justify-center py-16 px-8 text-center">
         <lucide-icon name="folder-open" [size]="56" style="color: var(--main-color); opacity: 0.3" class="mb-4"></lucide-icon>
         <p class="text-lg opacity-50">No projects added yet.</p>
       </div>
@@ -25,10 +25,10 @@
           <div class="project-card bg-[color:var(--card-bg)] border rounded-xl overflow-hidden shadow-md"
                style="border-color: color-mix(in srgb, var(--main-color) 30%, transparent);">
             <!-- Project Image -->
-            @if (project.image) {
+            @if (hasProjectImage(project)) {
               <div class="project-image-wrapper overflow-hidden">
                 <img
-                  [src]="project.image"
+                  [src]="getProjectImageUrl(project)"
                   [alt]="project.title"
                   class="project-image w-full h-48 object-cover"
                 />

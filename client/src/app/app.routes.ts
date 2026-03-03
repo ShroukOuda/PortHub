@@ -23,6 +23,7 @@ import { AdminLayoutComponent } from './features/admin/admin-layout/admin-layout
 import { AdminOverviewComponent } from './features/admin/admin-overview/admin-overview';
 import { AdminUsersComponent } from './features/admin/admin-users/admin-users';
 import { AdminPortfoliosComponent } from './features/admin/admin-portfolios/admin-portfolios';
+import { AdminSkillsComponent } from './features/admin/admin-skills/admin-skills';
 
 export const routes: Routes = [
     // Public routes
@@ -67,6 +68,7 @@ export const routes: Routes = [
             { path: '', component: AdminOverviewComponent },
             { path: 'users', component: AdminUsersComponent },
             { path: 'portfolios', component: AdminPortfoliosComponent },
+            { path: 'skills', component: AdminSkillsComponent },
         ]
     },
     

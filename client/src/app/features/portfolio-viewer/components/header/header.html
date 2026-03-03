@@ -13,9 +13,9 @@
       >
         @if (user) {
           <span class="relative" [style.color]="'var(--main-color)'">
-            {{ user.firstName?.charAt(0) || 'P' }}
+            {{ user.firstName.charAt(0) || 'P' }}
           </span>
-          <span [style.color]="'var(--text-color)'">{{ user.firstName?.slice(1) || 'ortfolio' }}</span>
+          <span [style.color]="'var(--text-color)'">{{ user.firstName.slice(1) || 'ortfolio' }}</span>
         } @else {
           <span class="relative" [style.color]="'var(--main-color)'">P</span>
           <span [style.color]="'var(--text-color)'">ortfolio</span>

@@ -62,4 +62,14 @@
   .filters-bar { flex-direction: column; }
   .users-table-wrapper { overflow-x: auto; }
   .users-table { min-width: 700px; }
+  .pagination { flex-direction: column; gap: 1rem; }
 }
+
+/* Pagination */
+.pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding: 1rem 1.25rem; background: #12121e; border-radius: 12px; border: 1px solid rgba(231, 76, 60, 0.1); flex-wrap: wrap; gap: 1rem; }
+.pagination-info { color: #a0a0b0; font-size: 0.9rem; }
+.pagination-controls { display: flex; gap: 0.35rem; align-items: center; }
+.page-btn { background: rgba(231, 76, 60, 0.1); color: #a0a0b0; border: 1px solid transparent; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; min-width: 36px; height: 36px; }
+.page-btn:hover:not(:disabled):not(.active) { color: #fff; background: rgba(231, 76, 60, 0.2); }
+.page-btn.active { background: #e74c3c; color: #fff; font-weight: 600; }
+.page-btn:disabled { opacity: 0.35; cursor: not-allowed; }

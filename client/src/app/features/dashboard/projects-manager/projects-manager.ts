@@ -25,7 +25,7 @@ export class ProjectsManagerComponent implements OnInit {
   formData = signal<Partial<IProject>>({
     title: '',
     description: '',
-    imageUrl: '',
+    image: '',
     projectUrl: '',
     githubUrl: '',
     technologies: [],
@@ -59,7 +59,7 @@ export class ProjectsManagerComponent implements OnInit {
     this.formData.set({
       title: '',
       description: '',
-      imageUrl: '',
+      image: '',
       projectUrl: '',
       githubUrl: '',
       technologies: [],
@@ -77,14 +77,14 @@ export class ProjectsManagerComponent implements OnInit {
     this.formData.set({
       title: project.title,
       description: project.description,
-      imageUrl: project.imageUrl,
+      image: project.image || project.imageUrl || '',
       projectUrl: project.projectUrl,
       githubUrl: project.githubUrl,
       technologies: [...(project.technologies || [])],
       featured: project.featured
     });
     this.techInput.set('');
-    this.imageMode.set(project.imageUrl ? 'url' : 'url');
+    this.imageMode.set(project.image || project.imageUrl ? 'url' : 'url');
     this.imagePreview.set(null);
     this.selectedImageFile.set(null);
     this.showModal.set(true);
@@ -150,7 +150,7 @@ export class ProjectsManagerComponent implements OnInit {
     if (this.selectedImageFile()) {
       this.portfolioService.uploadImage(this.selectedImageFile()!, 'projects').subscribe({
         next: (res: any) => {
-          saveData.imageUrl = res.url || res.filePath || res.data?.url;
+          saveData.image = res.path || res.url || res.filePath || res.data?.url;
           this._performSave(saveData);
         },
         error: () => {

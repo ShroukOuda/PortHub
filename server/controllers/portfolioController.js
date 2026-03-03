@@ -288,6 +288,58 @@ const getMyPortfolioStats = async (req, res) => {
     }
 };
 
+// Get a user's full portfolio with all related data (public, no auth required)
+const getFullPortfolioByUserId = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const portfolio = await Portfolio.findOne({ userId }).populate('userId', 'firstName lastName email profilePicture profileImage bio jobTitle city country phone');
+        
+        if (!portfolio) {
+            return res.status(404).json({ message: 'No portfolio found for this user' });
+        }
+
+        // Check access
+        if (portfolio.isPublic === false) {
+            const requestingUser = req.user;
+            if (!requestingUser) return res.status(403).json({ message: 'This portfolio is private' });
+            const ownerId = portfolio.userId?._id?.toString() || portfolio.userId?.toString();
+            if (requestingUser._id.toString() !== ownerId && requestingUser.role !== 'admin') {
+                return res.status(403).json({ message: 'This portfolio is private' });
+            }
+        }
+
+        const portfolioId = portfolio._id;
+        const [projects, skills, services, education, experience, certificates, testimonials] = await Promise.all([
+            Project.find({ portfolioId }),
+            Skill.find({ portfolioId }),
+            Service.find({ portfolioId }),
+            Education.find({ portfolioId }),
+            Experience.find({ portfolioId }),
+            Certificate.find({ portfolioId }),
+            Testimonial.find({ portfolioId })
+        ]);
+
+        // Extract user data from populated field
+        const user = portfolio.userId;
+        const portfolioObj = portfolio.toObject();
+        delete portfolioObj.userId;
+
+        res.status(200).json({
+            user,
+            portfolio: portfolioObj,
+            projects,
+            skills,
+            services,
+            educations: education,
+            experiences: experience,
+            certificates,
+            testimonials
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching full portfolio', error: error.message });
+    }
+};
+
 module.exports = {
     createPortfolio,
     updatePortfolio,
@@ -298,5 +350,6 @@ module.exports = {
     getMyPortfolio,
     updatePortfolioTheme,
     trackPortfolioView,
-    getMyPortfolioStats
+    getMyPortfolioStats,
+    getFullPortfolioByUserId
 };

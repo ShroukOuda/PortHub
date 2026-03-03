@@ -9,8 +9,8 @@
       <span class="logo-text">ortHub</span>
     </div>
     <div class="user-avatar-mobile">
-      @if (currentUser()?.profileImage) {
-        <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName">
+      @if (getProfileImageUrl()) {
+        <img [src]="getProfileImageUrl()" [alt]="currentUser()?.firstName">
       } @else {
         <lucide-icon name="user" [size]="20"></lucide-icon>
       }
@@ -36,8 +36,8 @@
 
     <div class="user-info" [class.compact]="sidebarCollapsed()">
       <div class="avatar">
-        @if (currentUser()?.profileImage) {
-          <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName">
+        @if (getProfileImageUrl()) {
+          <img [src]="getProfileImageUrl()" [alt]="currentUser()?.firstName">
         } @else {
           <lucide-icon name="user" [size]="20"></lucide-icon>
         }

@@ -31,8 +31,8 @@
       @if (isLoggedIn()) {
         <div class="relative group">
           <button class="avatar-btn focus:outline-none">
-            @if (currentUser()?.profileImage) {
-              <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName"
+            @if (getProfileImageUrl()) {
+              <img [src]="getProfileImageUrl()" [alt]="currentUser()?.firstName"
                    class="w-9 h-9 rounded-full object-cover ring-2 ring-[#91729c]/30">
             } @else {
               <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#91729c] to-[#432161] flex items-center justify-center text-white text-sm font-semibold">
@@ -45,8 +45,8 @@
           <div class="dropdown-menu">
             <div class="px-4 py-3 border-b border-gray-100">
               <div class="flex items-center gap-3">
-                @if (currentUser()?.profileImage) {
-                  <img [src]="currentUser()?.profileImage" [alt]="currentUser()?.firstName"
+                @if (getProfileImageUrl()) {
+                  <img [src]="getProfileImageUrl()" [alt]="currentUser()?.firstName"
                        class="w-10 h-10 rounded-full object-cover ring-2 ring-[#91729c]/20">
                 } @else {
                   <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#91729c] to-[#432161] flex items-center justify-center text-white font-semibold">

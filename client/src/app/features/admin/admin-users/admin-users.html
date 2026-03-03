@@ -5,7 +5,7 @@
       <p>Manage all registered users</p>
     </div>
     <div class="header-stats">
-      <span class="stat">Total: {{ users().length }}</span>
+      <span class="stat">Total: {{ totalUsers() }}</span>
       <span class="stat">Admins: {{ getAdminCount() }}</span>
     </div>
   </header>
@@ -54,7 +54,7 @@
       <div class="spinner"></div>
       <p>Loading users...</p>
     </div>
-  } @else if (filteredUsers().length === 0) {
+  } @else if (users().length === 0) {
     <div class="empty-state">
       <lucide-icon name="user-x" [size]="48"></lucide-icon>
       <h3>No Users Found</h3>
@@ -73,7 +73,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (user of filteredUsers(); track user._id) {
+          @for (user of users(); track user._id) {
             <tr>
               <td>
                 <div class="user-cell">
@@ -114,5 +114,33 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <div class="pagination-info">
+          Showing {{ (currentPage() - 1) * pageSize() + 1 }} - {{ currentPage() * pageSize() > totalUsers() ? totalUsers() : currentPage() * pageSize() }} of {{ totalUsers() }}
+        </div>
+        <div class="pagination-controls">
+          <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(1)" title="First">
+            <lucide-icon name="chevrons-left" [size]="16"></lucide-icon>
+          </button>
+          <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" title="Previous">
+            <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          </button>
+          @for (page of getPageNumbers(); track page) {
+            <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+          <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)" title="Next">
+            <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+          </button>
+          <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(totalPages())" title="Last">
+            <lucide-icon name="chevrons-right" [size]="16"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    }
   }
 </div>

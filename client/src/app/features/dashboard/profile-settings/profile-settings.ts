@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthStateService } from '../../../core/services/auth-state.service';
 import { IUser } from '../../../core/models/iuser';
@@ -20,7 +19,7 @@ interface Country {
 @Component({
   selector: 'app-profile-settings',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule, RouterLink],
+  imports: [LucideAngularModule, CommonModule, FormsModule],
   templateUrl: './profile-settings.html',
   styleUrl: './profile-settings.css'
 })

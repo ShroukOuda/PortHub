@@ -5,7 +5,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import {
   ArrowLeft, ArrowRight, Award, BookOpen, Briefcase,
   Building2, Calendar, Camera, ChartBar, Check, ChevronDown, ChevronLeft,
-  ChevronRight, CircleAlert, CircleCheck, CircleDot, CircleUser,
+  ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck, CircleDot, CircleUser,
   Clock, CloudUpload, Code, ConciergeBell, Copy, Download, ExternalLink, Eye, EyeOff,
   Facebook, FileText, FolderOpen, FolderPlus, Github, Globe,
   GraduationCap, HandCoins, HandMetal, Heart, House, Image, Info, Instagram, Key,
@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(LucideAngularModule.pick({
       ArrowLeft, ArrowRight, Award, BookOpen, Briefcase,
       Building2, Calendar, Camera, ChartBar, Check, ChevronDown, ChevronLeft,
-      ChevronRight, CircleAlert, CircleCheck, CircleDot, CircleUser,
+      ChevronRight, ChevronsLeft, ChevronsRight, CircleAlert, CircleCheck, CircleDot, CircleUser,
       Clock, CloudUpload, Code, ConciergeBell, Copy, Download, ExternalLink, Eye, EyeOff,
       Facebook, FileText, FolderOpen, FolderPlus, Github, Globe,
       GraduationCap, HandCoins, HandMetal, Heart, House, Image, Info, Instagram, Key,

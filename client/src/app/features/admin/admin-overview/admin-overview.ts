@@ -6,6 +6,7 @@ import { AdminService, AdminStats } from '../../../core/services/admin.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
+import { environment } from '../../../../environments/environment';
 
 Chart.register(...registerables);
 
@@ -18,6 +19,7 @@ Chart.register(...registerables);
 })
 export class AdminOverviewComponent implements OnInit {
   private adminService = inject(AdminService);
+  private apiUrl = environment.apiUrl;
 
   loading = signal(true);
   stats = signal<AdminStats>({
@@ -63,6 +65,26 @@ export class AdminOverviewComponent implements OnInit {
     scales: {
       x: { ticks: { color: '#a0a0b0', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
       y: { ticks: { color: '#a0a0b0' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+    }
+  };
+
+  // Country Distribution Chart (Doughnut)
+  countryChartData: ChartConfiguration<'doughnut'>['data'] = { labels: [], datasets: [] };
+  countryChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { color: '#a0a0b0', padding: 12, font: { size: 11 } } }
+    }
+  };
+
+  // Users vs Admins Chart (Pie)
+  roleChartData: ChartConfiguration<'pie'>['data'] = { labels: [], datasets: [] };
+  roleChartOptions: ChartConfiguration<'pie'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#a0a0b0', padding: 16, font: { size: 12 } } }
     }
   };
 
@@ -128,5 +150,48 @@ export class AdminOverviewComponent implements OnInit {
         pointHoverRadius: 5
       }]
     };
+
+    // Country distribution chart (top 8 + Others)
+    const countryColors = [
+      '#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6',
+      '#1abc9c', '#e67e22', '#34495e', '#95a5a6'
+    ];
+    const topCountries = stats.countryCounts.slice(0, 8);
+    const othersCount = stats.countryCounts.slice(8).reduce((sum, c) => sum + c.count, 0);
+    const countryLabels = topCountries.map(c => c.country);
+    const countryData = topCountries.map(c => c.count);
+    if (othersCount > 0) {
+      countryLabels.push('Others');
+      countryData.push(othersCount);
+    }
+    this.countryChartData = {
+      labels: countryLabels,
+      datasets: [{
+        data: countryData,
+        backgroundColor: countryColors.slice(0, countryLabels.length),
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    };
+
+    // Users vs Admins pie chart
+    const adminCount = (stats as any).adminCount || 0;
+    const userCount = stats.totalUsers - adminCount;
+    this.roleChartData = {
+      labels: ['Users', 'Admins'],
+      datasets: [{
+        data: [userCount, adminCount],
+        backgroundColor: ['#3498db', '#e74c3c'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    };
+  }
+
+  getAdminProfileUrl(user: any): string | null {
+    const pic = user?.profilePicture || user?.profileImage;
+    if (!pic || pic === 'default-profile.png') return null;
+    if (pic.startsWith('http')) return pic;
+    return `${this.apiUrl}/${pic}`;
   }
 }

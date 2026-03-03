@@ -114,7 +114,7 @@ const deleteUser = async (req, res) => {
 // Update current user's profile (self-update)
 const updateMyProfile = async (req, res) => {
     const userId = req.user._id;
-    const { firstName, lastName, username, phone, gender, country, dateOfBirth, city, address, bio, jobTitle } = req.body;
+    const { firstName, lastName, username, phone, gender, country, dateOfBirth, city, address, bio, jobTitle, profilePicture } = req.body;
 
     try {
         const user = await userModel.findById(userId);
@@ -142,6 +142,7 @@ const updateMyProfile = async (req, res) => {
         user.dateOfBirth = dateOfBirth || user.dateOfBirth;
         user.bio = bio !== undefined ? bio : user.bio;
         user.jobTitle = jobTitle || user.jobTitle;
+        if (profilePicture !== undefined) user.profilePicture = profilePicture;
 
         await user.save();
         

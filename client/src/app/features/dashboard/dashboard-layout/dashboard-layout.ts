@@ -6,6 +6,7 @@ import { AuthStateService } from '../../../core/services/auth-state.service';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { IUser } from '../../../core/models/iuser';
 import { IPortfolio } from '../../../core/models/iportfolio';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -17,6 +18,7 @@ import { IPortfolio } from '../../../core/models/iportfolio';
 export class DashboardLayoutComponent implements OnInit {
   private authState = inject(AuthStateService);
   private portfolioService = inject(DashboardPortfolioService);
+  private apiUrl = environment.apiUrl;
 
   currentUser = signal<IUser | null>(null);
   portfolio = signal<IPortfolio | null>(null);
@@ -59,5 +61,13 @@ export class DashboardLayoutComponent implements OnInit {
 
   logout() {
     this.authState.logout();
+  }
+
+  getProfileImageUrl(): string | null {
+    const user = this.currentUser();
+    const pic = user?.profilePicture || user?.profileImage;
+    if (!pic || pic === 'default-profile.png') return null;
+    if (pic.startsWith('http')) return pic;
+    return `${this.apiUrl}/${pic}`;
   }
 }

@@ -23,6 +23,7 @@ export class AdminLayoutComponent implements OnInit {
     { icon: 'layout-dashboard', label: 'Dashboard', route: '/admin' },
     { icon: 'users', label: 'Users', route: '/admin/users' },
     { icon: 'briefcase', label: 'Portfolios', route: '/admin/portfolios' },
+    { icon: 'wrench', label: 'Skills', route: '/admin/skills' },
   ];
 
   ngOnInit() {

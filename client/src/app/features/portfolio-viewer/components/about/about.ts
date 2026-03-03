@@ -38,10 +38,17 @@ export class About implements OnInit, OnDestroy {
     return this.portfolioData?.portfolio;
   }
 
-  getProfileImageUrl(): string {
-    if (this.user?.profilePicture) {
+  getProfileImageUrl(): string | null {
+    if (this.user?.profilePicture && this.user.profilePicture !== 'default-profile.png') {
+      if (this.user.profilePicture.startsWith('http')) return this.user.profilePicture;
       return `${this.apiUrl}/${this.user.profilePicture}`;
     }
-    return 'assets/images/default-profile.png';
+    return null;
+  }
+
+  getUserInitials(): string {
+    const first = this.user?.firstName?.charAt(0)?.toUpperCase() || '';
+    const last = this.user?.lastName?.charAt(0)?.toUpperCase() || '';
+    return first + last || '?';
   }
 }

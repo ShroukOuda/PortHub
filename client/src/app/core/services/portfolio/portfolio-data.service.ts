@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Iportfolio } from '../../models/iportfolio';
 import { Iuser } from '../../models/iuser';
 import { Iproject } from '../../models/iproject';
@@ -10,15 +11,7 @@ import { Ieducation } from '../../models/ieducation';
 import { Iexperience } from '../../models/iexperience';
 import { Itestimonial } from '../../models/itestimonial';
 import { Icertificate } from '../../models/icertificate';
-import { PortfolioService } from './portfolio-service';
-import { UserService } from '../user-service';
-import { ProjectService } from './project-service';
-import { SkillService } from './skill-service';
-import { ServiceService } from './service-service';
-import { EducationService } from './education-service';
-import { ExperienceService } from './experience-service';
-import { TestimonialService } from './testimonial-service';
-import { CertificateService } from './certificate-service';
+import { environment } from '../../../../environments/environment';
 
 export interface PortfolioData {
   user: Iuser | null;
@@ -38,6 +31,7 @@ export interface PortfolioData {
   providedIn: 'root'
 })
 export class PortfolioDataService {
+  private apiUrl = environment.apiUrl;
   private initialState: PortfolioData = {
     user: null,
     portfolio: null,
@@ -55,70 +49,28 @@ export class PortfolioDataService {
   private portfolioDataSubject = new BehaviorSubject<PortfolioData>(this.initialState);
   public portfolioData$ = this.portfolioDataSubject.asObservable();
 
-  constructor(
-    private portfolioService: PortfolioService,
-    private userService: UserService,
-    private projectService: ProjectService,
-    private skillService: SkillService,
-    private serviceService: ServiceService,
-    private educationService: EducationService,
-    private experienceService: ExperienceService,
-    private testimonialService: TestimonialService,
-    private certificateService: CertificateService
-  ) {}
+  constructor(private http: HttpClient) {}
 
   loadPortfolioData(userId: string): Observable<PortfolioData> {
     this.portfolioDataSubject.next({ ...this.initialState, loading: true });
 
-    return this.userService.getUserById(userId).pipe(
-      switchMap(user => {
-        return this.portfolioService.getPortfoliosByUserId(userId).pipe(
-          switchMap(portfolios => {
-            const portfolio = portfolios.length > 0 ? portfolios[0] : null;
-            
-            if (!portfolio || !portfolio._id) {
-              const data: PortfolioData = {
-                user,
-                portfolio: null,
-                projects: [],
-                skills: [],
-                services: [],
-                educations: [],
-                experiences: [],
-                testimonials: [],
-                certificates: [],
-                loading: false,
-                error: null
-              };
-              this.portfolioDataSubject.next(data);
-              return of(data);
-            }
-
-            const portfolioId = portfolio._id;
-
-            return forkJoin({
-              projects: this.projectService.getProjectByPortfolioId(portfolioId).pipe(catchError(() => of([]))),
-              skills: this.skillService.getSkillByPortfolioId(portfolioId).pipe(catchError(() => of([]))),
-              services: this.serviceService.getServiceByPortfolioId(portfolioId).pipe(catchError(() => of([]))),
-              educations: this.educationService.getEducationsByPortfolioId(portfolioId).pipe(catchError(() => of([]))),
-              experiences: this.experienceService.getExperiencesByPortfolioId(portfolioId).pipe(catchError(() => of([]))),
-              testimonials: this.testimonialService.getTestimonialByPortfolioId(portfolioId).pipe(catchError(() => of([]))),
-              certificates: this.certificateService.getCertificatesByPortfolioId(portfolioId).pipe(catchError(() => of([])))
-            }).pipe(
-              map(portfolioItems => {
-                const data: PortfolioData = {
-                  user,
-                  portfolio,
-                  ...portfolioItems,
-                  loading: false,
-                  error: null
-                };
-                this.portfolioDataSubject.next(data);
-                return data;
-              })
-            );
-          })
-        );
+    return this.http.get<any>(`${this.apiUrl}/api/portfolios/user/${userId}/full`).pipe(
+      map(response => {
+        const data: PortfolioData = {
+          user: response.user || null,
+          portfolio: response.portfolio || null,
+          projects: response.projects || [],
+          skills: response.skills || [],
+          services: response.services || [],
+          educations: response.educations || [],
+          experiences: response.experiences || [],
+          testimonials: response.testimonials || [],
+          certificates: response.certificates || [],
+          loading: false,
+          error: null
+        };
+        this.portfolioDataSubject.next(data);
+        return data;
       }),
       catchError(error => {
         const errorMessage = error?.error?.message || error?.message || 'Error loading portfolio data';

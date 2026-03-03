@@ -16,6 +16,7 @@ const getAdminStats = async (req, res) => {
             totalPortfolios,
             totalProjects,
             totalSkills,
+            adminCount,
             recentUsers,
             recentPortfolios,
             usersThisMonth,
@@ -25,7 +26,8 @@ const getAdminStats = async (req, res) => {
             Portfolio.countDocuments(),
             Project.countDocuments(),
             Skill.countDocuments(),
-            User.find().sort({ createdAt: -1 }).limit(5).select('firstName lastName email createdAt profileImage'),
+            User.countDocuments({ role: 'admin' }),
+            User.find().sort({ createdAt: -1 }).limit(5).select('firstName lastName email createdAt profileImage profilePicture'),
             Portfolio.find().sort({ createdAt: -1 }).limit(5).populate('userId', 'firstName lastName'),
             User.countDocuments({
                 createdAt: { $gte: new Date(new Date().setDate(1)) }
@@ -134,6 +136,7 @@ const getAdminStats = async (req, res) => {
                 totalProjects,
                 totalSkills,
                 totalViews,
+                adminCount,
                 usersThisMonth,
                 portfoliosThisMonth,
                 recentUsers,
