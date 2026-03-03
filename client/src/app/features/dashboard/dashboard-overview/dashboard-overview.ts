@@ -82,13 +82,13 @@ export class DashboardOverviewComponent implements OnInit {
       next: (data) => {
         this.hasPortfolio.set(!!data.portfolio);
         this.stats.set({
-          projects: data.projects.length,
-          skills: data.skills.length,
-          services: data.services.length,
-          education: data.education.length,
-          experience: data.experience.length,
-          certificates: data.certificates.length,
-          testimonials: data.testimonials.length
+          projects: data.projects?.length || 0,
+          skills: data.skills?.length || 0,
+          services: data.services?.length || 0,
+          education: data.education?.length || 0,
+          experience: data.experience?.length || 0,
+          certificates: data.certificates?.length || 0,
+          testimonials: data.testimonials?.length || 0
         });
         this.loading.set(false);
 

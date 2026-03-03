@@ -196,6 +196,26 @@
             </canvas>
           </div>
         </div>
+
+        <!-- Portfolio Visibility Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <h3>
+                <lucide-icon name="eye" [size]="18"></lucide-icon>
+                Portfolio Visibility
+              </h3>
+              <span class="chart-subtitle">Public vs Private portfolios</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <canvas baseChart
+              [type]="'doughnut'"
+              [data]="visibilityChartData"
+              [options]="visibilityChartOptions">
+            </canvas>
+          </div>
+        </div>
       </div>
     </section>
 

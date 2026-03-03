@@ -1,0 +1,141 @@
+const skillDefinitions = [
+  // Programming Languages
+  { name: 'JavaScript', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', isActive: true },
+  { name: 'TypeScript', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', isActive: true },
+  { name: 'Python', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', isActive: true },
+  { name: 'Java', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg', isActive: true },
+  { name: 'C#', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg', isActive: true },
+  { name: 'C++', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', isActive: true },
+  { name: 'Go', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg', isActive: true },
+  { name: 'Rust', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg', isActive: true },
+  { name: 'PHP', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg', isActive: true },
+  { name: 'Ruby', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg', isActive: true },
+  { name: 'Swift', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg', isActive: true },
+  { name: 'Kotlin', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg', isActive: true },
+  { name: 'Dart', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg', isActive: true },
+  { name: 'R', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg', isActive: true },
+  { name: 'Scala', category: 'Programming Languages', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg', isActive: true },
+
+  // Frontend
+  { name: 'React', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', isActive: true },
+  { name: 'Angular', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg', isActive: true },
+  { name: 'Vue.js', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg', isActive: true },
+  { name: 'Next.js', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg', isActive: true },
+  { name: 'Svelte', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg', isActive: true },
+  { name: 'HTML5', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', isActive: true },
+  { name: 'CSS3', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg', isActive: true },
+  { name: 'Sass', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg', isActive: true },
+  { name: 'Tailwind CSS', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', isActive: true },
+  { name: 'Bootstrap', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg', isActive: true },
+  { name: 'Material UI', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg', isActive: true },
+  { name: 'Redux', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg', isActive: true },
+  { name: 'jQuery', category: 'Frontend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jquery/jquery-original.svg', isActive: true },
+
+  // Backend
+  { name: 'Node.js', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', isActive: true },
+  { name: 'Express.js', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg', isActive: true },
+  { name: 'Django', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg', isActive: true },
+  { name: 'Flask', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg', isActive: true },
+  { name: 'FastAPI', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', isActive: true },
+  { name: 'Spring Boot', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg', isActive: true },
+  { name: 'ASP.NET', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg', isActive: true },
+  { name: 'Laravel', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg', isActive: true },
+  { name: 'NestJS', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg', isActive: true },
+  { name: 'GraphQL', category: 'Backend', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg', isActive: true },
+  { name: 'gRPC', category: 'Backend', icon: '', isActive: true },
+
+  // Database
+  { name: 'MongoDB', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', isActive: true },
+  { name: 'PostgreSQL', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', isActive: true },
+  { name: 'MySQL', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg', isActive: true },
+  { name: 'Redis', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', isActive: true },
+  { name: 'Firebase', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg', isActive: true },
+  { name: 'SQLite', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg', isActive: true },
+  { name: 'Oracle', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg', isActive: true },
+  { name: 'Microsoft SQL Server', category: 'Database', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg', isActive: true },
+  { name: 'Elasticsearch', category: 'Database', icon: '', isActive: true },
+  { name: 'DynamoDB', category: 'Database', icon: '', isActive: true },
+
+  // DevOps
+  { name: 'Docker', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', isActive: true },
+  { name: 'Kubernetes', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg', isActive: true },
+  { name: 'AWS', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg', isActive: true },
+  { name: 'Azure', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg', isActive: true },
+  { name: 'Google Cloud', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg', isActive: true },
+  { name: 'Jenkins', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg', isActive: true },
+  { name: 'GitHub Actions', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', isActive: true },
+  { name: 'Terraform', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg', isActive: true },
+  { name: 'Ansible', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ansible/ansible-original.svg', isActive: true },
+  { name: 'Nginx', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg', isActive: true },
+  { name: 'Linux', category: 'DevOps', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', isActive: true },
+  { name: 'CI/CD', category: 'DevOps', icon: '', isActive: true },
+
+  // Mobile
+  { name: 'React Native', category: 'Mobile', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', isActive: true },
+  { name: 'Flutter', category: 'Mobile', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg', isActive: true },
+  { name: 'iOS Development', category: 'Mobile', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg', isActive: true },
+  { name: 'Android Development', category: 'Mobile', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg', isActive: true },
+  { name: 'Ionic', category: 'Mobile', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg', isActive: true },
+  { name: 'Xamarin', category: 'Mobile', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xamarin/xamarin-original.svg', isActive: true },
+
+  // Design
+  { name: 'Figma', category: 'Design', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', isActive: true },
+  { name: 'Adobe XD', category: 'Design', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xd/xd-plain.svg', isActive: true },
+  { name: 'Adobe Photoshop', category: 'Design', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg', isActive: true },
+  { name: 'Adobe Illustrator', category: 'Design', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg', isActive: true },
+  { name: 'Sketch', category: 'Design', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sketch/sketch-original.svg', isActive: true },
+  { name: 'Canva', category: 'Design', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/canva/canva-original.svg', isActive: true },
+  { name: 'UI/UX Design', category: 'Design', icon: '', isActive: true },
+  { name: 'Wireframing', category: 'Design', icon: '', isActive: true },
+
+  // Tools
+  { name: 'Git', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', isActive: true },
+  { name: 'GitHub', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', isActive: true },
+  { name: 'GitLab', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg', isActive: true },
+  { name: 'VS Code', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg', isActive: true },
+  { name: 'Jira', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg', isActive: true },
+  { name: 'Slack', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg', isActive: true },
+  { name: 'Postman', category: 'Tools', icon: '', isActive: true },
+  { name: 'npm', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/npm/npm-original-wordmark.svg', isActive: true },
+  { name: 'Webpack', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webpack/webpack-original.svg', isActive: true },
+  { name: 'Vite', category: 'Tools', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg', isActive: true },
+
+  // Data Science
+  { name: 'TensorFlow', category: 'Data Science', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', isActive: true },
+  { name: 'PyTorch', category: 'Data Science', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg', isActive: true },
+  { name: 'Pandas', category: 'Data Science', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg', isActive: true },
+  { name: 'NumPy', category: 'Data Science', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg', isActive: true },
+  { name: 'Jupyter', category: 'Data Science', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg', isActive: true },
+  { name: 'Machine Learning', category: 'Data Science', icon: '', isActive: true },
+  { name: 'Deep Learning', category: 'Data Science', icon: '', isActive: true },
+  { name: 'Data Visualization', category: 'Data Science', icon: '', isActive: true },
+  { name: 'NLP', category: 'Data Science', icon: '', isActive: true },
+
+  // Soft Skills
+  { name: 'Problem Solving', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Communication', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Teamwork', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Leadership', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Time Management', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Critical Thinking', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Agile/Scrum', category: 'Soft Skills', icon: '', isActive: true },
+  { name: 'Project Management', category: 'Soft Skills', icon: '', isActive: true },
+
+  // Testing
+  { name: 'Jest', category: 'Technical', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg', isActive: true },
+  { name: 'Cypress', category: 'Technical', icon: '', isActive: true },
+  { name: 'Selenium', category: 'Technical', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/selenium/selenium-original.svg', isActive: true },
+  { name: 'Mocha', category: 'Technical', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mocha/mocha-plain.svg', isActive: true },
+
+  // Other Technical
+  { name: 'RESTful APIs', category: 'Technical', icon: '', isActive: true },
+  { name: 'WebSockets', category: 'Technical', icon: '', isActive: true },
+  { name: 'Microservices', category: 'Technical', icon: '', isActive: true },
+  { name: 'OAuth/JWT', category: 'Technical', icon: '', isActive: true },
+  { name: 'RabbitMQ', category: 'Technical', icon: '', isActive: true },
+  { name: 'Apache Kafka', category: 'Technical', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg', isActive: true },
+  { name: 'Blockchain', category: 'Technical', icon: '', isActive: true },
+  { name: 'Web3', category: 'Technical', icon: '', isActive: true },
+];
+
+module.exports = { skillDefinitions };

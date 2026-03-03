@@ -250,7 +250,7 @@ const users = [
   {
     _id: userIds[30],
     firstName: "Oliver", lastName: "Taylor", username: "oliver.taylor", email: "oliver.taylor@example.co.uk",
-    phone: "+442079460001", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-2.jpg",
+    phone: "+442079460001", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-2.jpeg",
     bio: "Senior Developer at London fintech startup. Love building scalable systems.",
     gender: "male", dateOfBirth: "1990-02-14", country: "UK", city: "London", address: "221B Baker St",
     jobTitle: "Senior Developer", role: "user", isActive: true
@@ -412,7 +412,7 @@ const users = [
   {
     _id: userIds[50],
     firstName: "Liam", lastName: "Tremblay", username: "liam.tremblay", email: "liam.tremblay@example.ca",
-    phone: "+14165551234", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-3.jpg",
+    phone: "+14165551234", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-3.jpeg",
     bio: "Software Engineer at Toronto tech company. Building scalable web applications.",
     gender: "male", dateOfBirth: "1989-04-12", country: "Canada", city: "Toronto", address: "100 Queen St W",
     jobTitle: "Software Engineer", role: "user", isActive: true
@@ -534,7 +534,7 @@ const users = [
   {
     _id: userIds[65],
     firstName: "Jack", lastName: "O'Brien", username: "jack.obrien", email: "jack.obrien@example.com.au",
-    phone: "+61255551234", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-4.jpg",
+    phone: "+61255551234", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-4.jpeg",
     bio: "Full Stack Developer at Sydney startup. Love building products that make a difference.",
     gender: "male", dateOfBirth: "1990-03-18", country: "Australia", city: "Sydney", address: "1 George St",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -656,7 +656,7 @@ const users = [
   {
     _id: userIds[80],
     firstName: "Aarav", lastName: "Sharma", username: "aarav.sharma", email: "aarav.sharma@example.co.in",
-    phone: "+912212345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-5.jpg",
+    phone: "+912212345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-5.jpeg",
     bio: "Senior Software Engineer at Bangalore tech company. Expert in cloud computing.",
     gender: "male", dateOfBirth: "1988-05-12", country: "India", city: "Bangalore", address: "1 MG Road",
     jobTitle: "Senior Software Engineer", role: "user", isActive: true
@@ -900,7 +900,7 @@ const users = [
   {
     _id: userIds[110],
     firstName: "Lucas", lastName: "Martin", username: "lucas.martin", email: "lucas.martin@example.fr",
-    phone: "+33123456789", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-7.jpg",
+    phone: "+33123456789", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-7.jpeg",
     bio: "Full Stack Developer with expertise in React and Node.js.",
     gender: "male", dateOfBirth: "1990-02-14", country: "France", city: "Paris", address: "1 Rue de Rivoli",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -1022,7 +1022,7 @@ const users = [
   {
     _id: userIds[125],
     firstName: "Miguel", lastName: "Silva", username: "miguel.silva", email: "miguel.silva@example.com.br",
-    phone: "+551112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-8.jpg",
+    phone: "+551112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-8.jpeg",
     bio: "Senior Software Engineer specializing in scalable systems.",
     gender: "male", dateOfBirth: "1988-04-22", country: "Brazil", city: "São Paulo", address: "1 Av. Paulista",
     jobTitle: "Senior Software Engineer", role: "user", isActive: true
@@ -1144,7 +1144,7 @@ const users = [
   {
     _id: userIds[140],
     firstName: "Chidi", lastName: "Okonkwo", username: "chidi.okonkwo", email: "chidi.okonkwo@example.com.ng",
-    phone: "+234112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-9.jpg",
+    phone: "+234112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-9.jpeg",
     bio: "Full Stack Developer building scalable web applications for African businesses.",
     gender: "male", dateOfBirth: "1990-05-18", country: "Nigeria", city: "Lagos", address: "1 Marina",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -1226,7 +1226,7 @@ const users = [
   {
     _id: userIds[150],
     firstName: "Leonardo", lastName: "Rossi", username: "leonardo.rossi", email: "leonardo.rossi@example.it",
-    phone: "+390612345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-10.jpg",
+    phone: "+390612345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-10.jpeg",
     bio: "Full Stack Developer with experience in React and Node.js.",
     gender: "male", dateOfBirth: "1989-03-12", country: "Italy", city: "Rome", address: "1 Via del Corso",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -1308,7 +1308,7 @@ const users = [
   {
     _id: userIds[160],
     firstName: "Pablo", lastName: "Garcia", username: "pablo.garcia", email: "pablo.garcia@example.es",
-    phone: "+349112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-11.jpg",
+    phone: "+349112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-11.jpeg",
     bio: "Full Stack Developer with experience in React and Node.js.",
     gender: "male", dateOfBirth: "1989-06-21", country: "Spain", city: "Madrid", address: "1 Gran Vía",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -1390,7 +1390,7 @@ const users = [
   {
     _id: userIds[170],
     firstName: "Juan", lastName: "Hernandez", username: "juan.hernandez", email: "juan.hernandez@example.mx",
-    phone: "+525512345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-12.jpg",
+    phone: "+525512345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-12.jpeg",
     bio: "Full Stack Developer with experience in React and Node.js.",
     gender: "male", dateOfBirth: "1989-07-15", country: "Mexico", city: "Mexico City", address: "1 Paseo de la Reforma",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -1472,7 +1472,7 @@ const users = [
   {
     _id: userIds[180],
     firstName: "Haruto", lastName: "Sato", username: "haruto.sato", email: "haruto.sato@example.co.jp",
-    phone: "+81312345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-13.jpg",
+    phone: "+81312345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-13.jpeg",
     bio: "Full Stack Developer building scalable web applications.",
     gender: "male", dateOfBirth: "1990-03-10", country: "Japan", city: "Tokyo", address: "1 Shibuya Crossing",
     jobTitle: "Full Stack Developer", role: "user", isActive: true
@@ -1554,7 +1554,7 @@ const users = [
   {
     _id: userIds[190],
     firstName: "Mateo", lastName: "Fernandez", username: "mateo.fernandez", email: "mateo.fernandez@example.ar",
-    phone: "+541112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-14.jpg",
+    phone: "+541112345678", password: "Password@123", profilePicture: "/uploads/profiles/seed/user-avatar-14.jpeg",
     bio: "Full Stack Developer with expertise in React and Node.js.",
     gender: "male", dateOfBirth: "1990-05-12", country: "Argentina", city: "Buenos Aires", address: "1 Av. 9 de Julio",
     jobTitle: "Full Stack Developer", role: "user", isActive: true

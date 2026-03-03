@@ -13,6 +13,8 @@ export interface AdminStats {
   totalViews: number;
   usersThisMonth: number;
   portfoliosThisMonth: number;
+  publicPortfolioCount: number;
+  privatePortfolioCount: number;
   recentUsers: IUser[];
   recentPortfolios: IPortfolio[];
   topPortfolios: any[];
@@ -62,6 +64,8 @@ export class AdminService {
         totalViews: 0,
         usersThisMonth: 0,
         portfoliosThisMonth: 0,
+        publicPortfolioCount: 0,
+        privatePortfolioCount: 0,
         recentUsers: [],
         recentPortfolios: [],
         topPortfolios: [],

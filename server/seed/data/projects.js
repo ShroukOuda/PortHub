@@ -2,12 +2,12 @@ const { ObjectId } = require('mongodb');
 const { portfolioIds } = require('./portfolios');
 
 const projectImages = [
-  'ecommerce-platform.jpg', 'healthcare-app.jpg', 'fintech-dashboard.jpg', 'social-media-app.jpg',
-  'learning-management.jpg', 'real-estate-portal.jpg', 'food-delivery-app.jpg', 'travel-booking.jpg',
-  'portfolio-website.jpg', 'blog-platform.jpg', 'weather-app.jpg', 'task-manager.jpg',
-  'crm-system.jpg', 'inventory-management.jpg', 'chat-application.jpg', 'video-streaming.jpg',
-  'analytics-dashboard.jpg', 'iot-platform.jpg', 'ai-chatbot.jpg', 'blockchain-wallet.jpg',
-  'mobile-game.jpg', 'fitness-tracker.jpg', 'music-player.jpg', 'news-aggregator.jpg'
+  'ecommerce-platform.jpeg', 'healthcare-app.jpeg', 'fintech-dashboard.jpeg', 'social-media-app.jpeg',
+  'learning-management.jpeg', 'real-estate-portal.jpeg', 'food-delivery-app.jpeg', 'travel-booking.jpeg',
+  'portfolio-website.jpeg', 'blog-platform.jpeg', 'weather-app.jpeg', 'task-manager.jpeg',
+  'crm-system.jpeg', 'inventory-management.jpeg', 'chat-application.jpeg', 'video-streaming.jpeg',
+  'analytics-dashboard.jpeg', 'iot-platform.jpeg', 'ai-chatbot.jpeg', 'blockchain-wallet.jpeg',
+  'mobile-game.jpeg', 'fitness-tracker.jpeg', 'music-player.jpeg', 'news-aggregator.jpeg'
 ];
 
 const projectTitles = [

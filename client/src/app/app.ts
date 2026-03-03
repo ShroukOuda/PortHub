@@ -29,11 +29,14 @@ export class App {
       }
       const is404 = route.snapshot.routeConfig?.path === '**';
 
-      // Hide main header/footer for portfolio-view, dashboard, admin, and 404 routes
+      // Hide main header/footer for portfolio-view, dashboard, admin, auth, and 404 routes
       this.showMainLayout = !is404 &&
                             !url.startsWith('/portfolio-view') && 
                             !url.startsWith('/dashboard') && 
-                            !url.startsWith('/admin');
+                            !url.startsWith('/admin') &&
+                            !url.startsWith('/login') &&
+                            !url.startsWith('/signup') &&
+                            !url.startsWith('/forgot-password');
     });
   }
 }

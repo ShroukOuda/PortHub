@@ -13,6 +13,7 @@ const { certificates } = require('./data/certificates');
 const { projects } = require('./data/projects');
 const { educations } = require('./data/educations');
 const { experiences } = require('./data/experiences');
+const { skillDefinitions } = require('./data/skillDefinitions');
 
 const url = process.env.MONGO_URL;
 
@@ -46,6 +47,7 @@ const seedDatabase = async () => {
         await db.collection('projects').deleteMany({});
         await db.collection('educations').deleteMany({});
         await db.collection('experiences').deleteMany({});
+        await db.collection('skilldefinitions').deleteMany({});
 
         console.log('Collections cleared');
 
@@ -62,6 +64,7 @@ const seedDatabase = async () => {
         await db.collection('projects').insertMany(projects);
         await db.collection('educations').insertMany(educations);
         await db.collection('experiences').insertMany(experiences);
+        await db.collection('skilldefinitions').insertMany(skillDefinitions);
 
         console.log('Database seeded successfully');
     } catch (error) {

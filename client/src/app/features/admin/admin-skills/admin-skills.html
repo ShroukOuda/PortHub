@@ -101,8 +101,40 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Icon URL (optional)</label>
-            <input type="text" [value]="formData().icon" (input)="updateFormField('icon', $any($event.target).value)" placeholder="Icon URL or leave empty">
+            <label>Icon (optional)</label>
+            <div class="icon-mode-tabs">
+              <button type="button" class="icon-tab" [class.active]="iconMode() === 'url'" (click)="iconMode.set('url')">
+                <lucide-icon name="link" [size]="14"></lucide-icon> URL
+              </button>
+              <button type="button" class="icon-tab" [class.active]="iconMode() === 'upload'" (click)="iconMode.set('upload')">
+                <lucide-icon name="upload" [size]="14"></lucide-icon> Upload
+              </button>
+            </div>
+
+            @if (iconMode() === 'url') {
+              <input type="text" [value]="formData().icon" (input)="updateFormField('icon', $any($event.target).value)" placeholder="Icon URL (e.g., https://cdn.jsdelivr.net/...)">
+            } @else {
+              @if (selectedIconFile()) {
+                <div class="icon-preview-wrapper">
+                  @if (iconPreview()) {
+                    <img [src]="iconPreview()" alt="Icon preview" class="icon-preview-img">
+                  }
+                  <span class="icon-file-name">{{ selectedIconFile()?.name }}</span>
+                  <button type="button" class="remove-icon-btn" (click)="removeIconFile()">
+                    <lucide-icon name="x" [size]="14"></lucide-icon>
+                  </button>
+                </div>
+              } @else {
+                <div class="icon-upload-area">
+                  <input type="file" accept="image/*,.svg" (change)="onIconFileSelected($event)" class="icon-file-input" id="iconFileInput">
+                  <label for="iconFileInput" class="icon-upload-label">
+                    <lucide-icon name="image-plus" [size]="20"></lucide-icon>
+                    <span>Choose icon file</span>
+                    <span class="upload-hint">SVG, PNG, JPG (max 1MB)</span>
+                  </label>
+                </div>
+              }
+            }
           </div>
         </div>
         <div class="modal-footer">

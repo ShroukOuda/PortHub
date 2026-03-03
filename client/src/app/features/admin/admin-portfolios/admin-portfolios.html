@@ -61,8 +61,16 @@
       <p>{{ searchQuery() ? 'Try adjusting your search' : 'No portfolios created yet' }}</p>
     </div>
   } @else {
+    <!-- Results Info -->
+    @if (filteredPortfolios().length > 0) {
+      <div class="results-info">
+        Showing {{ (currentPage() - 1) * itemsPerPage() + 1 }}–{{ currentPage() * itemsPerPage() > filteredPortfolios().length ? filteredPortfolios().length : currentPage() * itemsPerPage() }}
+        of {{ filteredPortfolios().length }} portfolios
+      </div>
+    }
+
     <div class="portfolios-grid">
-      @for (portfolio of filteredPortfolios(); track portfolio._id) {
+      @for (portfolio of paginatedPortfolios(); track portfolio._id) {
         <div class="portfolio-card">
           <div class="card-header">
             <div class="visibility-badge" [class.public]="portfolio.isPublic !== false" [class.private]="portfolio.isPublic === false">
@@ -94,5 +102,28 @@
         </div>
       }
     </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+      <nav class="pagination">
+        <button class="page-btn nav-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+        </button>
+
+        @for (page of pageNumbers(); track $index) {
+          @if (page === '...') {
+            <span class="page-ellipsis">…</span>
+          } @else {
+            <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+        }
+
+        <button class="page-btn nav-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </nav>
+    }
   }
 </div>

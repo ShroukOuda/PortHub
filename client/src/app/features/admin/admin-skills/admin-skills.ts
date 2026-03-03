@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
+import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 
 @Component({
   selector: 'app-admin-skills',
@@ -13,6 +14,7 @@ import { SkillDefinitionService, SkillDefinition } from '../../../core/services/
 })
 export class AdminSkillsComponent implements OnInit {
   private skillDefService = inject(SkillDefinitionService);
+  private uploadService = inject(DashboardPortfolioService);
 
   loading = signal(true);
   skills = signal<SkillDefinition[]>([]);
@@ -24,6 +26,11 @@ export class AdminSkillsComponent implements OnInit {
   editingItem = signal<SkillDefinition | null>(null);
   saving = signal(false);
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Icon mode: 'url' or 'upload'
+  iconMode = signal<'url' | 'upload'>('url');
+  selectedIconFile = signal<File | null>(null);
+  iconPreview = signal<string>('');
 
   formData = signal<Partial<SkillDefinition>>({
     name: '',
@@ -85,12 +92,18 @@ export class AdminSkillsComponent implements OnInit {
   openAddModal() {
     this.editingItem.set(null);
     this.formData.set({ name: '', category: 'Technical', icon: '' });
+    this.iconMode.set('url');
+    this.selectedIconFile.set(null);
+    this.iconPreview.set('');
     this.showModal.set(true);
   }
 
   openEditModal(skill: SkillDefinition) {
     this.editingItem.set(skill);
     this.formData.set({ name: skill.name, category: skill.category, icon: skill.icon || '' });
+    this.iconMode.set('url');
+    this.selectedIconFile.set(null);
+    this.iconPreview.set('');
     this.showModal.set(true);
   }
 
@@ -103,6 +116,26 @@ export class AdminSkillsComponent implements OnInit {
     this.formData.update(data => ({ ...data, [field]: value }));
   }
 
+  onIconFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.selectedIconFile.set(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.iconPreview.set(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeIconFile() {
+    this.selectedIconFile.set(null);
+    this.iconPreview.set('');
+  }
+
   save() {
     if (!this.formData().name) {
       this.message.set({ type: 'error', text: 'Skill name is required.' });
@@ -111,6 +144,25 @@ export class AdminSkillsComponent implements OnInit {
     this.saving.set(true);
     this.message.set(null);
 
+    // If upload mode and file selected, upload first
+    if (this.iconMode() === 'upload' && this.selectedIconFile()) {
+      this.uploadService.uploadImage(this.selectedIconFile()!, 'skills').subscribe({
+        next: (res: any) => {
+          const url = res.data?.url || res.url || res.data?.path || res.path;
+          this.formData.update(data => ({ ...data, icon: url }));
+          this.saveSkill();
+        },
+        error: () => {
+          this.saving.set(false);
+          this.message.set({ type: 'error', text: 'Failed to upload icon.' });
+        }
+      });
+    } else {
+      this.saveSkill();
+    }
+  }
+
+  private saveSkill() {
     if (this.editingItem()) {
       this.skillDefService.update(this.editingItem()!._id!, this.formData()).subscribe({
         next: (updated) => {

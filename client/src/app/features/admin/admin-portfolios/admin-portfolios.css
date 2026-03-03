@@ -58,4 +58,18 @@
   .page-header { flex-direction: column; align-items: flex-start; }
   .filters-bar { flex-direction: column; }
   .portfolios-grid { grid-template-columns: 1fr; }
+  .pagination { gap: 0.25rem; }
+  .page-btn { min-width: 32px; height: 32px; font-size: 0.8rem; }
 }
+
+/* Results Info */
+.results-info { color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1rem; }
+
+/* Pagination */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 0.35rem; margin-top: 2rem; padding-bottom: 1rem; }
+.page-btn { min-width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid rgba(231, 76, 60, 0.2); background: #12121e; color: #a0a0b0; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+.page-btn:hover:not(:disabled):not(.active) { border-color: #e74c3c; color: #fff; }
+.page-btn.active { background: #e74c3c; color: #fff; border-color: #e74c3c; box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3); }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nav-btn { padding: 0 0.5rem; }
+.page-ellipsis { min-width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: #a0a0b0; font-size: 0.9rem; }

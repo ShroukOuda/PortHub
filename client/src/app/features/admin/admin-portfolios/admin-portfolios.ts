@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +21,38 @@ export class AdminPortfoliosComponent implements OnInit {
   searchQuery = signal('');
   visibilityFilter = signal('all');
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Pagination
+  currentPage = signal(1);
+  itemsPerPage = signal(12);
+  totalItems = signal(0);
+
+  totalPages = computed(() => Math.ceil(this.filteredPortfolios().length / this.itemsPerPage()));
+  
+  paginatedPortfolios = computed(() => {
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    const end = start + this.itemsPerPage();
+    return this.filteredPortfolios().slice(start, end);
+  });
+
+  pageNumbers = computed(() => {
+    const total = this.totalPages();
+    const current = this.currentPage();
+    const pages: (number | string)[] = [];
+    
+    if (total <= 7) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (current > 3) pages.push('...');
+      for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+        pages.push(i);
+      }
+      if (current < total - 2) pages.push('...');
+      pages.push(total);
+    }
+    return pages;
+  });
 
   ngOnInit() {
     this.loadPortfolios();
@@ -58,6 +90,7 @@ export class AdminPortfoliosComponent implements OnInit {
     }
 
     this.filteredPortfolios.set(filtered);
+    this.currentPage.set(1);
   }
 
   onSearch(query: string) {
@@ -68,6 +101,12 @@ export class AdminPortfoliosComponent implements OnInit {
   onVisibilityFilter(visibility: string) {
     this.visibilityFilter.set(visibility);
     this.applyFilters();
+  }
+
+  goToPage(page: number | string) {
+    if (typeof page === 'string') return;
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
   }
 
   deletePortfolio(portfolio: IPortfolio) {

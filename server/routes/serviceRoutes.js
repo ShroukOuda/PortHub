@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const {
     createService,
+    getServicesByPortfolioId,
+    getServiceById,
     updateService,
     deleteService,
-    getServiceById,
-    getServicesByPortfolioId,
     getMyServices
 } = require('../controllers/serviceController');
 
@@ -16,9 +16,9 @@ const roleMiddleware = require('../middlewares/roleMiddleware');
 router.get('/my', authMiddleware, getMyServices);
 
 router.post('/', authMiddleware, roleMiddleware(['user', 'admin']), createService);
+router.get('/portfolio/:portfolioId', getServicesByPortfolioId);
+router.get('/:serviceId', getServiceById);
 router.put('/:serviceId', authMiddleware, roleMiddleware(['user', 'admin']), updateService);
 router.delete('/:serviceId', authMiddleware, roleMiddleware(['user', 'admin']), deleteService);
-router.get('/:serviceId', getServiceById);
-router.get('/portfolio/:portfolioId', getServicesByPortfolioId);
 
 module.exports = router;

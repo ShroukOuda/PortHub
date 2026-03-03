@@ -30,6 +30,8 @@ export class AdminOverviewComponent implements OnInit {
     totalViews: 0,
     usersThisMonth: 0,
     portfoliosThisMonth: 0,
+    publicPortfolioCount: 0,
+    privatePortfolioCount: 0,
     recentUsers: [],
     recentPortfolios: [],
     topPortfolios: [],
@@ -81,6 +83,16 @@ export class AdminOverviewComponent implements OnInit {
   // Users vs Admins Chart (Pie)
   roleChartData: ChartConfiguration<'pie'>['data'] = { labels: [], datasets: [] };
   roleChartOptions: ChartConfiguration<'pie'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#a0a0b0', padding: 16, font: { size: 12 } } }
+    }
+  };
+
+  // Portfolio Visibility Chart (Doughnut)
+  visibilityChartData: ChartConfiguration<'doughnut'>['data'] = { labels: [], datasets: [] };
+  visibilityChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -182,6 +194,19 @@ export class AdminOverviewComponent implements OnInit {
       datasets: [{
         data: [userCount, adminCount],
         backgroundColor: ['#3498db', '#e74c3c'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    };
+
+    // Portfolio Visibility doughnut chart
+    const publicCount = stats.publicPortfolioCount || 0;
+    const privateCount = stats.privatePortfolioCount || 0;
+    this.visibilityChartData = {
+      labels: ['Public', 'Private'],
+      datasets: [{
+        data: [publicCount, privateCount],
+        backgroundColor: ['#2ecc71', '#f1c40f'],
         borderWidth: 0,
         hoverOffset: 8
       }]

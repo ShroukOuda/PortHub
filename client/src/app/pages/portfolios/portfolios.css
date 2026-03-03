@@ -1,8 +1,12 @@
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: url('/explore.jpeg') center/cover no-repeat;
+  background: linear-gradient(135deg, #91729c 0%, #432161 100%);
   z-index: 0;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #91729c 0%, #432161 100%);
 }
 
 .pattern-bg {
