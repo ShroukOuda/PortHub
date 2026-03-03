@@ -23,6 +23,8 @@ export interface AdminStats {
   platformViewHistory: { date: string; count: number }[];
   totalCountries: number;
   countryCounts: { country: string; count: number }[];
+  genderCounts: { gender: string; count: number }[];
+  jobTitleCounts: { jobTitle: string; count: number }[];
 }
 
 export interface PaginatedResponse<T> {
@@ -73,7 +75,9 @@ export class AdminService {
         portfolioGrowthData: [],
         platformViewHistory: [],
         totalCountries: 0,
-        countryCounts: []
+        countryCounts: [],
+        genderCounts: [],
+        jobTitleCounts: []
       }))
     );
   }

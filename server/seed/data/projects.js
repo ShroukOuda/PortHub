@@ -48,7 +48,7 @@ portfolioIds.forEach(portfolioId => {
       title: title,
       description: `A ${title.toLowerCase()} built with modern technologies. This project demonstrates my skills in full-stack development, user experience design, and scalable architecture.`,
       technologies: [...new Set(projectTech)], // Remove duplicates
-      image: `/uploads/projects/seed/${projectImages[Math.floor(Math.random() * projectImages.length)]}`,
+      image: `uploads/projects/seed/${projectImages[Math.floor(Math.random() * projectImages.length)]}`,
       demoUrl: Math.random() > 0.3 ? `https://demo-${title.toLowerCase().replace(/\s+/g, '-')}.com` : '',
       githubUrl: Math.random() > 0.2 ? `https://github.com/user/${title.toLowerCase().replace(/\s+/g, '-')}` : ''
     });

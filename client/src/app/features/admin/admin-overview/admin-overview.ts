@@ -39,7 +39,9 @@ export class AdminOverviewComponent implements OnInit {
     portfolioGrowthData: [],
     platformViewHistory: [],
     totalCountries: 0,
-    countryCounts: []
+    countryCounts: [],
+    genderCounts: [],
+    jobTitleCounts: []
   });
 
   // User & Portfolio Growth Chart (Bar)
@@ -97,6 +99,31 @@ export class AdminOverviewComponent implements OnInit {
     maintainAspectRatio: false,
     plugins: {
       legend: { position: 'bottom', labels: { color: '#a0a0b0', padding: 16, font: { size: 12 } } }
+    }
+  };
+
+  // Gender Distribution Chart (Pie)
+  genderChartData: ChartConfiguration<'pie'>['data'] = { labels: [], datasets: [] };
+  genderChartOptions: ChartConfiguration<'pie'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#a0a0b0', padding: 16, font: { size: 12 } } }
+    }
+  };
+
+  // Job Title Distribution Chart (Bar - horizontal)
+  jobTitleChartData: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
+  jobTitleChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { ticks: { color: '#a0a0b0' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true },
+      y: { ticks: { color: '#a0a0b0', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
     }
   };
 
@@ -209,6 +236,40 @@ export class AdminOverviewComponent implements OnInit {
         backgroundColor: ['#2ecc71', '#f1c40f'],
         borderWidth: 0,
         hoverOffset: 8
+      }]
+    };
+
+    // Gender Distribution pie chart
+    const genderLabels = (stats.genderCounts || []).map(g => {
+      const label = g.gender || 'other';
+      return label.charAt(0).toUpperCase() + label.slice(1);
+    });
+    const genderData = (stats.genderCounts || []).map(g => g.count);
+    const genderColors = ['#3498db', '#e74c3c', '#9b59b6', '#95a5a6'];
+    this.genderChartData = {
+      labels: genderLabels,
+      datasets: [{
+        data: genderData,
+        backgroundColor: genderColors.slice(0, genderLabels.length),
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    };
+
+    // Job Title Distribution bar chart (top 15)
+    const topJobTitles = (stats.jobTitleCounts || []).slice(0, 15);
+    const jobTitleColors = [
+      '#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6',
+      '#1abc9c', '#e67e22', '#34495e', '#d35400', '#8e44ad',
+      '#2980b9', '#27ae60', '#f39c12', '#c0392b', '#16a085'
+    ];
+    this.jobTitleChartData = {
+      labels: topJobTitles.map(j => j.jobTitle),
+      datasets: [{
+        label: 'Users',
+        data: topJobTitles.map(j => j.count),
+        backgroundColor: jobTitleColors.slice(0, topJobTitles.length),
+        borderRadius: 4
       }]
     };
   }

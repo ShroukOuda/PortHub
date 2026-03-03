@@ -124,6 +124,21 @@ const getAdminStats = async (req, res) => {
         });
         const platformViewHistory = Object.entries(dailyViewsMap).map(([date, count]) => ({ date, count }));
 
+        // Gender breakdown
+        const genderAgg = await User.aggregate([
+            { $group: { _id: '$gender', count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+        const genderCounts = genderAgg.map(g => ({ gender: g._id || 'other', count: g.count }));
+
+        // Job title breakdown (top 15)
+        const jobTitleAgg = await User.aggregate([
+            { $match: { jobTitle: { $ne: null, $ne: '' } } },
+            { $group: { _id: '$jobTitle', count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+        const jobTitleCounts = jobTitleAgg.map(j => ({ jobTitle: j._id, count: j.count }));
+
         // Country breakdown
         const countryAgg = await User.aggregate([
             { $match: { country: { $ne: null, $ne: '' } } },
@@ -152,7 +167,9 @@ const getAdminStats = async (req, res) => {
                 portfolioGrowthData,
                 platformViewHistory,
                 totalCountries,
-                countryCounts
+                countryCounts,
+                genderCounts,
+                jobTitleCounts
             }
         });
     } catch (error) {
