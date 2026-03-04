@@ -19,8 +19,13 @@ const getMyServices = async (req, res) => {
 };
 
 const createService = async (req, res) => {
-    const { title, description, icon, price } = req.body;
+    const { title, name, description, icon } = req.body;
     let { portfolioId } = req.body;
+
+    const serviceTitle = title || name;
+    if (!serviceTitle) {
+        return res.status(400).json({ message: 'Title is required' });
+    }
 
     try {
         // If no portfolioId provided, get user's portfolio
@@ -31,12 +36,16 @@ const createService = async (req, res) => {
             }
         }
 
+        if (!portfolioId) {
+            return res.status(400).json({ message: 'No portfolio found. Create a portfolio first.' });
+        }
+
         const newService = new Service({
             portfolioId,
-            name: title,
-            title: title,
+            name: serviceTitle,
+            title: serviceTitle,
             description: description || '',
-            icon,
+            icon: icon || '',
         });
 
         const savedService = await newService.save();
@@ -49,13 +58,23 @@ const updateService = async (req, res) => {
     const { serviceId } = req.params;
     const { name, title, description, icon } = req.body;
 
+    const serviceTitle = title || name;
+    if (!serviceTitle) {
+        return res.status(400).json({ message: 'Title is required' });
+    }
+
     try {
         const updatedService = await Service.findByIdAndUpdate(serviceId, {
-            name: name || title,
-            title: title || name,
+            name: serviceTitle,
+            title: serviceTitle,
             description,
             icon
         }, { new: true });
+
+        if (!updatedService) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
         res.status(200).json({ data: updatedService });
     } catch (error) {
         res.status(500).json({ message: 'Error updating service', error: error.message });

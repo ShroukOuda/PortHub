@@ -74,17 +74,24 @@
                 name="firstName"
                 required
                 placeholder="Enter your first name">
+              @if (validationErrors()['firstName']) {
+                <span class="hint" style="color: #e74c3c;">{{ validationErrors()['firstName'] }}</span>
+              }
             </div>
 
             <!-- Last Name -->
             <div class="form-group">
-              <label for="lastName">Last Name</label>
+              <label for="lastName">Last Name *</label>
               <input 
                 type="text" 
                 id="lastName" 
                 [(ngModel)]="formData.lastName" 
                 name="lastName"
+                required
                 placeholder="Enter your last name">
+              @if (validationErrors()['lastName']) {
+                <span class="hint" style="color: #e74c3c;">{{ validationErrors()['lastName'] }}</span>
+              }
             </div>
 
             <!-- Username (readonly) -->
@@ -117,13 +124,25 @@
 
             <!-- Job Title -->
             <div class="form-group full-width">
-              <label for="jobTitle">Job Title</label>
-              <input 
-                type="text" 
-                id="jobTitle" 
-                [(ngModel)]="formData.jobTitle" 
-                name="jobTitle"
-                placeholder="e.g., Full Stack Developer">
+              <label for="jobTitle">Job Title *</label>
+              @if (jobTitles().length > 0) {
+                <select id="jobTitle" [(ngModel)]="formData.jobTitle" name="jobTitle" required>
+                  <option value="" disabled>Select a job title</option>
+                  @for (jt of jobTitles(); track jt._id) {
+                    <option [value]="jt.title">{{ jt.title }}</option>
+                  }
+                </select>
+              } @else {
+                <input 
+                  type="text" 
+                  id="jobTitle" 
+                  [(ngModel)]="formData.jobTitle" 
+                  name="jobTitle"
+                  placeholder="e.g., Full Stack Developer">
+              }
+              @if (validationErrors()['jobTitle']) {
+                <span class="hint" style="color: #e74c3c;">{{ validationErrors()['jobTitle'] }}</span>
+              }
             </div>
 
             <!-- Bio -->
@@ -222,6 +241,9 @@
               </div>
               @if (selectedCountry) {
                 <span class="hint">Format: {{ selectedCountry.format }}</span>
+              }
+              @if (validationErrors()['phone']) {
+                <span class="hint" style="color: #e74c3c;">{{ validationErrors()['phone'] }}</span>
               }
             </div>
 

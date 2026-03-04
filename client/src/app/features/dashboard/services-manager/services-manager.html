@@ -59,7 +59,16 @@
               </div>
               <div class="form-group">
                 <label>Icon (Lucide icon name)</label>
-                <input type="text" [value]="formData().icon" (input)="updateField('icon', $any($event.target).value)" placeholder="e.g., code">
+                <input type="text" [value]="formData().icon" (input)="updateField('icon', $any($event.target).value)" placeholder="e.g., code, globe, palette">
+                <span class="help-text">Browse icons at <a href="https://lucide.dev/icons" target="_blank" style="color: #91729c;">lucide.dev/icons</a></span>
+                @if (formData().icon) {
+                  <div class="icon-preview">
+                    <div class="preview-icon">
+                      <lucide-icon [name]="formData().icon!" [size]="24"></lucide-icon>
+                    </div>
+                    <span style="color: #a0a0b0; font-size: 0.85rem;">{{ formData().icon }}</span>
+                  </div>
+                }
               </div>
             </div>
             <div class="modal-footer">

@@ -75,6 +75,8 @@ npm run seed
 
 ## Docker
 
+### Run with Docker Compose
+
 Run the entire stack with a single command:
 
 ```bash
@@ -86,6 +88,74 @@ docker compose up --build
 | Client (SSR) | http://localhost:4000 |
 | API Server | http://localhost:3000 |
 | MongoDB | localhost:27017 |
+
+### Run in detached mode
+
+```bash
+docker compose up --build -d
+```
+
+### Stop containers
+
+```bash
+docker compose down
+```
+
+### Stop and remove volumes (⚠️ deletes database)
+
+```bash
+docker compose down -v
+```
+
+### Build individual images
+
+```bash
+# Build server image
+docker build -t porthub-server ./server
+
+# Build client image
+docker build -t porthub-client ./client
+```
+
+### Run individual containers
+
+```bash
+# Run MongoDB
+docker run -d --name porthub-mongo -p 27017:27017 -v mongo-data:/data/db mongo:7
+
+# Run server (link to mongo)
+docker run -d --name porthub-server -p 3000:3000 \
+  -e MONGO_URL=mongodb://porthub-mongo:27017 \
+  -e DB_NAME=porthub \
+  -e JWT_SECRET=your-secret-key \
+  --link porthub-mongo \
+  porthub-server
+
+# Run client
+docker run -d --name porthub-client -p 4000:4000 porthub-client
+```
+
+### Push to Docker Hub
+
+```bash
+# Login to Docker Hub
+docker login
+
+# Tag images (replace YOUR_USERNAME with your Docker Hub username)
+docker tag porthub-server YOUR_USERNAME/porthub-server:latest
+docker tag porthub-client YOUR_USERNAME/porthub-client:latest
+
+# Push images
+docker push YOUR_USERNAME/porthub-server:latest
+docker push YOUR_USERNAME/porthub-client:latest
+```
+
+### Pull and run from Docker Hub
+
+```bash
+docker pull YOUR_USERNAME/porthub-server:latest
+docker pull YOUR_USERNAME/porthub-client:latest
+```
 
 ## Testing
 
@@ -107,6 +177,8 @@ cd client && npm test
 | `/api/projects` | Project CRUD |
 | `/api/skills` | User skills CRUD |
 | `/api/skill-definitions` | Admin-managed predefined skills |
+| `/api/job-titles` | Admin-managed job titles |
+| `/api/countries` | Admin-managed countries |
 | `/api/services` | Service CRUD |
 | `/api/experiences` | Experience CRUD |
 | `/api/educations` | Education CRUD |

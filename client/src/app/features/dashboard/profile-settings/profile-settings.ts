@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthStateService } from '../../../core/services/auth-state.service';
+import { AdminService } from '../../../core/services/admin.service';
 import { IUser } from '../../../core/models/iuser';
 import { environment } from '../../../../environments/environment';
 
@@ -26,6 +27,7 @@ interface Country {
 export class ProfileSettingsComponent implements OnInit {
   private authState = inject(AuthStateService);
   private http = inject(HttpClient);
+  private adminService = inject(AdminService);
   private apiUrl = environment.apiUrl;
 
   currentUser = signal<IUser | null>(null);
@@ -130,8 +132,22 @@ export class ProfileSettingsComponent implements OnInit {
   selectedCountry: Country | null = null;
   phoneNumber = ''; // Local phone number without dial code
 
+  // Job titles from API
+  jobTitles = signal<{ _id: string; title: string }[]>([]);
+
+  // Validation errors
+  validationErrors = signal<Record<string, string>>({});
+
   ngOnInit() {
     this.loadUserData();
+    this.loadJobTitles();
+  }
+
+  loadJobTitles() {
+    this.adminService.getActiveJobTitles().subscribe({
+      next: (titles) => this.jobTitles.set(titles),
+      error: () => {}
+    });
   }
 
   loadUserData() {
@@ -280,13 +296,33 @@ export class ProfileSettingsComponent implements OnInit {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    // Debug: Check if token exists
-    const token = localStorage.getItem('token');
-    console.log('🔍 saveProfile - Token in localStorage:', token ? 'EXISTS' : 'MISSING');
-    console.log('🔍 saveProfile - Token value:', token?.substring(0, 50) + '...');
-
-    // Update phone with country code
+    // Validate before saving
+    const errors: Record<string, string> = {};
+    if (!this.formData.firstName.trim()) errors['firstName'] = 'First name is required';
+    if (!this.formData.lastName.trim()) errors['lastName'] = 'Last name is required';
+    if (!this.formData.bio.trim()) errors['bio'] = 'Bio is required';
+    if (!this.formData.jobTitle.trim()) errors['jobTitle'] = 'Job title is required';
+    if (!this.formData.country.trim()) errors['country'] = 'Country is required';
+    if (!this.formData.city.trim()) errors['city'] = 'City is required';
+    
+    // Phone validation
     this.updatePhoneNumber();
+    if (this.selectedCountry && this.phoneNumber) {
+      const digits = this.phoneNumber.replace(/\D/g, '').replace(/^0/, '');
+      if (digits.length < this.selectedCountry.minLength) {
+        errors['phone'] = `Phone too short for ${this.selectedCountry.name} (min ${this.selectedCountry.minLength} digits)`;
+      } else if (digits.length > this.selectedCountry.maxLength) {
+        errors['phone'] = `Phone too long for ${this.selectedCountry.name} (max ${this.selectedCountry.maxLength} digits)`;
+      }
+    }
+
+    this.validationErrors.set(errors);
+    if (Object.keys(errors).length > 0) {
+      this.isSaving.set(false);
+      this.errorMessage.set('Please fix the validation errors before saving.');
+      setTimeout(() => this.errorMessage.set(''), 3000);
+      return;
+    }
 
     const updateData = {
       firstName: this.formData.firstName,
@@ -300,8 +336,6 @@ export class ProfileSettingsComponent implements OnInit {
       city: this.formData.city,
       address: this.formData.address
     };
-
-    console.log('🔍 saveProfile - Making request to:', `${this.apiUrl}/api/users/me`);
 
     this.http.put<any>(`${this.apiUrl}/api/users/me`, updateData).subscribe({
       next: (res) => {

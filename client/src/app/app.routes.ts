@@ -24,6 +24,8 @@ import { AdminOverviewComponent } from './features/admin/admin-overview/admin-ov
 import { AdminUsersComponent } from './features/admin/admin-users/admin-users';
 import { AdminPortfoliosComponent } from './features/admin/admin-portfolios/admin-portfolios';
 import { AdminSkillsComponent } from './features/admin/admin-skills/admin-skills';
+import { AdminJobTitlesComponent } from './features/admin/admin-job-titles/admin-job-titles';
+import { AdminCountriesComponent } from './features/admin/admin-countries/admin-countries';
 
 export const routes: Routes = [
     // Public routes
@@ -69,6 +71,8 @@ export const routes: Routes = [
             { path: 'users', component: AdminUsersComponent },
             { path: 'portfolios', component: AdminPortfoliosComponent },
             { path: 'skills', component: AdminSkillsComponent },
+            { path: 'job-titles', component: AdminJobTitlesComponent },
+            { path: 'countries', component: AdminCountriesComponent },
         ]
     },
     

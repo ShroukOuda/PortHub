@@ -1,5 +1,16 @@
+const fs = require('fs');
+const path = require('path');
 const Project = require('../models/Project');
 const Portfolio = require('../models/Portfolio');
+
+// Helper: delete old file from disk
+const deleteOldFile = (filePath) => {
+    if (!filePath || filePath === 'default-project-image.png') return;
+    const fullPath = path.join(__dirname, '..', filePath);
+    fs.unlink(fullPath, (err) => {
+        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
+    });
+};
 
 // Get current user's projects
 const getMyProjects = async (req, res) => {
@@ -53,6 +64,14 @@ const updateProject = async (req, res) => {
     const { title, description, technologies, images, image, demoUrl, githubUrl, featured } = req.body;
 
     try {
+        // Delete old image if a new one is provided
+        if (image) {
+            const existingProject = await Project.findById(projectId);
+            if (existingProject && existingProject.image && existingProject.image !== image) {
+                deleteOldFile(existingProject.image);
+            }
+        }
+
         const updatedProject = await Project.findByIdAndUpdate(projectId, {
             title,
             description,
@@ -73,6 +92,12 @@ const deleteProject = async (req, res) => {
     const { projectId } = req.params;
 
     try {
+        // Delete image file before removing from DB
+        const project = await Project.findById(projectId);
+        if (project && project.image) {
+            deleteOldFile(project.image);
+        }
+
         await Project.findByIdAndDelete(projectId);
         res.status(200).json({ message: 'Project deleted successfully' });
     } catch (error) {

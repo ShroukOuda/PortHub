@@ -1,0 +1,136 @@
+<div class="manager-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1><lucide-icon name="globe" [size]="18"></lucide-icon> Countries</h1>
+      <p>Manage countries available for user registration</p>
+    </div>
+    <button class="btn btn-primary" (click)="openAddModal()">
+      <lucide-icon name="plus" [size]="16"></lucide-icon>
+      Add Country
+    </button>
+  </header>
+
+  @if (message()) {
+    <div class="message" [class.success]="message()?.type === 'success'" [class.error]="message()?.type === 'error'">
+      @if (message()?.type === 'success') { <lucide-icon name="circle-check" [size]="16"></lucide-icon> }
+      @else { <lucide-icon name="circle-alert" [size]="16"></lucide-icon> }
+      {{ message()?.text }}
+    </div>
+  }
+
+  <!-- Search -->
+  <div class="search-bar">
+    <div class="search-input-wrapper">
+      <lucide-icon name="search" [size]="16"></lucide-icon>
+      <input type="text" [value]="searchQuery()" (input)="searchQuery.set($any($event.target).value)"
+        (keydown.enter)="onSearch()" placeholder="Search countries...">
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading countries...</p>
+    </div>
+  } @else if (filteredItems().length === 0) {
+    <div class="empty-state">
+      <lucide-icon name="globe" [size]="48"></lucide-icon>
+      <h3>No Countries</h3>
+      <p>Add countries that users can select during registration.</p>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <lucide-icon name="plus" [size]="16"></lucide-icon>
+        Add First Country
+      </button>
+    </div>
+  } @else {
+    <div class="skills-grid">
+      @for (item of filteredItems(); track item._id) {
+        <div class="skill-card" [class.inactive]="!item.isActive">
+          <div class="skill-info">
+            <div class="skill-icon">
+              <lucide-icon name="map-pin" [size]="20"></lucide-icon>
+            </div>
+            <div class="skill-details">
+              <h3>{{ item.name }}</h3>
+              <span class="skill-category">{{ item.code }} · {{ item.dialCode }}</span>
+            </div>
+          </div>
+          <div class="skill-actions">
+            <button class="action-btn toggle" (click)="toggleStatus(item)"
+              [title]="item.isActive ? 'Deactivate' : 'Activate'">
+              <lucide-icon [name]="item.isActive ? 'eye' : 'eye-off'" [size]="16"></lucide-icon>
+            </button>
+            <button class="action-btn edit" (click)="openEditModal(item)" title="Edit">
+              <lucide-icon name="pencil" [size]="16"></lucide-icon>
+            </button>
+            <button class="action-btn delete" (click)="deleteItem(item)" title="Delete">
+              <lucide-icon name="trash-2" [size]="16"></lucide-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+        </button>
+        @for (page of getPageNumbers(); track page) {
+          <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+        <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+    }
+  }
+
+  <!-- Modal -->
+  @if (showModal()) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ editingItem() ? 'Edit Country' : 'Add New Country' }}</h2>
+          <button class="close-btn" (click)="closeModal()">
+            <lucide-icon name="x" [size]="20"></lucide-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Country Name <span class="required">*</span></label>
+            <input type="text" [value]="formData().name"
+              (input)="updateField('name', $any($event.target).value)"
+              placeholder="e.g., Egypt">
+          </div>
+          <div class="form-group">
+            <label>Country Code <span class="required">*</span></label>
+            <input type="text" [value]="formData().code"
+              (input)="updateField('code', $any($event.target).value)"
+              placeholder="e.g., EG" maxlength="3" style="text-transform: uppercase;">
+          </div>
+          <div class="form-group">
+            <label>Dial Code <span class="required">*</span></label>
+            <input type="text" [value]="formData().dialCode"
+              (input)="updateField('dialCode', $any($event.target).value)"
+              placeholder="e.g., +20">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+            @if (saving()) {
+              <lucide-icon name="loader-circle" [size]="16" class="animate-spin"></lucide-icon> Saving...
+            } @else {
+              <lucide-icon name="save" [size]="16"></lucide-icon>
+              {{ editingItem() ? 'Update' : 'Create' }}
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -18,6 +18,8 @@ const certificateRoutes = require('./routes/certificateRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const skillDefinitionRoutes = require('./routes/skillDefinitionRoutes');
+const jobTitleRoutes = require('./routes/jobTitleRoutes');
+const countryRoutes = require('./routes/countryRoutes');
 
 const app = express();
 app.use(express.json());
@@ -41,5 +43,15 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/skill-definitions', skillDefinitionRoutes);
+app.use('/api/job-titles', jobTitleRoutes);
+app.use('/api/countries', countryRoutes);
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err.message);
+    res.status(err.status || 500).json({
+        message: err.message || 'Internal server error'
+    });
+});
 
 module.exports = app;

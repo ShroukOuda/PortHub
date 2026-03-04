@@ -5,6 +5,8 @@ import { IuserRegister } from '../../core/models/iuser-register';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 // Country data with phone codes and formats
 interface Country {
@@ -107,21 +109,6 @@ export class Signup implements OnInit {
   selectedCountry: Country | null = null;
   phoneNumber: string = ''; // Local phone number without dial code
 
-  jobTitles: string[] = [
-    'Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'Software Engineer',
-    'Senior Software Engineer', 'Senior Developer', 'Mobile Developer', 'DevOps Engineer',
-    'Data Scientist', 'ML Engineer', 'UX Designer', 'UI Designer', 'Product Designer',
-    'Visual Designer', 'Product Manager', 'Product Owner', 'QA Engineer', 'Cloud Architect',
-    'Systems Architect', 'Technical Lead', 'Engineering Manager', 'Technical Project Manager',
-    'Database Administrator', 'Network Engineer', 'Security Engineer', 'SRE',
-    'Game Developer', 'Blockchain Developer', 'AR/VR Developer', 'Embedded Engineer',
-    'IT Consultant', 'DevOps Consultant', 'Technical Writer', 'Content Designer',
-    'Motion Designer', 'UX Researcher', 'Frontend Architect', 'Graphic Designer',
-    'Web Developer', 'iOS Developer', 'Android Developer', 'Data Engineer',
-    'AI Engineer', 'Cybersecurity Analyst', 'Solutions Architect', 'Scrum Master',
-    'Business Analyst', 'Project Manager', 'Marketing Specialist', 'SEO Specialist'
-  ].sort();
-
   formData: IuserRegister = {
     firstName: '',
     lastName: '',
@@ -152,7 +139,13 @@ export class Signup implements OnInit {
   passwordError = '';
   confirmPasswordError = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  // Job titles from API
+  jobTitles: { _id: string; title: string }[] = [];
+  private http: HttpClient;
+
+  constructor(private authService: AuthService, private router: Router, http: HttpClient) {
+    this.http = http;
+  }
 
   ngOnInit(): void {
     // Set default country to Egypt
@@ -160,6 +153,11 @@ export class Signup implements OnInit {
     if (this.selectedCountry) {
       this.formData.country = this.selectedCountry.name;
     }
+    // Load job titles from API
+    this.http.get<any>(`${environment.apiUrl}/api/job-titles/active`).subscribe({
+      next: (res: any) => this.jobTitles = Array.isArray(res) ? res : (res?.data || []),
+      error: () => {}
+    });
   }
 
   onCountryChange() {

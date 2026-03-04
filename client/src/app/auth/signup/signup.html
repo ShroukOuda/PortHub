@@ -291,15 +291,20 @@
           <label class="block text-sm font-medium text-gray-700 mb-1.5">
             <lucide-icon name="briefcase" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Job Title
           </label>
-          <div class="relative">
-            <select [(ngModel)]="formData.jobTitle" name="jobTitle" required #jobTitle="ngModel"
-              class="signup-input appearance-none cursor-pointer pr-10">
-              <option value="" disabled selected hidden>Select your job title</option>
-              <option *ngFor="let title of jobTitles" [value]="title">{{ title }}</option>
+          @if (jobTitles.length > 0) {
+            <select name="jobTitle" [(ngModel)]="formData.jobTitle" required #jobTitleField="ngModel"
+              class="signup-input appearance-none">
+              <option value="" disabled selected hidden>Select Job Title</option>
+              @for (jt of jobTitles; track jt._id) {
+                <option [value]="jt.title">{{ jt.title }}</option>
+              }
             </select>
-            <lucide-icon name="chevron-down" [size]="16" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></lucide-icon>
-          </div>
-          <div *ngIf="jobTitle.invalid && jobTitle.touched" class="text-red-500 text-xs mt-1">Job title is required</div>
+            <div *ngIf="jobTitleField.invalid && jobTitleField.touched" class="text-red-500 text-xs mt-1">Job title is required</div>
+          } @else {
+            <input type="text" name="jobTitle" [(ngModel)]="formData.jobTitle" required #jobTitleInput="ngModel"
+              class="signup-input" placeholder="Frontend Developer" />
+            <div *ngIf="jobTitleInput.invalid && jobTitleInput.touched" class="text-red-500 text-xs mt-1">Job title is required</div>
+          }
         </div>
       </div>
 

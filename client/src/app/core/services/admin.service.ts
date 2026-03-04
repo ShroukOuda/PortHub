@@ -143,4 +143,88 @@ export class AdminService {
       headers: this.getAuthHeaders()
     });
   }
+
+  // ===== Job Title CRUD =====
+
+  getJobTitles(params?: { search?: string; page?: number; limit?: number }): Observable<PaginatedResponse<any>> {
+    let httpParams = new HttpParams();
+    if (params?.search) httpParams = httpParams.set('search', params.search);
+    if (params?.page) httpParams = httpParams.set('page', params.page.toString());
+    if (params?.limit) httpParams = httpParams.set('limit', params.limit.toString());
+
+    return this.http.get<PaginatedResponse<any>>(`${this.apiUrl}/api/job-titles`, {
+      headers: this.getAuthHeaders(),
+      params: httpParams
+    });
+  }
+
+  getActiveJobTitles(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/job-titles/active`);
+  }
+
+  createJobTitle(data: { title: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/job-titles`, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  updateJobTitle(id: string, data: { title: string }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/api/job-titles/${id}`, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  deleteJobTitle(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/job-titles/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  toggleJobTitleStatus(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/api/job-titles/${id}/toggle`, {}, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  // ===== Country CRUD =====
+
+  getCountries(params?: { search?: string; page?: number; limit?: number }): Observable<PaginatedResponse<any>> {
+    let httpParams = new HttpParams();
+    if (params?.search) httpParams = httpParams.set('search', params.search);
+    if (params?.page) httpParams = httpParams.set('page', params.page.toString());
+    if (params?.limit) httpParams = httpParams.set('limit', params.limit.toString());
+
+    return this.http.get<PaginatedResponse<any>>(`${this.apiUrl}/api/countries`, {
+      headers: this.getAuthHeaders(),
+      params: httpParams
+    });
+  }
+
+  getActiveCountries(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/countries/active`);
+  }
+
+  createCountry(data: { name: string; code: string; dialCode: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/countries`, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  updateCountry(id: string, data: { name: string; code: string; dialCode: string }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/api/countries/${id}`, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  deleteCountry(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/countries/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  toggleCountryStatus(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/api/countries/${id}/toggle`, {}, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }

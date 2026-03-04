@@ -64,6 +64,17 @@ export class ExperienceManagerComponent implements OnInit {
       this.message.set({ type: 'error', text: 'Title and company are required.' }); 
       return; 
     }
+
+    // Date validation: start date must be before end date
+    if (this.formData().startDate && this.formData().endDate && !this.formData().current) {
+      const start = new Date(this.formData().startDate as string);
+      const end = new Date(this.formData().endDate as string);
+      if (start >= end) {
+        this.message.set({ type: 'error', text: 'Start date must be before end date.' });
+        return;
+      }
+    }
+
     this.saving.set(true);
 
     const operation = this.editingItem()

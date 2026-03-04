@@ -23,6 +23,13 @@ const createExperience = async (req, res) => {
         const { title, company, startDate, endDate, description, position, location, current, technologies } = req.body;
         let { portfolioId } = req.body;
 
+        // Date validation
+        if (startDate && endDate && !current) {
+            if (new Date(startDate) >= new Date(endDate)) {
+                return res.status(400).json({ message: 'Start date must be before end date' });
+            }
+        }
+
         // If no portfolioId provided, get user's portfolio
         if (!portfolioId && req.user) {
             const portfolio = await Portfolio.findOne({ userId: req.user._id || req.user.id });
@@ -75,6 +82,14 @@ const updateExperience = async (req, res) => {
     try {
         const { id } = req.params;
         const { title, company, startDate, endDate, description, position, location, current, technologies } = req.body;
+
+        // Date validation
+        if (startDate && endDate && !current) {
+            if (new Date(startDate) >= new Date(endDate)) {
+                return res.status(400).json({ message: 'Start date must be before end date' });
+            }
+        }
+
         const experience = await Experience.findByIdAndUpdate(id, {
             title,
             company,

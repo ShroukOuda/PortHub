@@ -22,6 +22,13 @@ const createEducation = async (req, res) => {
     const { institution, degree, fieldOfStudy, startDate, endDate, description, gpa } = req.body;
     let { portfolioId } = req.body;
 
+    // Date validation
+    if (startDate && endDate) {
+        if (new Date(startDate) >= new Date(endDate)) {
+            return res.status(400).json({ message: 'Start date must be before end date' });
+        }
+    }
+
     try {
         // If no portfolioId provided, get user's portfolio
         if (!portfolioId && req.user) {
@@ -61,6 +68,13 @@ const getEducationByPortfolioId = async (req, res) => {
 const updateEducation = async (req, res) => {
     const { educationId } = req.params;
     const { institution, degree, fieldOfStudy, startDate, endDate, description, grade, gpa, current } = req.body;
+
+    // Date validation
+    if (startDate && endDate) {
+        if (new Date(startDate) >= new Date(endDate)) {
+            return res.status(400).json({ message: 'Start date must be before end date' });
+        }
+    }
 
     try {
         const updatedEducation = await Education.findByIdAndUpdate(educationId, {

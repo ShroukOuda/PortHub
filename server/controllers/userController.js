@@ -1,7 +1,18 @@
 require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 const userModel = require('../models/User');
 const Portfolio = require('../models/Portfolio');
 const { hashPassword } = require('../utils/hash');
+
+// Helper: delete old file from disk
+const deleteOldFile = (filePath) => {
+    if (!filePath || filePath === 'default-profile.png') return;
+    const fullPath = path.join(__dirname, '..', filePath);
+    fs.unlink(fullPath, (err) => {
+        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
+    });
+};
 
 
 // Get public stats (no auth required) — totals + country breakdown
@@ -142,7 +153,13 @@ const updateMyProfile = async (req, res) => {
         user.dateOfBirth = dateOfBirth || user.dateOfBirth;
         user.bio = bio !== undefined ? bio : user.bio;
         user.jobTitle = jobTitle || user.jobTitle;
-        if (profilePicture !== undefined) user.profilePicture = profilePicture;
+        if (profilePicture !== undefined) {
+            // Delete old profile picture from disk
+            if (user.profilePicture && user.profilePicture !== profilePicture) {
+                deleteOldFile(user.profilePicture);
+            }
+            user.profilePicture = profilePicture;
+        }
 
         await user.save();
         

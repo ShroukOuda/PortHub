@@ -84,8 +84,6 @@
 .chart-title-group h3 lucide-icon { color: #e74c3c; }
 .chart-subtitle { font-size: 0.8rem; color: #a0a0b0; }
 .chart-body { padding: 1.25rem 1.5rem; height: 280px; position: relative; }
-.chart-card-wide { grid-column: 1 / -1; }
-.chart-body-tall { height: 420px; }
 
 /* Top Portfolios */
 .top-portfolios-section { margin-bottom: 2rem; }

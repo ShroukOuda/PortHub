@@ -43,7 +43,7 @@
           }
           @if (project.image && project.image !== 'default-project-image.png') {
             <div class="item-image">
-              <img [src]="project.image" [alt]="project.title">
+              <img [src]="getProjectImageUrl(project.image)" [alt]="project.title">
             </div>
           }
           <div class="item-content">

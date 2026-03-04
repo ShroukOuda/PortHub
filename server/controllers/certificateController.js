@@ -1,5 +1,16 @@
+const fs = require('fs');
+const path = require('path');
 const Certificate = require('../models/Certificate');
 const Portfolio = require('../models/Portfolio');
+
+// Helper: delete old file from disk
+const deleteOldFile = (filePath) => {
+    if (!filePath || filePath === 'default-certificate-image.png') return;
+    const fullPath = path.join(__dirname, '..', filePath);
+    fs.unlink(fullPath, (err) => {
+        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
+    });
+};
 
 // Get current user's certificates
 const getMyCertificates = async (req, res) => {
@@ -86,6 +97,14 @@ const updateCertificate = async (req, res) => {
     const { title, name, description, technologies, issuer, issueDate, expirationDate, expiryDate, CertificateImage, credentialId, credentialUrl } = req.body;
 
     try {
+        // Delete old image if a new one is provided
+        if (CertificateImage) {
+            const existing = await Certificate.findById(certificateId);
+            if (existing && existing.CertificateImage && existing.CertificateImage !== CertificateImage) {
+                deleteOldFile(existing.CertificateImage);
+            }
+        }
+
         const updateData = {};
         if (title || name) updateData.title = title || name;
         if (description) updateData.description = description;
@@ -108,6 +127,11 @@ const deleteCertificate = async (req, res) => {
     const { certificateId } = req.params;
 
     try {
+        const cert = await Certificate.findById(certificateId);
+        if (cert && cert.CertificateImage) {
+            deleteOldFile(cert.CertificateImage);
+        }
+
         await Certificate.findByIdAndDelete(certificateId);
         res.status(200).json({ message: 'Certificate deleted successfully' });
     } catch (error) {

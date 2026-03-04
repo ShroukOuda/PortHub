@@ -11,12 +11,12 @@ const serviceNames = [
 ];
 
 const serviceIcons = [
-  'web-development.svg', 'mobile-development.svg', 'ui-ux-design.svg', 'consulting.svg',
-  'technical-writing.svg', 'code-review.svg', 'devops.svg', 'cloud-migration.svg',
-  'database.svg', 'api.svg', 'performance.svg', 'security.svg',
-  'brand-design.svg', 'user-research.svg', 'prototyping.svg', 'frontend.svg',
-  'backend.svg', 'fullstack.svg', 'wordpress.svg', 'ecommerce.svg',
-  'seo.svg', 'content-strategy.svg', 'training.svg', 'mentoring.svg'
+  'globe', 'smartphone', 'palette', 'message-circle',
+  'file-text', 'code', 'server', 'cloud',
+  'database', 'plug', 'zap', 'shield',
+  'pen-tool', 'users', 'layout', 'monitor',
+  'terminal', 'layers', 'wordpress', 'shopping-cart',
+  'search', 'book-open', 'presentation', 'graduation-cap'
 ];
 
 const services = [];
@@ -32,7 +32,7 @@ portfolioIds.forEach(portfolioId => {
       _id: new ObjectId(),
       portfolioId: portfolioId,
       name: serviceName,
-      title: `${serviceName} Services`,
+      title: serviceName,
       description: `I offer professional ${serviceName.toLowerCase()} services tailored to your needs. With years of experience and a focus on quality, I deliver solutions that exceed expectations.`,
       icon: serviceIcons[Math.floor(Math.random() * serviceIcons.length)]
     });

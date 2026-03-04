@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { IProject } from '../../../core/models/iproject';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-projects-manager',
@@ -14,6 +15,7 @@ import { IProject } from '../../../core/models/iproject';
 })
 export class ProjectsManagerComponent implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
+  private apiUrl = environment.apiUrl;
 
   loading = signal(true);
   saving = signal(false);
@@ -133,6 +135,12 @@ export class ProjectsManagerComponent implements OnInit {
   removeImageFile() {
     this.selectedImageFile.set(null);
     this.imagePreview.set(null);
+  }
+
+  getProjectImageUrl(imagePath: string): string {
+    if (!imagePath || imagePath === 'default-project-image.png') return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${this.apiUrl}/${imagePath}`;
   }
 
   saveProject() {
