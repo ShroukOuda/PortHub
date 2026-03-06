@@ -2,16 +2,16 @@ const { ObjectId } = require('mongodb');
 const { portfolioIds } = require('./portfolios');
 
 const authors = [
-  { name: 'John Smith', position: 'CEO', company: 'TechStart Inc' },
-  { name: 'Sarah Johnson', position: 'Product Manager', company: 'InnovateLabs' },
-  { name: 'Michael Brown', position: 'CTO', company: 'CloudScale' },
-  { name: 'Emily Davis', position: 'Design Director', company: 'CreativeHub' },
-  { name: 'David Wilson', position: 'Founder', company: 'StartupXYZ' },
-  { name: 'Jessica Martinez', position: 'Engineering Manager', company: 'TechCorp' },
-  { name: 'Robert Taylor', position: 'Lead Developer', company: 'DevHouse' },
-  { name: 'Jennifer Anderson', position: 'Product Owner', company: 'FinTech Solutions' },
-  { name: 'William Thomas', position: 'CEO', company: 'Digital Agency' },
-  { name: 'Elizabeth Garcia', position: 'Marketing Director', company: 'BrandCo' }
+  { name: 'John Smith', position: 'CEO', company: 'TechStart Inc', image: 'professional-male-1' },
+  { name: 'Sarah Johnson', position: 'Product Manager', company: 'InnovateLabs', image: 'professional-female-1' },
+  { name: 'Michael Brown', position: 'CTO', company: 'CloudScale', image: 'professional-male-2' },
+  { name: 'Emily Davis', position: 'Design Director', company: 'CreativeHub', image: 'professional-female-2' },
+  { name: 'David Wilson', position: 'Founder', company: 'StartupXYZ', image: 'professional-male-3' },
+  { name: 'Jessica Martinez', position: 'Engineering Manager', company: 'TechCorp', image: 'professional-female-3' },
+  { name: 'Robert Taylor', position: 'Lead Developer', company: 'DevHouse', image: 'professional-male-4' },
+  { name: 'Jennifer Anderson', position: 'Product Owner', company: 'FinTech Solutions', image: 'professional-female-4' },
+  { name: 'William Thomas', position: 'CEO', company: 'Digital Agency', image: 'professional-male-5' },
+  { name: 'Elizabeth Garcia', position: 'Marketing Director', company: 'BrandCo', image: 'professional-female-5' }
 ];
 
 const testimonialContents = [
@@ -44,7 +44,7 @@ portfolioIds.forEach((portfolioId, index) => {
       portfolioId: portfolioId,
       content: testimonialContents[Math.floor(Math.random() * testimonialContents.length)],
       author: author.name,
-      authorImage: Math.random() > 0.5 ? `/uploads/profiles/seed/testimonial-${Math.floor(Math.random() * 10) + 1}.jpg` : 'default-author-image.png',
+      authorImage: author.image ? `/uploads/profiles/seed/${author.image}.jpg` : 'default-author-image.png',
       position: author.position,
       company: author.company,
       rating: Math.floor(Math.random() * 2) + 4 // 4 or 5 stars

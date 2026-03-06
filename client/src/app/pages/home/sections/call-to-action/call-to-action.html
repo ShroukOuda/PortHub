@@ -6,14 +6,14 @@
   </div>
 
   <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight" appScrollReveal>
       Ready to Tell Your Story?
     </h2>
-    <p class="text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+    <p class="text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed" appScrollReveal [revealDelay]="100">
       Join professionals who have transformed their careers with a compelling online portfolio 
       that tells their unique story.
     </p>
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4" appScrollReveal [revealDelay]="200" revealDirection="scale">
       <a [routerLink]="['/signup']" class="cta-btn-primary">
         <lucide-icon name="rocket" [size]="18"></lucide-icon>
         Get Started Free
@@ -22,6 +22,6 @@
         Browse Portfolios
       </a>
     </div>
-    <p class="mt-8 text-white/50 text-sm">No credit card required • Free forever</p>
+    <p class="mt-8 text-white/50 text-sm" appScrollReveal [revealDelay]="300">No credit card required • Free forever</p>
   </div>
 </section>

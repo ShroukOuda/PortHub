@@ -1,13 +1,18 @@
 <div class="manager-container">
   <header class="page-header">
     <div class="header-content">
-      <h1><lucide-icon name="tag" [size]="18"></lucide-icon> Job Titles</h1>
+      <h1><lucide-icon name="briefcase" [size]="18"></lucide-icon> Job Titles</h1>
       <p>Manage available job titles for user profiles</p>
     </div>
-    <button class="btn btn-primary" (click)="openAddModal()">
-      <lucide-icon name="plus" [size]="16"></lucide-icon>
-      Add Job Title
-    </button>
+    <div class="header-right">
+      <div class="header-stats">
+        <span class="stat">Total: {{ totalItems() }}</span>
+      </div>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <lucide-icon name="plus" [size]="16"></lucide-icon>
+        Add Job Title
+      </button>
+    </div>
   </header>
 
   @if (message()) {
@@ -43,50 +48,79 @@
       </button>
     </div>
   } @else {
-    <div class="skills-grid">
-      @for (item of filteredItems(); track item._id) {
-        <div class="skill-card" [class.inactive]="!item.isActive">
-          <div class="skill-info">
-            <div class="skill-icon">
-              <lucide-icon name="briefcase" [size]="20"></lucide-icon>
-            </div>
-            <div class="skill-details">
-              <h3>{{ item.title }}</h3>
-              <span class="skill-category" [class.active]="item.isActive" [class.inactive]="!item.isActive">
-                {{ item.isActive ? 'Active' : 'Inactive' }}
-              </span>
-            </div>
-          </div>
-          <div class="skill-actions">
-            <button class="action-btn toggle" (click)="toggleStatus(item)"
-              [title]="item.isActive ? 'Deactivate' : 'Activate'">
-              <lucide-icon [name]="item.isActive ? 'eye' : 'eye-off'" [size]="16"></lucide-icon>
-            </button>
-            <button class="action-btn edit" (click)="openEditModal(item)" title="Edit">
-              <lucide-icon name="pencil" [size]="16"></lucide-icon>
-            </button>
-            <button class="action-btn delete" (click)="deleteItem(item)" title="Delete">
-              <lucide-icon name="trash-2" [size]="16"></lucide-icon>
-            </button>
-          </div>
-        </div>
-      }
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Job Title</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredItems(); track item._id; let i = $index) {
+            <tr>
+              <td>{{ (currentPage() - 1) * pageSize() + i + 1 }}</td>
+              <td>
+                <div class="title-cell">
+                  <div class="title-icon">
+                    <lucide-icon name="briefcase" [size]="16"></lucide-icon>
+                  </div>
+                  <span class="title-name">{{ item.title }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="item.isActive" [class.inactive]="!item.isActive">
+                  <span class="status-dot"></span>
+                  {{ item.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="action-btn toggle" (click)="toggleStatus(item)"
+                    [title]="item.isActive ? 'Deactivate' : 'Activate'">
+                    <lucide-icon [name]="item.isActive ? 'eye' : 'eye-off'" [size]="16"></lucide-icon>
+                  </button>
+                  <button class="action-btn edit" (click)="openEditModal(item)" title="Edit">
+                    <lucide-icon name="pencil" [size]="16"></lucide-icon>
+                  </button>
+                  <button class="action-btn delete" (click)="deleteItem(item)" title="Delete">
+                    <lucide-icon name="trash-2" [size]="16"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
 
     <!-- Pagination -->
     @if (totalPages() > 1) {
       <div class="pagination">
-        <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">
-          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
-        </button>
-        @for (page of getPageNumbers(); track page) {
-          <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
-            {{ page }}
+        <div class="pagination-info">
+          Showing {{ (currentPage() - 1) * pageSize() + 1 }} - {{ currentPage() * pageSize() > totalItems() ? totalItems() : currentPage() * pageSize() }} of {{ totalItems() }}
+        </div>
+        <div class="pagination-controls">
+          <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(1)" title="First">
+            <lucide-icon name="chevrons-left" [size]="16"></lucide-icon>
           </button>
-        }
-        <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">
-          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
-        </button>
+          <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" title="Previous">
+            <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          </button>
+          @for (page of getPageNumbers(); track page) {
+            <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+          <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)" title="Next">
+            <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+          </button>
+          <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(totalPages())" title="Last">
+            <lucide-icon name="chevrons-right" [size]="16"></lucide-icon>
+          </button>
+        </div>
       </div>
     }
   }

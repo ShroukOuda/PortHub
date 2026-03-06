@@ -4,10 +4,15 @@
       <h1><lucide-icon name="globe" [size]="18"></lucide-icon> Countries</h1>
       <p>Manage countries available for user registration</p>
     </div>
-    <button class="btn btn-primary" (click)="openAddModal()">
-      <lucide-icon name="plus" [size]="16"></lucide-icon>
-      Add Country
-    </button>
+    <div class="header-right">
+      <div class="header-stats">
+        <span class="stat">Total: {{ totalItems() }}</span>
+      </div>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <lucide-icon name="plus" [size]="16"></lucide-icon>
+        Add Country
+      </button>
+    </div>
   </header>
 
   @if (message()) {
@@ -43,48 +48,83 @@
       </button>
     </div>
   } @else {
-    <div class="skills-grid">
-      @for (item of filteredItems(); track item._id) {
-        <div class="skill-card" [class.inactive]="!item.isActive">
-          <div class="skill-info">
-            <div class="skill-icon">
-              <lucide-icon name="map-pin" [size]="20"></lucide-icon>
-            </div>
-            <div class="skill-details">
-              <h3>{{ item.name }}</h3>
-              <span class="skill-category">{{ item.code }} · {{ item.dialCode }}</span>
-            </div>
-          </div>
-          <div class="skill-actions">
-            <button class="action-btn toggle" (click)="toggleStatus(item)"
-              [title]="item.isActive ? 'Deactivate' : 'Activate'">
-              <lucide-icon [name]="item.isActive ? 'eye' : 'eye-off'" [size]="16"></lucide-icon>
-            </button>
-            <button class="action-btn edit" (click)="openEditModal(item)" title="Edit">
-              <lucide-icon name="pencil" [size]="16"></lucide-icon>
-            </button>
-            <button class="action-btn delete" (click)="deleteItem(item)" title="Delete">
-              <lucide-icon name="trash-2" [size]="16"></lucide-icon>
-            </button>
-          </div>
-        </div>
-      }
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Country</th>
+            <th>Code</th>
+            <th>Dial Code</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredItems(); track item._id; let i = $index) {
+            <tr>
+              <td>{{ (currentPage() - 1) * pageSize() + i + 1 }}</td>
+              <td>
+                <div class="country-cell">
+                  <div class="country-flag">
+                    <lucide-icon name="map-pin" [size]="16"></lucide-icon>
+                  </div>
+                  <span class="country-name">{{ item.name }}</span>
+                </div>
+              </td>
+              <td><span class="code-badge">{{ item.code }}</span></td>
+              <td><span class="dial-code">{{ item.dialCode }}</span></td>
+              <td>
+                <span class="status-badge" [class.active]="item.isActive" [class.inactive]="!item.isActive">
+                  <span class="status-dot"></span>
+                  {{ item.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <button class="action-btn toggle" (click)="toggleStatus(item)"
+                    [title]="item.isActive ? 'Deactivate' : 'Activate'">
+                    <lucide-icon [name]="item.isActive ? 'eye' : 'eye-off'" [size]="16"></lucide-icon>
+                  </button>
+                  <button class="action-btn edit" (click)="openEditModal(item)" title="Edit">
+                    <lucide-icon name="pencil" [size]="16"></lucide-icon>
+                  </button>
+                  <button class="action-btn delete" (click)="deleteItem(item)" title="Delete">
+                    <lucide-icon name="trash-2" [size]="16"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
 
     <!-- Pagination -->
     @if (totalPages() > 1) {
       <div class="pagination">
-        <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">
-          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
-        </button>
-        @for (page of getPageNumbers(); track page) {
-          <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
-            {{ page }}
+        <div class="pagination-info">
+          Showing {{ (currentPage() - 1) * pageSize() + 1 }} - {{ currentPage() * pageSize() > totalItems() ? totalItems() : currentPage() * pageSize() }} of {{ totalItems() }}
+        </div>
+        <div class="pagination-controls">
+          <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(1)" title="First">
+            <lucide-icon name="chevrons-left" [size]="16"></lucide-icon>
           </button>
-        }
-        <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">
-          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
-        </button>
+          <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)" title="Previous">
+            <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+          </button>
+          @for (page of getPageNumbers(); track page) {
+            <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+          <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)" title="Next">
+            <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+          </button>
+          <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(totalPages())" title="Last">
+            <lucide-icon name="chevrons-right" [size]="16"></lucide-icon>
+          </button>
+        </div>
       </div>
     }
   }

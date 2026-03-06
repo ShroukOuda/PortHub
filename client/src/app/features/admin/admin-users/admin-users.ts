@@ -19,6 +19,7 @@ export class AdminUsersComponent implements OnInit {
   users = signal<IUser[]>([]);
   searchQuery = signal('');
   roleFilter = signal('all');
+  sortBy = signal('newest');
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Pagination
@@ -37,7 +38,8 @@ export class AdminUsersComponent implements OnInit {
     this.loading.set(true);
     const params: any = {
       page: this.currentPage(),
-      limit: this.pageSize()
+      limit: this.pageSize(),
+      sortBy: this.sortBy()
     };
     const query = this.searchQuery().trim();
     if (query) params.search = query;
@@ -65,6 +67,12 @@ export class AdminUsersComponent implements OnInit {
 
   onRoleFilter(role: string) {
     this.roleFilter.set(role);
+    this.currentPage.set(1);
+    this.loadUsers();
+  }
+
+  onSort(sortBy: string) {
+    this.sortBy.set(sortBy);
     this.currentPage.set(1);
     this.loadUsers();
   }

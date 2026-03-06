@@ -7,7 +7,15 @@
     <div class="shape shape-1"></div>
     <div class="shape shape-2"></div>
     <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
   </div>
+
+  <!-- Particles -->
+  <div class="hero-particles"></div>
+
+  <!-- Gradient orbs -->
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
 
   <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
     <div class="hero-badge">
@@ -16,7 +24,8 @@
     </div>
     
     <h1 class="hero-title">
-      Build Your <span class="hero-highlight">Professional</span> Portfolio
+      Build Your <span class="hero-highlight">Professional</span><br>
+      <span class="hero-highlight-alt">Portfolio</span>
     </h1>
     
     <p class="hero-subtitle">
@@ -28,6 +37,7 @@
       <a (click)="navigateToPortfolio()" class="hero-btn-primary">
         <lucide-icon name="rocket" [size]="18"></lucide-icon>
         Create Your Portfolio
+        <span class="btn-shine"></span>
       </a>
       <a [routerLink]="['/portfolios']" class="hero-btn-secondary">
         <lucide-icon name="eye" [size]="18"></lucide-icon>
@@ -37,17 +47,17 @@
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hero-stat-number">{{ totalUsers() }}+</span>
+        <span class="hero-stat-number">{{ displayUsers() }}+</span>
         <span class="hero-stat-label">Registered Users</span>
       </div>
       <div class="hero-stat-divider"></div>
       <div class="hero-stat">
-        <span class="hero-stat-number">{{ totalPortfolios() }}+</span>
+        <span class="hero-stat-number">{{ displayPortfolios() }}+</span>
         <span class="hero-stat-label">Public Portfolios</span>
       </div>
       <div class="hero-stat-divider"></div>
       <div class="hero-stat">
-        <span class="hero-stat-number">{{ totalCountries() }}+</span>
+        <span class="hero-stat-number">{{ displayCountries() }}+</span>
         <span class="hero-stat-label">Countries</span>
       </div>
       <div class="hero-stat-divider"></div>
@@ -56,5 +66,13 @@
         <span class="hero-stat-label">Free to Use</span>
       </div>
     </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-mouse">
+      <div class="scroll-wheel"></div>
+    </div>
+    <span>Scroll</span>
   </div>
 </section>

@@ -14,10 +14,10 @@
     </div>
 
     <div class="relative max-w-5xl mx-auto px-6 text-center">
-      <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight fade-in-up">
+      <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
         About <span class="text-white/90">PortHub</span>
       </h1>
-      <p class="text-lg md:text-xl text-white/85 max-w-3xl mx-auto leading-relaxed fade-in-up stagger-1">
+      <p class="text-lg md:text-xl text-white/85 max-w-3xl mx-auto leading-relaxed">
         We empower creative professionals by providing the ultimate platform to showcase their work,
         connect with opportunities, and build meaningful careers.
       </p>
@@ -28,7 +28,7 @@
   <section class="py-16 bg-white relative">
     <div class="max-w-5xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <div class="text-center fade-in-up">
+        <div class="text-center" appScrollReveal [revealDelay]="0">
           <div class="brand-gradient w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="users" [size]="22" class="text-white"></lucide-icon>
           </div>
@@ -36,7 +36,7 @@
           <div class="text-gray-500 text-sm font-medium">Registered Users</div>
         </div>
 
-        <div class="text-center fade-in-up stagger-1">
+        <div class="text-center">
           <div class="brand-gradient w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="briefcase" [size]="22" class="text-white"></lucide-icon>
           </div>
@@ -44,7 +44,7 @@
           <div class="text-gray-500 text-sm font-medium">Public Portfolios</div>
         </div>
 
-        <div class="text-center fade-in-up stagger-2">
+        <div class="text-center">
           <div class="brand-gradient w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="globe" [size]="22" class="text-white"></lucide-icon>
           </div>
@@ -52,7 +52,7 @@
           <div class="text-gray-500 text-sm font-medium">Countries</div>
         </div>
 
-        <div class="text-center fade-in-up stagger-3">
+        <div class="text-center">
           <div class="brand-gradient w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="shield-check" [size]="22" class="text-white"></lucide-icon>
           </div>
@@ -67,7 +67,7 @@
   <section class="py-20 relative bg-gradient-to-b from-gray-50 to-white">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid lg:grid-cols-2 gap-14 items-center">
-        <div class="fade-in-up">
+        <div appScrollReveal revealDirection="left">
           <h2 class="text-4xl font-bold text-brand-dark mb-6">
             Our <span class="text-gradient">Story</span>
           </h2>
@@ -89,7 +89,7 @@
           </div>
         </div>
 
-        <div class="fade-in-up stagger-2">
+        <div appScrollReveal revealDirection="right" [revealDelay]="200">
           <div class="relative">
             <div class="absolute inset-0 brand-gradient rounded-2xl rotate-3 scale-105 opacity-80"></div>
             <div class="relative bg-white rounded-2xl p-8 shadow-xl">
@@ -113,7 +113,7 @@
   <!-- Features Section -->
   <section class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-14">
+      <div class="text-center mb-14" appScrollReveal>
         <h2 class="text-4xl font-bold text-brand-dark mb-4">
           Why Choose <span class="text-gradient">PortHub?</span>
         </h2>
@@ -123,7 +123,7 @@
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30 fade-in-up">
+        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30">
           <div class="brand-gradient w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
             <lucide-icon name="sparkles" [size]="20" class="text-white"></lucide-icon>
           </div>
@@ -131,7 +131,7 @@
           <p class="text-gray-500 text-sm">Intuitive dashboard to manage your portfolio effortlessly</p>
         </div>
 
-        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30 fade-in-up stagger-1">
+        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30">
           <div class="brand-gradient w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
             <lucide-icon name="smartphone" [size]="20" class="text-white"></lucide-icon>
           </div>
@@ -139,7 +139,7 @@
           <p class="text-gray-500 text-sm">Your portfolio looks great on every device</p>
         </div>
 
-        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30 fade-in-up stagger-2">
+        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30">
           <div class="brand-gradient w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
             <lucide-icon name="chart-bar" [size]="20" class="text-white"></lucide-icon>
           </div>
@@ -147,7 +147,7 @@
           <p class="text-gray-500 text-sm">Projects, skills, certificates, education &amp; more</p>
         </div>
 
-        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30 fade-in-up stagger-3">
+        <div class="text-center group card-hover p-6 rounded-2xl border border-gray-100 hover:border-[#91729c]/30">
           <div class="brand-gradient w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
             <lucide-icon name="share-2" [size]="20" class="text-white"></lucide-icon>
           </div>
@@ -171,7 +171,7 @@
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover fade-in-up">
+        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover">
           <div class="w-12 h-12 brand-gradient rounded-xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="lightbulb" [size]="18" class="text-white"></lucide-icon>
           </div>
@@ -179,7 +179,7 @@
           <p class="text-gray-500 text-sm">Constantly improving to create better portfolio tools</p>
         </div>
 
-        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover fade-in-up stagger-1">
+        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover">
           <div class="w-12 h-12 brand-gradient rounded-xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="users" [size]="18" class="text-white"></lucide-icon>
           </div>
@@ -187,7 +187,7 @@
           <p class="text-gray-500 text-sm">Building connections that elevate the creative ecosystem</p>
         </div>
 
-        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover fade-in-up stagger-2">
+        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover">
           <div class="w-12 h-12 brand-gradient rounded-xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="star" [size]="18" class="text-white"></lucide-icon>
           </div>
@@ -195,7 +195,7 @@
           <p class="text-gray-500 text-sm">Delivering exceptional quality in every feature</p>
         </div>
 
-        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover fade-in-up stagger-3">
+        <div class="text-center p-6 rounded-2xl bg-white shadow-sm card-hover">
           <div class="w-12 h-12 brand-gradient rounded-xl flex items-center justify-center mx-auto mb-4">
             <lucide-icon name="heart" [size]="18" class="text-white"></lucide-icon>
           </div>
@@ -208,7 +208,7 @@
 
   <!-- Mission Section -->
   <section class="py-20 bg-white">
-    <div class="max-w-3xl mx-auto px-6 text-center">
+    <div class="max-w-3xl mx-auto px-6 text-center" appScrollReveal revealDirection="scale">
       <h2 class="text-4xl font-bold text-brand-dark mb-6">
         Our <span class="text-gradient">Mission</span>
       </h2>

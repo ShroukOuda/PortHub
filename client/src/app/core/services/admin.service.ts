@@ -83,13 +83,14 @@ export class AdminService {
   }
 
   // Get all users with optional filters
-  getUsers(params?: { search?: string; status?: string; role?: string; page?: number; limit?: number }): Observable<PaginatedResponse<IUser>> {
+  getUsers(params?: { search?: string; status?: string; role?: string; page?: number; limit?: number; sortBy?: string }): Observable<PaginatedResponse<IUser>> {
     let httpParams = new HttpParams();
     if (params?.search) httpParams = httpParams.set('search', params.search);
     if (params?.status) httpParams = httpParams.set('status', params.status);
     if (params?.role) httpParams = httpParams.set('role', params.role);
     if (params?.page) httpParams = httpParams.set('page', params.page.toString());
     if (params?.limit) httpParams = httpParams.set('limit', params.limit.toString());
+    if (params?.sortBy) httpParams = httpParams.set('sortBy', params.sortBy);
 
     return this.http.get<any>(`${this.apiUrl}/api/admin/users`, {
       headers: this.getAuthHeaders(),

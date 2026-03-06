@@ -2,10 +2,11 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { UserService } from '../../core/services/user-service';
+import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.directive';
 
 @Component({
   selector: 'app-about',
-  imports: [LucideAngularModule, RouterLink],
+  imports: [LucideAngularModule, RouterLink, ScrollRevealDirective],
   templateUrl: './about.html',
   styleUrl: './about.css'
 })

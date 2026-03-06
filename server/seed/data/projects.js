@@ -33,7 +33,8 @@ portfolioIds.forEach(portfolioId => {
   const numProjects = Math.floor(Math.random() * 6) + 3; // 3-8 projects
   
   for (let i = 0; i < numProjects; i++) {
-    const title = projectTitles[Math.floor(Math.random() * projectTitles.length)];
+    const titleIndex = Math.floor(Math.random() * projectTitles.length);
+    const title = projectTitles[titleIndex];
     
     // Generate 2-6 random technologies
     const techCount = Math.floor(Math.random() * 5) + 2;
@@ -48,7 +49,7 @@ portfolioIds.forEach(portfolioId => {
       title: title,
       description: `A ${title.toLowerCase()} built with modern technologies. This project demonstrates my skills in full-stack development, user experience design, and scalable architecture.`,
       technologies: [...new Set(projectTech)], // Remove duplicates
-      image: `uploads/projects/seed/${projectImages[Math.floor(Math.random() * projectImages.length)]}`,
+      image: `uploads/projects/seed/${projectImages[titleIndex]}`,
       demoUrl: Math.random() > 0.3 ? `https://demo-${title.toLowerCase().replace(/\s+/g, '-')}.com` : '',
       githubUrl: Math.random() > 0.2 ? `https://github.com/user/${title.toLowerCase().replace(/\s+/g, '-')}` : ''
     });

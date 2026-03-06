@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex flex-col lg:flex-row items-center gap-16">
       <!-- Left: Visual -->
-      <div class="lg:w-1/2 w-full">
+      <div class="lg:w-1/2 w-full" appScrollReveal revealDirection="left">
         <div class="about-visual">
           <div class="about-card about-card-1">
             <lucide-icon name="code" [size]="28" class="text-[#91729c]"></lucide-icon>
@@ -29,7 +29,7 @@
       </div>
 
       <!-- Right: Text -->
-      <div class="lg:w-1/2 w-full">
+      <div class="lg:w-1/2 w-full" appScrollReveal revealDirection="right" [revealDelay]="150">
         <span class="text-[#91729c] font-semibold text-sm uppercase tracking-wider">About PortHub</span>
         <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-3 mb-6 leading-tight">
           Build Your <span class="gradient-text">Professional Story</span>
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Stats Bar -->
-    <div class="about-stats-bar">
+    <div class="about-stats-bar" appScrollReveal [revealDelay]="200" revealDirection="scale">
       <div class="about-stat">
         <span class="about-stat-number">{{ totalUsers() }}+</span>
         <span class="about-stat-label">Users</span>

@@ -3,10 +3,10 @@
   <section class="hero-section text-white py-24 relative overflow-hidden">
     <div class="absolute inset-0 pattern-bg opacity-15"></div>
     <div class="relative max-w-5xl mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4 fade-in-up">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">
         Get in <span class="text-white/90">Touch</span>
       </h1>
-      <p class="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed fade-in-up stagger-1">
+      <p class="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
         Have a question, suggestion, or just want to say hello?
         We'd love to hear from you.
       </p>
@@ -19,7 +19,7 @@
       <div class="grid lg:grid-cols-5 gap-12">
 
         <!-- Contact Form (3 cols) -->
-        <div class="lg:col-span-3 fade-in-up">
+        <div class="lg:col-span-3" appScrollReveal revealDirection="left">
           <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <h2 class="text-2xl font-bold text-brand-dark mb-6">
               Send us a <span class="text-gradient">Message</span>
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Contact Info (2 cols) -->
-        <div class="lg:col-span-2 space-y-5 fade-in-up stagger-1">
+        <div class="lg:col-span-2 space-y-5" appScrollReveal revealDirection="right" [revealDelay]="200">
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 card-hover">
             <div class="flex items-start gap-4">
               <div class="brand-gradient w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0">

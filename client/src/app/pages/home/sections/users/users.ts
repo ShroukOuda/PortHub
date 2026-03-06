@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { Iuser } from '../../../../core/models/iuser';
 import { UserService } from '../../../../core/services/user-service';
+import { ScrollRevealDirective } from '../../../../shared/directives/scroll-reveal.directive';
 
 
 @Component({
   selector: 'app-users',
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule, ScrollRevealDirective],
   templateUrl: './users.html',
   styleUrls: ['./users.css']
 })

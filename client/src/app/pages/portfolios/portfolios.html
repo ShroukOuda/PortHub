@@ -2,23 +2,26 @@
   <!-- Hero Header -->
   <section class="hero-section text-white py-20 relative overflow-hidden">
     <div class="absolute inset-0 pattern-bg opacity-15"></div>
+    <!-- Floating orbs -->
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
     <div class="relative max-w-5xl mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 hero-title">
         <lucide-icon name="users" [size]="36" class="inline-block mr-2 align-middle opacity-80"></lucide-icon>
         Explore Portfolios
       </h1>
-      <p class="text-white/80 text-lg max-w-2xl mx-auto mb-8">
+      <p class="text-white/80 text-lg max-w-2xl mx-auto mb-8 hero-subtitle">
         Discover talented professionals and browse their public portfolios
       </p>
 
       <!-- Search Bar -->
-      <div class="max-w-md mx-auto relative">
-        <lucide-icon name="search" [size]="18" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></lucide-icon>
+      <div class="max-w-md mx-auto relative hero-search">
+        <lucide-icon name="search" [size]="18" class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 z-10"></lucide-icon>
         <input
           type="text"
           (input)="onSearch($event)"
           placeholder="Search by name, username, or job title..."
-          class="w-full pl-11 pr-4 py-3 rounded-xl bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg text-sm"
+          class="w-full pl-11 pr-4 py-3 rounded-xl bg-white/95 backdrop-blur-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg text-sm"
         />
       </div>
     </div>
@@ -26,7 +29,7 @@
 
   <!-- Results Info -->
   @if (!isLoading() && filteredUsers().length > 0) {
-    <div class="results-bar">
+    <div class="results-bar" appScrollReveal>
       <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <span class="text-sm text-gray-500">
           Showing {{ (currentPage() - 1) * itemsPerPage() + 1 }}–{{ currentPage() * itemsPerPage() > filteredUsers().length ? filteredUsers().length : currentPage() * itemsPerPage() }}
@@ -50,9 +53,9 @@
 
       <!-- Users Grid - Upwork Style Cards -->
       @if (!isLoading() && paginatedUsers().length > 0) {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" appScrollReveal>
           @for (user of paginatedUsers(); track user._id || $index) {
-            <div class="upwork-card">
+            <div class="upwork-card" [style.animation-delay]="($index * 80) + 'ms'" style="animation: cardFadeIn 0.5s ease both;">
               <!-- Top Section: Avatar + Online dot -->
               <div class="upwork-card-top">
                 <div class="avatar-wrapper">

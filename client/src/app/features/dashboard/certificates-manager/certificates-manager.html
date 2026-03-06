@@ -29,6 +29,11 @@
         <div class="items-grid">
           @for (item of items(); track item._id) {
             <div class="item-card certificate-card">
+              @if (item.CertificateImage && item.CertificateImage !== 'default-certificate-image.png') {
+                <div class="cert-image-preview">
+                  <img [src]="getCertificateImageUrl(item.CertificateImage)" [alt]="item.title">
+                </div>
+              }
               <div class="cert-icon"><lucide-icon name="award" [size]="24"></lucide-icon></div>
               <div class="cert-content">
                 <h3>{{ item.title }}</h3>
@@ -87,34 +92,36 @@
               <!-- Certificate Image -->
               <div class="form-group">
                 <label>Certificate Image</label>
-                <div class="image-mode-toggle">
-                  <label class="radio-label">
-                    <input type="radio" name="imageMode" value="url" [checked]="imageMode() === 'url'" (change)="imageMode.set('url')"> URL
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="imageMode" value="upload" [checked]="imageMode() === 'upload'" (change)="imageMode.set('upload')"> Upload
-                  </label>
-                </div>
-                @if (imageMode() === 'url') {
-                  <input type="text" [value]="formData().CertificateImage" (input)="updateField('CertificateImage', $any($event.target).value)" placeholder="https://example.com/certificate.jpg">
-                } @else {
-                  <div class="file-upload-area">
-                    @if (!imagePreview()) {
-                      <label class="upload-label">
-                        <lucide-icon name="upload" [size]="20"></lucide-icon>
-                        <span>Choose image file</span>
-                        <input type="file" accept="image/*" (change)="onImageFileSelected($event)" hidden>
-                      </label>
-                    } @else {
-                      <div class="image-preview">
-                        <img [src]="imagePreview()" alt="Certificate preview">
-                        <button type="button" class="remove-image-btn" (click)="removeImageFile()">
-                          <lucide-icon name="x" [size]="14"></lucide-icon>
-                        </button>
-                      </div>
-                    }
+                <div class="image-upload-options">
+                  <div class="upload-tab-buttons">
+                    <button type="button" class="tab-btn" [class.active]="imageMode() === 'url'" (click)="imageMode.set('url')">
+                      <lucide-icon name="link" [size]="14"></lucide-icon> URL
+                    </button>
+                    <button type="button" class="tab-btn" [class.active]="imageMode() === 'upload'" (click)="imageMode.set('upload')">
+                      <lucide-icon name="upload" [size]="14"></lucide-icon> Upload
+                    </button>
                   </div>
-                }
+                  @if (imageMode() === 'url') {
+                    <input type="text" [value]="formData().CertificateImage" (input)="updateField('CertificateImage', $any($event.target).value)" placeholder="https://example.com/certificate.jpg">
+                  } @else {
+                    <div class="file-upload-area">
+                      @if (!imagePreview()) {
+                        <label class="upload-label">
+                          <lucide-icon name="upload" [size]="20"></lucide-icon>
+                          <span>Choose image file</span>
+                          <input type="file" accept="image/*" (change)="onImageFileSelected($event)" hidden>
+                        </label>
+                      } @else {
+                        <div class="image-preview">
+                          <img [src]="imagePreview()" alt="Certificate preview">
+                          <button type="button" class="remove-image-btn" (click)="removeImageFile()">
+                            <lucide-icon name="x" [size]="14"></lucide-icon>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
               </div>
             </div>
             <div class="modal-footer">

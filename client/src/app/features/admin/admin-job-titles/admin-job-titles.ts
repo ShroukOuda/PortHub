@@ -9,7 +9,7 @@ import { AdminService } from '../../../core/services/admin.service';
   standalone: true,
   imports: [LucideAngularModule, CommonModule, FormsModule],
   templateUrl: './admin-job-titles.html',
-  styleUrls: ['../admin-skills/admin-skills.css']
+  styleUrl: './admin-job-titles.css'
 })
 export class AdminJobTitlesComponent implements OnInit {
   private adminService = inject(AdminService);

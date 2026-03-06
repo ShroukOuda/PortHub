@@ -1,29 +1,30 @@
 const { ObjectId } = require('mongodb');
 const { portfolioIds } = require('./portfolios');
+const { skillDefinitions } = require('./skillDefinitions');
 
-const skillsByCategory = {
-  'Programming Languages': ['JavaScript', 'TypeScript', 'Python', 'Java', 'C#', 'C++', 'PHP', 'Ruby', 'Go', 'Rust', 'Swift', 'Kotlin', 'Dart'],
-  'Frontend': ['React', 'Vue.js', 'Angular', 'Next.js', 'Nuxt.js', 'Svelte', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap', 'Material UI', 'Redux'],
-  'Backend': ['Node.js', 'Express.js', 'Django', 'Flask', 'Spring Boot', 'Laravel', 'Ruby on Rails', 'ASP.NET', 'FastAPI', 'GraphQL'],
-  'Database': ['MongoDB', 'PostgreSQL', 'MySQL', 'Redis', 'SQLite', 'Firebase', 'DynamoDB', 'Cassandra', 'Elasticsearch'],
-  'DevOps': ['Docker', 'Kubernetes', 'Jenkins', 'GitHub Actions', 'GitLab CI', 'AWS', 'Azure', 'GCP', 'Terraform', 'Ansible'],
-  'Mobile': ['React Native', 'Flutter', 'iOS (Swift)', 'Android (Kotlin)', 'Xamarin', 'Ionic'],
-  'Data Science': ['Pandas', 'NumPy', 'TensorFlow', 'PyTorch', 'Scikit-learn', 'Jupyter', 'R', 'Tableau', 'Power BI'],
-  'Design': ['Figma', 'Adobe XD', 'Sketch', 'Photoshop', 'Illustrator', 'InDesign', 'Blender'],
-  'Soft Skills': ['Leadership', 'Communication', 'Problem Solving', 'Team Collaboration', 'Time Management', 'Critical Thinking']
-};
+// Group skill definitions by category for weighted selection
+const skillDefsByCategory = {};
+skillDefinitions.forEach(sd => {
+  if (!skillDefsByCategory[sd.category]) skillDefsByCategory[sd.category] = [];
+  skillDefsByCategory[sd.category].push(sd);
+});
+const categories = Object.keys(skillDefsByCategory);
 
 const skills = [];
 
 // Generate 5-15 skills per portfolio
 portfolioIds.forEach(portfolioId => {
   const numSkills = Math.floor(Math.random() * 10) + 5; // 5-15 skills
+  const usedNames = new Set();
   
   for (let i = 0; i < numSkills; i++) {
-    const categories = Object.keys(skillsByCategory);
     const category = categories[Math.floor(Math.random() * categories.length)];
-    const skillNames = skillsByCategory[category];
-    const skillName = skillNames[Math.floor(Math.random() * skillNames.length)];
+    const defsInCategory = skillDefsByCategory[category];
+    const skillDef = defsInCategory[Math.floor(Math.random() * defsInCategory.length)];
+    
+    // Skip duplicates within same portfolio
+    if (usedNames.has(skillDef.name)) continue;
+    usedNames.add(skillDef.name);
     
     // Random level (60-100 for numbers, or Beginner/Intermediate/Advanced/Expert for strings)
     const useNumberLevel = Math.random() > 0.3;
@@ -38,10 +39,10 @@ portfolioIds.forEach(portfolioId => {
     skills.push({
       _id: new ObjectId(),
       portfolioId: portfolioId,
-      name: skillName,
+      name: skillDef.name,
       level: level,
-      category: category,
-      icon: Math.random() > 0.5 ? `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${skillName.toLowerCase().replace(/\s+/g, '')}/${skillName.toLowerCase().replace(/\s+/g, '')}-original.svg` : undefined
+      category: skillDef.category,
+      icon: skillDef.icon || undefined
     });
   }
 });

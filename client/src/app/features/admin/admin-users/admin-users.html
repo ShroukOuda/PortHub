@@ -27,6 +27,17 @@
         [value]="searchQuery()"
         (input)="onSearch($any($event.target).value)">
     </div>
+    <div class="sort-select">
+      <lucide-icon name="arrow-up-down" [size]="16"></lucide-icon>
+      <select [value]="sortBy()" (change)="onSort($any($event.target).value)">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="name-asc">Name A–Z</option>
+        <option value="name-desc">Name Z–A</option>
+        <option value="email">Email</option>
+        <option value="role">Role</option>
+      </select>
+    </div>
     <div class="filter-buttons">
       <button 
         class="filter-btn" 

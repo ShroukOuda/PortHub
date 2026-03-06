@@ -38,7 +38,7 @@
           </div>
           <div class="client-info">
             @if (testimonial.authorImage && testimonial.authorImage !== 'default-author-image.png') {
-              <img [src]="testimonial.authorImage" [alt]="testimonial.author" class="client-avatar">
+              <img [src]="getAuthorImageUrl(testimonial.authorImage)" [alt]="testimonial.author" class="client-avatar">
             } @else {
               <div class="client-avatar-placeholder">
                 {{ testimonial.author?.charAt(0) }}
@@ -81,7 +81,10 @@
           <div class="form-group">
             <label>Client Name <span class="required">*</span></label>
             <input type="text" [(ngModel)]="currentTestimonial.author" name="author" required
-                   placeholder="John Smith">
+                   placeholder="John Smith" #authorField="ngModel">
+            @if (authorField.invalid && authorField.touched) {
+              <span class="field-error"><lucide-icon name="circle-alert" [size]="12"></lucide-icon> Client name is required</span>
+            }
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -97,35 +100,37 @@
           </div>
           <div class="form-group">
             <label>Client Image</label>
-            <div class="image-mode-toggle">
-              <label class="radio-label">
-                <input type="radio" name="imageMode" value="url" [checked]="imageMode === 'url'" (change)="imageMode = 'url'"> URL
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="imageMode" value="upload" [checked]="imageMode === 'upload'" (change)="imageMode = 'upload'"> Upload
-              </label>
-            </div>
-            @if (imageMode === 'url') {
-              <input type="text" [(ngModel)]="currentTestimonial.authorImage" name="authorImage"
-                     placeholder="https://example.com/photo.jpg">
-            } @else {
-              <div class="file-upload-area">
-                @if (!imagePreview) {
-                  <label class="upload-label">
-                    <lucide-icon name="upload" [size]="20"></lucide-icon>
-                    <span>Choose client photo</span>
-                    <input type="file" accept="image/*" (change)="onImageFileSelected($event)" hidden>
-                  </label>
-                } @else {
-                  <div class="image-preview">
-                    <img [src]="imagePreview" alt="Client photo preview">
-                    <button type="button" class="remove-image-btn" (click)="removeImageFile()">
-                      <lucide-icon name="x" [size]="14"></lucide-icon>
-                    </button>
-                  </div>
-                }
+            <div class="image-upload-options">
+              <div class="upload-tab-buttons">
+                <button type="button" class="tab-btn" [class.active]="imageMode === 'url'" (click)="imageMode = 'url'">
+                  <lucide-icon name="link" [size]="14"></lucide-icon> URL
+                </button>
+                <button type="button" class="tab-btn" [class.active]="imageMode === 'upload'" (click)="imageMode = 'upload'">
+                  <lucide-icon name="upload" [size]="14"></lucide-icon> Upload
+                </button>
               </div>
-            }
+              @if (imageMode === 'url') {
+                <input type="text" [(ngModel)]="currentTestimonial.authorImage" name="authorImage"
+                       placeholder="https://example.com/photo.jpg">
+              } @else {
+                <div class="file-upload-area">
+                  @if (!imagePreview) {
+                    <label class="upload-label">
+                      <lucide-icon name="upload" [size]="20"></lucide-icon>
+                      <span>Choose client photo</span>
+                      <input type="file" accept="image/*" (change)="onImageFileSelected($event)" hidden>
+                    </label>
+                  } @else {
+                    <div class="image-preview">
+                      <img [src]="imagePreview" alt="Client photo preview">
+                      <button type="button" class="remove-image-btn" (click)="removeImageFile()">
+                        <lucide-icon name="x" [size]="14"></lucide-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           </div>
           <div class="form-group">
             <label>Rating</label>
@@ -141,7 +146,10 @@
           <div class="form-group">
             <label>Testimonial Content <span class="required">*</span></label>
             <textarea [(ngModel)]="currentTestimonial.content" name="content" rows="4" required
-                      placeholder="What the client said about your work..."></textarea>
+                      placeholder="What the client said about your work..." #contentField="ngModel" minlength="10"></textarea>
+            @if (contentField.invalid && contentField.touched) {
+              <span class="field-error"><lucide-icon name="circle-alert" [size]="12"></lucide-icon> Content is required (min 10 characters)</span>
+            }
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>

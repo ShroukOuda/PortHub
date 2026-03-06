@@ -4,18 +4,18 @@ export interface IuserRegister {
     lastName: string;
     username: string;
     email: string;
-    phone: string;
+    phone?: string;
     password: string;
     confirmPassword: string;
     profilePicture?: string | null;
-    bio: string;
-    gender: 'male' | 'female' | 'other';
-    dateOfBirth: string;
-    country: string;
-    city: string;
-    address: string;
-    jobTitle: string;
-    role: 'user' | 'admin';
+    bio?: string;
+    gender?: 'male' | 'female' | 'other';
+    dateOfBirth?: string;
+    country?: string;
+    city?: string;
+    address?: string;
+    jobTitle?: string;
+    role?: 'user' | 'admin';
     createdAt?: Date | string;
     updatedAt?: Date | string;
 }

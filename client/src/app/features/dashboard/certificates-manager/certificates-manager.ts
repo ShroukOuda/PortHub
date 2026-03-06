@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { ICertificate } from '../../../core/models/icertificate';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-certificates-manager',
@@ -14,6 +15,7 @@ import { ICertificate } from '../../../core/models/icertificate';
 })
 export class CertificatesManagerComponent implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
+  private apiUrl = environment.apiUrl;
 
   loading = signal(true);
   saving = signal(false);
@@ -142,5 +144,11 @@ export class CertificatesManagerComponent implements OnInit {
       },
       error: () => this.message.set({ type: 'error', text: 'Delete failed.' })
     });
+  }
+
+  getCertificateImageUrl(imagePath: string): string {
+    if (!imagePath || imagePath === 'default-certificate-image.png') return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${this.apiUrl}/${imagePath}`;
   }
 }

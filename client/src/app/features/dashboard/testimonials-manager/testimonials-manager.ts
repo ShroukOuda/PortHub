@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { ITestimonial } from '../../../core/models/itestimonial';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-testimonials-manager',
@@ -13,6 +14,7 @@ import { ITestimonial } from '../../../core/models/itestimonial';
   styleUrls: ['../projects-manager/projects-manager.css', './testimonials-manager.css']
 })
 export class TestimonialsManagerComponent implements OnInit {
+  private apiUrl = environment.apiUrl;
   testimonials: ITestimonial[] = [];
   loading = true;
   saving = false;
@@ -171,5 +173,11 @@ export class TestimonialsManagerComponent implements OnInit {
 
   getStars(rating: number = 5): number[] {
     return Array(5).fill(0).map((_, i) => i < rating ? 1 : 0);
+  }
+
+  getAuthorImageUrl(imagePath: string): string {
+    if (!imagePath || imagePath === 'default-author-image.png') return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${this.apiUrl}/${imagePath}`;
   }
 }

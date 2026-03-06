@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { Iuser } from '../../core/models/iuser';
 import { UserService } from '../../core/services/user-service';
 import { LucideAngularModule } from 'lucide-angular';
+import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.directive';
 
 @Component({
   selector: 'app-portfolios',
-  imports: [LucideAngularModule, RouterLink],
+  imports: [LucideAngularModule, RouterLink, ScrollRevealDirective],
   templateUrl: './portfolios.html',
   styleUrl: './portfolios.css'
 })

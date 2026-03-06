@@ -1,5 +1,16 @@
+const fs = require('fs');
+const path = require('path');
 const Testimonial = require('../models/Testimonial');
 const Portfolio = require('../models/Portfolio');
+
+// Helper: delete old file from disk
+const deleteOldFile = (filePath) => {
+    if (!filePath || filePath === 'default-author-image.png') return;
+    const fullPath = path.join(__dirname, '..', filePath);
+    fs.unlink(fullPath, (err) => {
+        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
+    });
+};
 
 // Get current user's testimonials
 const getMyTestimonials = async (req, res) => {
@@ -78,10 +89,19 @@ const updateTestimonial = async (req, res) => {
     const { content, author, authorImage, position, company, rating, clientName, clientImage, clientPosition, clientCompany } = req.body;
 
     try {
+        // Delete old image if a new one is provided
+        const newImage = authorImage || clientImage;
+        if (newImage) {
+            const existing = await Testimonial.findById(testimonialId);
+            if (existing && existing.authorImage && existing.authorImage !== newImage) {
+                deleteOldFile(existing.authorImage);
+            }
+        }
+
         const updatedTestimonial = await Testimonial.findByIdAndUpdate(testimonialId, {
             content,
             author: author || clientName,
-            authorImage: authorImage || clientImage,
+            authorImage: newImage || undefined,
             position: position || clientPosition,
             company: company || clientCompany,
             rating
@@ -95,6 +115,11 @@ const deleteTestimonial = async (req, res) => {
     const { testimonialId } = req.params;
 
     try {
+        const testimonial = await Testimonial.findById(testimonialId);
+        if (testimonial && testimonial.authorImage) {
+            deleteOldFile(testimonial.authorImage);
+        }
+
         await Testimonial.findByIdAndDelete(testimonialId);
         res.status(200).json({ message: 'Testimonial deleted successfully' });
     } catch (error) {

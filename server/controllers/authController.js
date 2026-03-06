@@ -26,8 +26,8 @@ const registerUser = async (req, res) => {
     const { firstName, lastName, username, email, password, phone, gender, dateOfBirth, bio, country, city, address, role, jobTitle } = req.body;
 
     try {
-        if (!firstName || !username || !email || !password || !phone || !gender || !bio ||  !dateOfBirth || !country || !city || !address || !jobTitle) {
-            return res.status(400).json({ message: 'All fields are required' });
+        if (!firstName || !lastName || !username || !email || !password) {
+            return res.status(400).json({ message: 'First name, last name, username, email, and password are required' });
         }
 
         if (!isValidEmail(email)) {
@@ -40,10 +40,12 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid email domain. Please use a valid email address.' });
         }
 
-        // Validate phone number
-        const phoneValidation = getPhoneValidationDetails(phone);
-        if (!phoneValidation.valid) {
-            return res.status(400).json({ message: phoneValidation.message });
+        // Validate phone number (only if provided)
+        if (phone) {
+            const phoneValidation = getPhoneValidationDetails(phone);
+            if (!phoneValidation.valid) {
+                return res.status(400).json({ message: phoneValidation.message });
+            }
         }
 
         if (!isValidPassword(password)) {
@@ -57,23 +59,27 @@ const registerUser = async (req, res) => {
             return res.status(409).json({ message: 'Email or username already exists' });
         }
 
-        await userModel.create({
+        const userData = {
             firstName,
             lastName,
             username,
             email,
-            phone,
-            gender,
-            dateOfBirth,
-            country,
-            city,
-            address,
-            bio,
-            profilePicture,
-            jobTitle,
             password: await hashPassword(password),
             role: role || 'user'
-        });
+        };
+
+        // Add optional fields if provided
+        if (phone) userData.phone = phone;
+        if (gender) userData.gender = gender;
+        if (dateOfBirth) userData.dateOfBirth = dateOfBirth;
+        if (country) userData.country = country;
+        if (city) userData.city = city;
+        if (address) userData.address = address;
+        if (bio) userData.bio = bio;
+        if (profilePicture) userData.profilePicture = profilePicture;
+        if (jobTitle) userData.jobTitle = jobTitle;
+
+        await userModel.create(userData);
 
         res.status(201).json({ message: 'User registered successfully' });
 

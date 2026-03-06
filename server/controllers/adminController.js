@@ -182,7 +182,7 @@ const getAdminStats = async (req, res) => {
 // Get all users (admin)
 const getUsers = async (req, res) => {
     try {
-        const { search, status, role, page = 1, limit = 10 } = req.query;
+        const { search, status, role, page = 1, limit = 10, sortBy = 'newest' } = req.query;
         
         let query = {};
         
@@ -205,9 +205,20 @@ const getUsers = async (req, res) => {
             query.role = role;
         }
 
+        // Determine sort order
+        let sortOption = { createdAt: -1 }; // default: newest
+        switch (sortBy) {
+            case 'oldest': sortOption = { createdAt: 1 }; break;
+            case 'name-asc': sortOption = { firstName: 1, lastName: 1 }; break;
+            case 'name-desc': sortOption = { firstName: -1, lastName: -1 }; break;
+            case 'email': sortOption = { email: 1 }; break;
+            case 'role': sortOption = { role: -1, createdAt: -1 }; break;
+            default: sortOption = { createdAt: -1 };
+        }
+
         const total = await User.countDocuments(query);
         const users = await User.find(query)
-            .sort({ createdAt: -1 })
+            .sort(sortOption)
             .skip((page - 1) * limit)
             .limit(parseInt(limit))
             .select('-password');
