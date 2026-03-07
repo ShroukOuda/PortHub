@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Itestimonial } from '../../../../core/models/itestimonial';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-testimonials',
@@ -35,5 +36,16 @@ export class Testimonials implements OnInit, OnDestroy {
 
   getStars(rating: number = 5): number[] {
     return Array(5).fill(0).map((_, i) => i < rating ? 1 : 0);
+  }
+
+  getAuthorImageUrl(testimonial: Itestimonial): string {
+    const img = testimonial.authorImage || '';
+    if (!img || img === 'default-author-image.png') return '';
+    if (img.startsWith('http://') || img.startsWith('https://')) return img;
+    return `${environment.apiUrl}/${img}`;
+  }
+
+  hasAuthorImage(testimonial: Itestimonial): boolean {
+    return !!this.getAuthorImageUrl(testimonial);
   }
 }

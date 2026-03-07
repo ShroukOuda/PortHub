@@ -2,13 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { AdminService } from '../../../core/services/admin.service';
 import { IUser } from '../../../core/models/iuser';
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './admin-users.html',
   styleUrl: './admin-users.css'
 })

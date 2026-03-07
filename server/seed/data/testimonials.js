@@ -44,7 +44,7 @@ portfolioIds.forEach((portfolioId, index) => {
       portfolioId: portfolioId,
       content: testimonialContents[Math.floor(Math.random() * testimonialContents.length)],
       author: author.name,
-      authorImage: author.image ? `/uploads/profiles/seed/${author.image}.jpg` : 'default-author-image.png',
+      authorImage: author.image ? `uploads/testimonials/seed/${author.image}.jpg` : 'default-author-image.png',
       position: author.position,
       company: author.company,
       rating: Math.floor(Math.random() * 2) + 4 // 4 or 5 stars

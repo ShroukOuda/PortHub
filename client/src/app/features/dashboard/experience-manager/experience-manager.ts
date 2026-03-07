@@ -2,13 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { IExperience } from '../../../core/models/iexperience';
 
 @Component({
   selector: 'app-experience-manager',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: "./experience-manager.html",
   styleUrls: ['../projects-manager/projects-manager.css', '../education-manager/education-manager.css', './experience-manager.css']
 })

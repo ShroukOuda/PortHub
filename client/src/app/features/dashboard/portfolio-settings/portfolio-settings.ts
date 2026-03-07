@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { AuthStateService } from '../../../core/services/auth-state.service';
@@ -11,7 +12,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-portfolio-settings',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './portfolio-settings.html',
   styleUrl: './portfolio-settings.css'
 })

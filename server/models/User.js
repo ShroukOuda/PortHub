@@ -32,9 +32,6 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: function() {
-            return !this.googleId && !this.githubId;
-        },
         trim: true
     },
     password: {
@@ -75,37 +72,22 @@ const UserSchema = new mongoose.Schema({
         default: 'other'
     },
     dateOfBirth: {
-        type: Date,
-        required: function() {
-            return !this.googleId && !this.githubId;
-        }
+        type: Date
     },
     country: {
         type: String,
-        required: function() {
-            return !this.googleId && !this.githubId;
-        },
         trim: true
     },
     city: {
         type: String,
-        required: function() {
-            return !this.googleId && !this.githubId;
-        },
         trim: true
     },
     address: {
         type: String,
-        required: function() {
-            return !this.googleId && !this.githubId;
-        },
         trim: true
     },
     jobTitle: {
         type: String,
-        required: function() {
-            return !this.googleId && !this.githubId;
-        },
         trim: true
     },
 

@@ -10,7 +10,20 @@
     Skills
   </h2>
 
-  @if (skills.length === 0) {
+  @if (isLoading) {
+    <!-- Loading skeleton -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="bg-[color:var(--card-bg)] rounded-xl p-5 border animate-pulse" style="border-color: color-mix(in srgb, var(--main-color) 15%, transparent)">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-8 h-8 rounded bg-gray-300/20"></div>
+            <div class="h-4 w-24 rounded bg-gray-300/20"></div>
+          </div>
+          <div class="h-2 rounded-full bg-gray-300/20 mt-2"></div>
+        </div>
+      }
+    </div>
+  } @else if (skills.length === 0) {
     <div class="empty-state">
       <lucide-icon name="wrench" [size]="48" style="color: var(--main-color)"></lucide-icon>
       <p class="mt-4 text-lg opacity-50">No skills added yet.</p>
@@ -27,7 +40,7 @@
               <div class="skill-card bg-[color:var(--card-bg)] rounded-xl p-5 border transition duration-300" style="border-color: color-mix(in srgb, var(--main-color) 15%, transparent)">
                 <div class="flex items-center gap-3 mb-3">
                   @if (skill.icon && isUrl(skill.icon)) {
-                    <img [src]="skill.icon" [alt]="skill.name" class="w-8 h-8 object-contain shrink-0" />
+                    <img [src]="getIconUrl(skill.icon)" [alt]="skill.name" class="w-8 h-8 object-contain shrink-0" />
                   } @else if (skill.icon) {
                     <lucide-icon [name]="skill.icon" [size]="24" style="color: var(--main-color)"></lucide-icon>
                   } @else {
@@ -56,7 +69,7 @@
           <div class="skill-card bg-[color:var(--card-bg)] rounded-xl p-5 border transition duration-300" style="border-color: color-mix(in srgb, var(--main-color) 15%, transparent)">
             <div class="flex items-center gap-3 mb-3">
               @if (skill.icon && isUrl(skill.icon)) {
-                <img [src]="skill.icon" [alt]="skill.name" class="w-8 h-8 object-contain shrink-0" />
+                <img [src]="getIconUrl(skill.icon)" [alt]="skill.name" class="w-8 h-8 object-contain shrink-0" />
               } @else if (skill.icon) {
                 <lucide-icon [name]="skill.icon" [size]="24" style="color: var(--main-color)"></lucide-icon>
               } @else {

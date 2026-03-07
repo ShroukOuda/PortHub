@@ -168,14 +168,25 @@
           <lucide-icon name="camera" [size]="14" class="inline mr-1 text-[#91729c]"></lucide-icon>Profile Picture
           <span class="text-gray-400 font-normal ml-1">(optional)</span>
         </label>
-        <input
-          type="file"
-          (change)="onFileSelected($event)"
-          name="profilePicture"
-          accept="image/*"
-          class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0
-                 file:text-sm file:font-medium file:bg-[#91729c]/10 file:text-[#432161]
-                 hover:file:bg-[#91729c]/20 cursor-pointer" />
+        <div class="flex items-center gap-4 mb-2">
+          @if (previewUrl) {
+            <img [src]="previewUrl" alt="Preview" class="w-14 h-14 rounded-full object-cover ring-2 ring-[#91729c]/30">
+          } @else {
+            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#91729c]/20 to-[#432161]/20 flex items-center justify-center">
+              <lucide-icon name="user" [size]="24" class="text-[#91729c]"></lucide-icon>
+            </div>
+          }
+          <div class="flex-1">
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              name="profilePicture"
+              accept="image/*"
+              class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0
+                     file:text-sm file:font-medium file:bg-[#91729c]/10 file:text-[#432161]
+                     hover:file:bg-[#91729c]/20 cursor-pointer" />
+          </div>
+        </div>
       </div>
 
       <!-- Info Note -->

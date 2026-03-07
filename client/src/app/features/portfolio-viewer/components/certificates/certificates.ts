@@ -4,6 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Icertificate } from '../../../../core/models/icertificate';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-certificates',
@@ -31,5 +32,16 @@ export class Certificates implements OnInit, OnDestroy {
 
   get certificates(): Icertificate[] {
     return this.portfolioData?.certificates || [];
+  }
+
+  getCertificateImageUrl(cert: Icertificate): string {
+    const img = cert.CertificateImage || '';
+    if (!img || img === 'default-certificate-image.png') return '';
+    if (img.startsWith('http://') || img.startsWith('https://')) return img;
+    return `${environment.apiUrl}/${img}`;
+  }
+
+  hasCertificateImage(cert: Icertificate): boolean {
+    return !!this.getCertificateImageUrl(cert);
   }
 }

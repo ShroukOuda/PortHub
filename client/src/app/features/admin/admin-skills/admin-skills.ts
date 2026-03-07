@@ -2,13 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 
 @Component({
   selector: 'app-admin-skills',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './admin-skills.html',
   styleUrl: './admin-skills.css'
 })

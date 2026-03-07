@@ -2,13 +2,11 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-
-
-const { users} = require('./data/users');
+const { users } = require('./data/users');
 const { portfolios } = require('./data/portfolios');
 const { testimonials } = require('./data/testimonials');
 const { services } = require('./data/services');
-const { skills } = require('./data/skills');  
+const { skills } = require('./data/skills');
 const { certificates } = require('./data/certificates');
 const { projects } = require('./data/projects');
 const { educations } = require('./data/educations');
@@ -18,7 +16,6 @@ const { jobTitles } = require('./data/jobTitles');
 const { countries } = require('./data/countries');
 
 const url = process.env.MONGO_URL;
-
 const dbName = process.env.DB_NAME;
 
 // Hash passwords for users
@@ -30,55 +27,96 @@ const hashUserPasswords = async (usersData) => {
     })));
 };
 
+const seedCollection = async (db, name, data, summary) => {
+    try {
+        const result = await db.collection(name).insertMany(data);
+        summary[name] = result.insertedCount;
+    } catch (err) {
+        console.error(`❌ Error seeding ${name}:`, err.message);
+        summary[name] = 'ERROR';
+    }
+};
+
 const seedDatabase = async () => {
-    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-    
+    const client = new MongoClient(url);
+
     try {
         await client.connect();
-        console.log('Connected to MongoDB');
+        console.log('✅ Connected to MongoDB');
 
         const db = client.db(dbName);
+        const summary = {};
 
-        // Clear existing collections
-        await db.collection('users').deleteMany({});
-        await db.collection('portfolios').deleteMany({});
-        await db.collection('testimonials').deleteMany({});
-        await db.collection('services').deleteMany({});
-        await db.collection('skills').deleteMany({});
-        await db.collection('certificates').deleteMany({});
-        await db.collection('projects').deleteMany({});
-        await db.collection('educations').deleteMany({});
-        await db.collection('experiences').deleteMany({});
-        await db.collection('skilldefinitions').deleteMany({});
-        await db.collection('jobtitles').deleteMany({});
-        await db.collection('countries').deleteMany({});
+        // ── 1. Clear all collections ────────────────────────────
+        const collections = [
+            'users', 'portfolios', 'testimonials', 'services',
+            'skills', 'certificates', 'projects', 'educations',
+            'experiences', 'skilldefinitions', 'jobtitles', 'countries'
+        ];
 
-        console.log('Collections cleared');
+        for (const col of collections) {
+            try {
+                await db.collection(col).deleteMany({});
+            } catch (err) {
+                console.warn(`⚠️  Could not clear ${col}: ${err.message}`);
+            }
+        }
+        console.log('🗑️  Collections cleared\n');
 
-        // Hash passwords before inserting users
-        const usersWithHashedPasswords = await hashUserPasswords(users);
+        // ── 2. Seed in dependency order ─────────────────────────
 
-        // Seed new data
-        await db.collection('users').insertMany(usersWithHashedPasswords);
-        await db.collection('portfolios').insertMany(portfolios);
-        await db.collection('testimonials').insertMany(testimonials);
-        await db.collection('services').insertMany(services);
-        await db.collection('skills').insertMany(skills);
-        await db.collection('certificates').insertMany(certificates);
-        await db.collection('projects').insertMany(projects);
-        await db.collection('educations').insertMany(educations);
-        await db.collection('experiences').insertMany(experiences);
-        await db.collection('skilldefinitions').insertMany(skillDefinitions);
-        await db.collection('jobtitles').insertMany(jobTitles);
-        await db.collection('countries').insertMany(countries);
+        // Independent reference data first
+        await seedCollection(db, 'skilldefinitions', skillDefinitions, summary);
+        await seedCollection(db, 'jobtitles', jobTitles, summary);
+        await seedCollection(db, 'countries', countries, summary);
 
-        console.log('Database seeded successfully');
+        // Users (hash passwords first)
+        try {
+            const usersWithHashedPasswords = await hashUserPasswords(users);
+            const uResult = await db.collection('users').insertMany(usersWithHashedPasswords);
+            summary['users'] = uResult.insertedCount;
+        } catch (err) {
+            console.error('❌ Error seeding users:', err.message);
+            summary['users'] = 'ERROR';
+        }
+
+        // Portfolios (depend on users)
+        await seedCollection(db, 'portfolios', portfolios, summary);
+
+        // Everything else depends on portfolios
+        await seedCollection(db, 'skills', skills, summary);
+        await seedCollection(db, 'projects', projects, summary);
+        await seedCollection(db, 'services', services, summary);
+        await seedCollection(db, 'educations', educations, summary);
+        await seedCollection(db, 'experiences', experiences, summary);
+        await seedCollection(db, 'certificates', certificates, summary);
+        await seedCollection(db, 'testimonials', testimonials, summary);
+
+        // ── 3. Print summary ────────────────────────────────────
+        console.log('\n╔══════════════════════════════════════╗');
+        console.log('║         SEED SUMMARY                 ║');
+        console.log('╠══════════════════════════════════════╣');
+        for (const [collection, count] of Object.entries(summary)) {
+            const status = count === 'ERROR' ? '❌' : '✅';
+            const label = collection.padEnd(22);
+            console.log(`║ ${status} ${label} ${String(count).padStart(10)} ║`);
+        }
+        console.log('╚══════════════════════════════════════╝');
+
+        const errors = Object.values(summary).filter(v => v === 'ERROR').length;
+        if (errors > 0) {
+            console.log(`\n⚠️  Seeding completed with ${errors} error(s)`);
+        } else {
+            console.log('\n🎉 Database seeded successfully!');
+        }
+
     } catch (error) {
-        console.error('Error seeding database:', error);
+        console.error('💥 Fatal error seeding database:', error);
     } finally {
         await client.close();
+        console.log('🔌 MongoDB connection closed');
     }
-}
+};
 
 seedDatabase();
 

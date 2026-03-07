@@ -72,7 +72,7 @@ portfolioIds.forEach(portfolioId => {
       issuer: issuers[Math.floor(Math.random() * issuers.length)],
       issueDate: issueDate,
       expirationDate: expirationDate,
-      certificateImage: Math.random() > 0.5 ? `/uploads/certificates/seed/certificate-${Math.floor(Math.random() * 20) + 1}.jpg` : 'default-certificate-image.jpg',
+      CertificateImage: Math.random() > 0.5 ? `uploads/certificates/seed/certificate-${Math.floor(Math.random() * 20) + 1}.jpg` : 'default-certificate-image.png',
       credentialId: `CRED-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
       credentialUrl: Math.random() > 0.3 ? `https://credential.verify/${Math.random().toString(36).substring(2, 10)}` : ''
     });

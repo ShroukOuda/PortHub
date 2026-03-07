@@ -4,10 +4,11 @@ import { AuthService } from '../../core/services/auth-service';
 import { AuthStateService } from '../../core/services/auth-state.service';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
+import { MouseFollowDirective } from '../../shared/directives/mouse-follow.directive';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, RouterLink, LucideAngularModule],
+  imports: [FormsModule, RouterLink, LucideAngularModule, MouseFollowDirective],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })

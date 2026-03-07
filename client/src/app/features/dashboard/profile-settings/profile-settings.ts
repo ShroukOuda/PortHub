@@ -7,6 +7,7 @@ import { AuthStateService } from '../../../core/services/auth-state.service';
 import { AdminService } from '../../../core/services/admin.service';
 import { IUser } from '../../../core/models/iuser';
 import { environment } from '../../../../environments/environment';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 
 interface Country {
   name: string;
@@ -20,7 +21,7 @@ interface Country {
 @Component({
   selector: 'app-profile-settings',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './profile-settings.html',
   styleUrl: './profile-settings.css'
 })

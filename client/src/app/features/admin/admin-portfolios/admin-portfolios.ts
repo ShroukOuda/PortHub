@@ -2,13 +2,14 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { AdminService } from '../../../core/services/admin.service';
 import { IPortfolio } from '../../../core/models/iportfolio';
 
 @Component({
   selector: 'app-admin-portfolios',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './admin-portfolios.html',
   styleUrl: './admin-portfolios.css'
 })

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, tap, shareReplay } from 'rxjs/operators';
 import { Iportfolio } from '../../models/iportfolio';
 import { Iuser } from '../../models/iuser';
 import { Iproject } from '../../models/iproject';
@@ -48,13 +48,21 @@ export class PortfolioDataService {
 
   private portfolioDataSubject = new BehaviorSubject<PortfolioData>(this.initialState);
   public portfolioData$ = this.portfolioDataSubject.asObservable();
+  private cachedUserId: string | null = null;
+  private cachedRequest$: Observable<PortfolioData> | null = null;
 
   constructor(private http: HttpClient) {}
 
   loadPortfolioData(userId: string): Observable<PortfolioData> {
+    // Return cached data if already loaded for this user
+    if (this.cachedUserId === userId && this.cachedRequest$) {
+      return this.cachedRequest$;
+    }
+
+    this.cachedUserId = userId;
     this.portfolioDataSubject.next({ ...this.initialState, loading: true });
 
-    return this.http.get<any>(`${this.apiUrl}/api/portfolios/user/${userId}/full`).pipe(
+    this.cachedRequest$ = this.http.get<any>(`${this.apiUrl}/api/portfolios/user/${userId}/full`).pipe(
       map(response => {
         const data: PortfolioData = {
           user: response.user || null,
@@ -81,8 +89,11 @@ export class PortfolioDataService {
         };
         this.portfolioDataSubject.next(errorData);
         return of(errorData);
-      })
+      }),
+      shareReplay(1)
     );
+
+    return this.cachedRequest$;
   }
 
   get currentData(): PortfolioData {
@@ -91,5 +102,7 @@ export class PortfolioDataService {
 
   clearData(): void {
     this.portfolioDataSubject.next(this.initialState);
+    this.cachedUserId = null;
+    this.cachedRequest$ = null;
   }
 }

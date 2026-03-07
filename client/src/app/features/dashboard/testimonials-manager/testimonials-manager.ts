@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { ITestimonial } from '../../../core/models/itestimonial';
 import { environment } from '../../../../environments/environment';
@@ -9,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-testimonials-manager',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './testimonials-manager.html',
   styleUrls: ['../projects-manager/projects-manager.css', './testimonials-manager.css']
 })

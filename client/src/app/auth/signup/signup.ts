@@ -5,17 +5,19 @@ import { IuserRegister } from '../../core/models/iuser-register';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule, NgForm } from '@angular/forms';
+import { MouseFollowDirective } from '../../shared/directives/mouse-follow.directive';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [LucideAngularModule, RouterLink, CommonModule, FormsModule],
+  imports: [LucideAngularModule, RouterLink, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: './signup.html',
   styleUrls: ['./signup.css'],
 })
 export class Signup implements OnInit {
 
   selectedFile: File | null = null;
+  previewUrl: string | null = null;
   isUploading = false;
   showPassword = false;
   showConfirmPassword = false;
@@ -54,6 +56,13 @@ export class Signup implements OnInit {
       return;
     }
     this.selectedFile = file;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
 
   checkUsername() {

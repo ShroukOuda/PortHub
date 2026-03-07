@@ -2,13 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
+import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { IEducation } from '../../../core/models/ieducation';
 
 @Component({
   selector: 'app-education-manager',
   standalone: true,
-  imports: [LucideAngularModule, CommonModule, FormsModule],
+  imports: [LucideAngularModule, CommonModule, FormsModule, MouseFollowDirective],
   templateUrl: "./education-manager.html",
   styleUrls: ['../projects-manager/projects-manager.css', './education-manager.css']
 })

@@ -24,10 +24,10 @@
           <div class="certificate-card bg-[color:var(--card-bg)] border rounded-xl overflow-hidden shadow-md"
                style="border-color: color-mix(in srgb, var(--main-color) 30%, transparent);">
             <!-- Image -->
-            @if (cert.CertificateImage) {
+            @if (hasCertificateImage(cert)) {
               <div class="cert-image-wrapper overflow-hidden">
                 <img
-                  [src]="cert.CertificateImage"
+                  [src]="getCertificateImageUrl(cert)"
                   [alt]="cert.title + ' Certificate'"
                   class="cert-image w-full h-48 object-contain p-2"
                   style="background-color: color-mix(in srgb, var(--main-color) 5%, transparent)"
