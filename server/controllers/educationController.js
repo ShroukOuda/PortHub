@@ -67,7 +67,7 @@ const getEducationByPortfolioId = async (req, res) => {
 }
 const updateEducation = async (req, res) => {
     const { educationId } = req.params;
-    const { institution, degree, fieldOfStudy, startDate, endDate, description, grade, gpa, current } = req.body;
+    const { startDate, endDate } = req.body;
 
     // Date validation
     if (startDate && endDate) {
@@ -76,23 +76,20 @@ const updateEducation = async (req, res) => {
         }
     }
 
+    const allowedFields = ['institution', 'degree', 'fieldOfStudy', 'startDate', 'endDate', 'description', 'grade', 'gpa', 'current'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
+
     try {
-        const updatedEducation = await Education.findByIdAndUpdate(educationId, {
-            institution,
-            degree,
-            fieldOfStudy,
-            startDate,
-            endDate,
-            description,
-            grade,
-            gpa,
-            current
-        }, { new: true });
+        const updatedEducation = await Education.findByIdAndUpdate(educationId, updateData, { new: true });
         res.status(200).json({ data: updatedEducation });
     } catch (error) {
         res.status(500).json({ message: 'Error updating education', error: error.message });
     }
-}   
+}
 const deleteEducation = async (req, res) => {
     const { educationId } = req.params;
 

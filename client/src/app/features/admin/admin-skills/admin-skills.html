@@ -58,6 +58,11 @@
         <div class="skills-grid">
           @for (skill of getSkillsByCategory()[category]; track skill._id) {
             <div class="skill-chip" [class.inactive]="skill.isActive === false">
+              @if (skill.icon) {
+                <img [src]="getIconDisplayUrl(skill.icon)" [alt]="skill.name"
+                     class="skill-icon-preview"
+                     (error)="$any($event.target).style.display='none'">
+              }
               <span class="skill-name">{{ skill.name }}</span>
               <div class="skill-actions">
                 <button class="chip-btn" (click)="toggleActive(skill)" [title]="skill.isActive !== false ? 'Deactivate' : 'Activate'">
@@ -113,6 +118,14 @@
 
             @if (iconMode() === 'url') {
               <input type="text" [value]="formData().icon" (input)="updateFormField('icon', $any($event.target).value)" placeholder="Icon URL (e.g., https://cdn.jsdelivr.net/...)">
+              @if (formData().icon) {
+                <div class="icon-url-preview">
+                  <img [src]="getIconDisplayUrl(formData().icon!)" alt="Icon preview"
+                       class="icon-preview-img"
+                       (error)="$any($event.target).style.display='none'">
+                  <span class="icon-url-label">Preview</span>
+                </div>
+              }
             } @else {
               @if (selectedIconFile()) {
                 <div class="icon-preview-wrapper">

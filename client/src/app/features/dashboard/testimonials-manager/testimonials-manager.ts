@@ -86,7 +86,7 @@ export class TestimonialsManagerComponent implements OnInit {
     if (this.selectedImageFile) {
       this.portfolioService.uploadImage(this.selectedImageFile, 'testimonials').subscribe({
         next: (res: any) => {
-          this.currentTestimonial.authorImage = res.url || res.path || res.data?.url;
+          this.currentTestimonial.authorImage = res.path || res.url || res.data?.path || res.data?.url;
           this._performSave();
         },
         error: () => {

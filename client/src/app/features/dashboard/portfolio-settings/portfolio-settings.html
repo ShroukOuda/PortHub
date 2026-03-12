@@ -164,7 +164,7 @@
             <div class="cv-preview">
               <lucide-icon name="file-text" [size]="18"></lucide-icon>
               <span>CV uploaded</span>
-              <a [href]="formData().cvUrl" target="_blank" class="preview-link">
+              <a [href]="getResolvedUrl(formData().cvUrl!)" target="_blank" class="preview-link">
                 <lucide-icon name="external-link" [size]="14"></lucide-icon> Preview
               </a>
               <button type="button" class="remove-btn" (click)="removeCv()">

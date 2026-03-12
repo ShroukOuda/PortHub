@@ -3,7 +3,8 @@ const ExperienceSchema = new mongoose.Schema({
     portfolioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Portfolio',
-        required: true
+        required: true,
+        index: true
     },
     title: {
         type: String,

@@ -37,12 +37,10 @@
           <div class="service-card bg-[color:var(--card-bg)] border rounded-2xl p-8 shadow-lg text-center"
                style="border-color: color-mix(in srgb, var(--main-color) 30%, transparent);">
             <!-- Icon -->
-            @if (service.icon) {
-              <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                   style="background-color: color-mix(in srgb, var(--hover-color) 15%, transparent)">
-                <lucide-icon [name]="service.icon" [size]="32" style="color: var(--hover-color)"></lucide-icon>
-              </div>
-            }
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                 style="background-color: color-mix(in srgb, var(--hover-color) 15%, transparent)">
+              <lucide-icon name="building" [size]="32" style="color: var(--hover-color)"></lucide-icon>
+            </div>
 
             <!-- Name -->
             <h3 class="text-xl font-bold mb-3" style="color: var(--hover-color)">

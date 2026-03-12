@@ -4,7 +4,8 @@ const CertificateSchema = new mongoose.Schema({
     portfolioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Portfolio',
-        required: true
+        required: true,
+        index: true
     },
     title: {
         type: String,
@@ -39,7 +40,7 @@ const CertificateSchema = new mongoose.Schema({
     CertificateImage: {
         type: String,
         required: false,
-        default: 'default-certificate-image.png',
+        default: 'uploads/default-certificate-image.png',
         trim: true
     },
     credentialId: {

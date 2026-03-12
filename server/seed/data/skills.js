@@ -12,37 +12,32 @@ const categories = Object.keys(skillDefsByCategory);
 
 const skills = [];
 
-// Generate 5-15 skills per portfolio
+// Generate 5-15 unique skills per portfolio with numeric levels
 portfolioIds.forEach(portfolioId => {
-  const numSkills = Math.floor(Math.random() * 10) + 5; // 5-15 skills
+  const numSkills = Math.floor(Math.random() * 11) + 5; // 5-15 skills
   const usedNames = new Set();
-  
+
   for (let i = 0; i < numSkills; i++) {
     const category = categories[Math.floor(Math.random() * categories.length)];
     const defsInCategory = skillDefsByCategory[category];
     const skillDef = defsInCategory[Math.floor(Math.random() * defsInCategory.length)];
-    
+
     // Skip duplicates within same portfolio
     if (usedNames.has(skillDef.name)) continue;
     usedNames.add(skillDef.name);
-    
-    // Random level (60-100 for numbers, or Beginner/Intermediate/Advanced/Expert for strings)
-    const useNumberLevel = Math.random() > 0.3;
-    let level;
-    if (useNumberLevel) {
-      level = Math.floor(Math.random() * 40) + 60; // 60-100
-    } else {
-      const levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
-      level = levels[Math.floor(Math.random() * levels.length)];
-    }
-    
+
+    // Always numeric level 50-100 with ±5 variance
+    const baseLevel = Math.floor(Math.random() * 41) + 55; // 55-95
+    const variance = Math.floor(Math.random() * 11) - 5;   // -5 to +5
+    const level = Math.min(100, Math.max(50, baseLevel + variance));
+
     skills.push({
       _id: new ObjectId(),
       portfolioId: portfolioId,
       name: skillDef.name,
       level: level,
       category: skillDef.category,
-      icon: skillDef.icon || undefined
+      icon: skillDef.icon || undefined,
     });
   }
 });

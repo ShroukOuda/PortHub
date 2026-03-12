@@ -1,16 +1,25 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URL, {
-            dbName: process.env.DB_NAME,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log('MongoDB connected successfully');
-    } catch (error) {
-        console.error('MongoDB connection failed:', error.message);
-        process.exit(1); 
+const connectDB = async (retries = 5, delay = 3000) => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            await mongoose.connect(process.env.MONGO_URL, {
+                dbName: process.env.DB_NAME,
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            });
+            console.log('MongoDB connected successfully');
+            return;
+        } catch (error) {
+            console.error(`MongoDB connection failed (attempt ${attempt}/${retries}):`, error.message);
+            if (attempt < retries) {
+                console.log(`Retrying in ${delay / 1000}s...`);
+                await new Promise(res => setTimeout(res, delay));
+            } else {
+                console.error('All connection attempts failed. Exiting.');
+                process.exit(1);
+            }
+        }
     }
 }
 

@@ -46,6 +46,7 @@ export class About implements OnInit, OnDestroy {
     return null;
   }
 
+
   getUserInitials(): string {
     const first = this.user?.firstName?.charAt(0)?.toUpperCase() || '';
     const last = this.user?.lastName?.charAt(0)?.toUpperCase() || '';

@@ -4,7 +4,6 @@ export interface Iservice {
     name?: string;
     title: string;
     description: string;
-    icon?: string;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 }

@@ -45,7 +45,7 @@
       <div class="flex gap-5 mb-12 flex-wrap justify-center">
         <!-- Let's Talk Button -->
         <a
-          [routerLink]="['contact']"
+          [routerLink]="['../contact']"
           class="hero-btn-primary px-8 py-3 rounded-full font-medium flex items-center gap-2"
           style="background-color: var(--main-color); color: var(--button-text-color)"
         >
@@ -56,7 +56,7 @@
         <!-- Download Resume Button -->
         @if (portfolio?.cvUrl) {
           <a
-            [href]="portfolio!.cvUrl"
+            [href]="getCvUrl()"
             target="_blank"
             download
             class="hero-btn-outline px-8 py-3 rounded-full font-medium border-2 flex items-center gap-2"

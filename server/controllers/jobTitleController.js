@@ -69,22 +69,30 @@ const createJobTitle = async (req, res) => {
 const updateJobTitle = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title } = req.body;
 
-        if (!title || !title.trim()) {
-            return res.status(400).json({ message: 'Title is required' });
+        const allowedFields = ['title'];
+        const updateData = Object.fromEntries(
+            allowedFields
+                .filter(field => req.body[field] !== undefined)
+                .map(field => [field, req.body[field]])
+        );
+
+        if (typeof updateData.title === 'string') {
+            updateData.title = updateData.title.trim();
         }
 
         // Check for duplicate (exclude current)
-        const existing = await JobTitle.findOne({
-            title: { $regex: `^${title.trim()}$`, $options: 'i' },
-            _id: { $ne: id }
-        });
-        if (existing) {
-            return res.status(409).json({ message: 'Job title already exists' });
+        if (updateData.title) {
+            const existing = await JobTitle.findOne({
+                title: { $regex: `^${updateData.title}$`, $options: 'i' },
+                _id: { $ne: id }
+            });
+            if (existing) {
+                return res.status(409).json({ message: 'Job title already exists' });
+            }
         }
 
-        const updated = await JobTitle.findByIdAndUpdate(id, { title: title.trim() }, { new: true });
+        const updated = await JobTitle.findByIdAndUpdate(id, updateData, { new: true });
         if (!updated) {
             return res.status(404).json({ message: 'Job title not found' });
         }

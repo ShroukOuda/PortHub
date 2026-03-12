@@ -41,6 +41,7 @@
 .skill-chip { display: flex; align-items: center; gap: 0.75rem; background: #12121e; border: 1px solid rgba(231, 76, 60, 0.15); border-radius: 10px; padding: 0.6rem 0.75rem 0.6rem 1rem; transition: all 0.3s ease; }
 .skill-chip:hover { border-color: rgba(231, 76, 60, 0.4); }
 .skill-chip.inactive { opacity: 0.5; }
+.skill-icon-preview { width: 22px; height: 22px; object-fit: contain; border-radius: 4px; flex-shrink: 0; }
 .skill-name { color: #fff; font-size: 0.9rem; font-weight: 500; }
 .skill-actions { display: flex; gap: 0.25rem; }
 .chip-btn { width: 28px; height: 28px; border-radius: 6px; border: none; background: rgba(255,255,255,0.05); color: #a0a0b0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
@@ -86,3 +87,8 @@
 .icon-file-name { flex: 1; color: #fff; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .remove-icon-btn { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
 .remove-icon-btn:hover { background: #e74c3c; color: #fff; }
+
+/* Icon URL Preview */
+.icon-url-preview { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; background: #12121e; border: 1px solid rgba(231, 76, 60, 0.15); border-radius: 8px; margin-top: 0.5rem; }
+.icon-url-preview .icon-preview-img { width: 32px; height: 32px; object-fit: contain; border-radius: 6px; }
+.icon-url-label { color: #a0a0b0; font-size: 0.8rem; }

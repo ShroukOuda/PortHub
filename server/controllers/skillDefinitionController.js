@@ -1,4 +1,5 @@
 const SkillDefinition = require('../models/SkillDefinition');
+const { deleteFile } = require('../utils/fileUtils');
 
 // Get all active skill definitions (public)
 const getAllSkillDefinitions = async (req, res) => {
@@ -49,14 +50,23 @@ const createSkillDefinition = async (req, res) => {
 // Update a skill definition (admin)
 const updateSkillDefinition = async (req, res) => {
     const { id } = req.params;
-    const { name, category, icon, isActive } = req.body;
+
+    const allowedFields = ['name', 'category', 'icon', 'isActive'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
+
     try {
-        const skill = await SkillDefinition.findByIdAndUpdate(id, {
-            ...(name && { name }),
-            ...(category && { category }),
-            ...(icon !== undefined && { icon }),
-            ...(isActive !== undefined && { isActive })
-        }, { new: true });
+        if (updateData.icon) {
+            const existing = await SkillDefinition.findById(id);
+            if (existing?.icon && existing.icon !== updateData.icon) {
+                await deleteFile(existing.icon);
+            }
+        }
+
+        const skill = await SkillDefinition.findByIdAndUpdate(id, updateData, { new: true });
         if (!skill) {
             return res.status(404).json({ message: 'Skill definition not found' });
         }

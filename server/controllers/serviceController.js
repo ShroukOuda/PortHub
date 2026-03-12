@@ -19,7 +19,7 @@ const getMyServices = async (req, res) => {
 };
 
 const createService = async (req, res) => {
-    const { title, name, description, icon } = req.body;
+    const { title, name, description } = req.body;
     let { portfolioId } = req.body;
 
     const serviceTitle = title || name;
@@ -44,8 +44,7 @@ const createService = async (req, res) => {
             portfolioId,
             name: serviceTitle,
             title: serviceTitle,
-            description: description || '',
-            icon: icon || '',
+            description: description || ''
         });
 
         const savedService = await newService.save();
@@ -56,20 +55,22 @@ const createService = async (req, res) => {
 }
 const updateService = async (req, res) => {
     const { serviceId } = req.params;
-    const { name, title, description, icon } = req.body;
 
-    const serviceTitle = title || name;
-    if (!serviceTitle) {
-        return res.status(400).json({ message: 'Title is required' });
+    const allowedFields = ['title', 'name', 'description'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
+
+    if (updateData.title !== undefined || updateData.name !== undefined) {
+        const serviceTitle = updateData.title !== undefined ? updateData.title : updateData.name;
+        updateData.title = serviceTitle;
+        updateData.name = serviceTitle;
     }
 
     try {
-        const updatedService = await Service.findByIdAndUpdate(serviceId, {
-            name: serviceTitle,
-            title: serviceTitle,
-            description,
-            icon
-        }, { new: true });
+        const updatedService = await Service.findByIdAndUpdate(serviceId, updateData, { new: true });
 
         if (!updatedService) {
             return res.status(404).json({ message: 'Service not found' });

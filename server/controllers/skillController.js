@@ -1,5 +1,9 @@
+const fs = require('fs');
+const path = require('path');
 const Skill = require('../models/Skill');
 const Portfolio = require('../models/Portfolio');
+const { deleteFile } = require('../utils/fileUtils');
+
 
 // Get current user's skills
 const getMySkills = async (req, res) => {
@@ -58,15 +62,23 @@ const getSkillsByPortfolioId = async (req, res) => {
 }
 const updateSkill = async (req, res) => {
     const { skillId } = req.params;
-    const { name, level, category, icon } = req.body;
+
+    const allowedFields = ['name', 'level', 'category', 'icon'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
 
     try {
-        const updatedSkill = await Skill.findByIdAndUpdate(skillId, {
-            name,
-            level,
-            category,
-            icon
-        }, { new: true });
+        if (updateData.icon) {
+            const existing = await Skill.findById(skillId);
+            if (existing?.icon && existing.icon !== updateData.icon) {
+                await deleteFile(existing.icon, 'default-skill-icon.png');
+            }
+        }
+
+        const updatedSkill = await Skill.findByIdAndUpdate(skillId, updateData, { new: true });
         res.status(200).json({ data: updatedSkill });
     } catch (error) {
         res.status(500).json({ message: 'Error updating skill', error: error.message });
@@ -76,6 +88,11 @@ const deleteSkill = async (req, res) => {
     const { skillId } = req.params;
 
     try {
+        const skill = await Skill.findById(skillId);
+        if (skill && skill.icon) {
+            await deleteFile(skill.icon, 'default-skill-icon.png');
+        }
+
         await Skill.findByIdAndDelete(skillId);
         res.status(200).json({ message: 'Skill deleted successfully' });
     } catch (error) {

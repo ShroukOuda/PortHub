@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-skills',
@@ -231,5 +232,14 @@ export class AdminSkillsComponent implements OnInit {
 
   getCategoryKeys(): string[] {
     return Object.keys(this.getSkillsByCategory()).sort();
+  }
+
+  /** Resolve an icon value to a displayable URL */
+  getIconDisplayUrl(icon: string): string {
+    if (!icon) return '';
+    // Already a full URL
+    if (icon.startsWith('http://') || icon.startsWith('https://')) return icon;
+    // Relative upload path (e.g., uploads/skills/2025/08/file.png)
+    return `${environment.apiUrl}/${icon}`;
   }
 }

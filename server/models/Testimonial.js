@@ -5,7 +5,8 @@ const testimonialSchema = new mongoose.Schema({
     portfolioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Portfolio',
-        required: true
+        required: true,
+        index: true
     },
     content: {
         type: String,
@@ -18,7 +19,7 @@ const testimonialSchema = new mongoose.Schema({
     },
     authorImage: {
         type: String,
-        default: 'default-author-image.png',
+        default: 'uploads/default-author-image.png',
         trim: true
     },
     position: {

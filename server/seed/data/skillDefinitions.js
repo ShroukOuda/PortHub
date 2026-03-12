@@ -95,7 +95,7 @@ const skillDefinitions = [
   { name: 'VS Code', category: 'Tools', icon: 'uploads/skills/icons/vscode.svg', isActive: true },
   { name: 'Jira', category: 'Tools', icon: 'uploads/skills/icons/jira.svg', isActive: true },
   { name: 'Slack', category: 'Tools', icon: 'uploads/skills/icons/slack.svg', isActive: true },
-  { name: 'Postman', category: 'Tools', icon: '', isActive: true },
+  { name: 'Postman', category: 'Tools', icon: 'uploads/skills/icons/postman.svg', isActive: true },
   { name: 'npm', category: 'Tools', icon: 'uploads/skills/icons/npm.svg', isActive: true },
   { name: 'Webpack', category: 'Tools', icon: 'uploads/skills/icons/webpack.svg', isActive: true },
   { name: 'Vite', category: 'Tools', icon: 'uploads/skills/icons/vitejs.svg', isActive: true },

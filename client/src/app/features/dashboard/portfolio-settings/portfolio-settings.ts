@@ -6,6 +6,7 @@ import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.di
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { AuthStateService } from '../../../core/services/auth-state.service';
+import { PortfolioDataService } from '../../../core/services/portfolio/portfolio-data.service';
 import { IPortfolio } from '../../../core/models/iportfolio';
 import { environment } from '../../../../environments/environment';
 
@@ -19,6 +20,7 @@ import { environment } from '../../../../environments/environment';
 export class PortfolioSettingsComponent implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
   private authState = inject(AuthStateService);
+  private portfolioDataService = inject(PortfolioDataService);
   private http = inject(HttpClient);
 
   loading = signal(true);
@@ -124,7 +126,7 @@ export class PortfolioSettingsComponent implements OnInit {
     
     this.http.post<any>(`${environment.apiUrl}/api/uploads/cv`, formData, { headers }).subscribe({
       next: (response) => {
-        this.updateField('cvUrl', response.url || response.cvUrl);
+        this.updateField('cvUrl', response.path || response.cvUrl || response.url);
         this.uploadingCv.set(false);
         this.message.set({ type: 'success', text: 'CV uploaded successfully!' });
         setTimeout(() => this.message.set(null), 3000);
@@ -165,6 +167,8 @@ export class PortfolioSettingsComponent implements OnInit {
           type: 'success', 
           text: this.hasPortfolio() ? 'Portfolio updated successfully!' : 'Portfolio created successfully!' 
         });
+        // Refresh portfolio viewer cache
+        this.portfolioDataService.refreshPortfolio();
         setTimeout(() => this.message.set(null), 3000);
       },
       error: () => {
@@ -192,5 +196,11 @@ export class PortfolioSettingsComponent implements OnInit {
     if (userId) {
       window.open(`/portfolio-view/${userId}`, '_blank');
     }
+  }
+
+  getResolvedUrl(url: string): string {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `${environment.apiUrl}/${url}`;
   }
 }

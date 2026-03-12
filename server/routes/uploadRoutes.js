@@ -5,7 +5,7 @@ const { uploadFile, uploadCV } = require('../controllers/uploadController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 // Profile image upload
-router.post('/profiles', uploadMiddleware('profiles').single('file'), uploadFile);
+router.post('/profiles', authMiddleware, uploadMiddleware('profiles').single('file'), uploadFile);
 
 // CV upload (requires authentication)
 router.post('/cv', authMiddleware, uploadMiddleware('cvs').single('cv'), uploadCV);

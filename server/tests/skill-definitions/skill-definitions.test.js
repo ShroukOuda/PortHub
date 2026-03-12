@@ -51,9 +51,9 @@ describe('Skill Definitions API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ name: 'TestSkill_React', category: 'Frontend' });
       expect(res.statusCode).toBe(201);
-      expect(res.body.name).toBe('TestSkill_React');
-      expect(res.body.category).toBe('Frontend');
-      skillId = res.body._id;
+      expect(res.body.data.name).toBe('TestSkill_React');
+      expect(res.body.data.category).toBe('Frontend');
+      skillId = res.body.data._id;
     });
 
     it('should reject duplicate skill name', async () => {
@@ -77,8 +77,8 @@ describe('Skill Definitions API', () => {
     it('should return all active skill definitions', async () => {
       const res = await request(app).get('/api/skill-definitions');
       expect(res.statusCode).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body.some(s => s.name === 'TestSkill_React')).toBe(true);
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data.some(s => s.name === 'TestSkill_React')).toBe(true);
     });
   });
 
@@ -86,8 +86,8 @@ describe('Skill Definitions API', () => {
     it('should return distinct categories', async () => {
       const res = await request(app).get('/api/skill-definitions/categories');
       expect(res.statusCode).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body).toContain('Frontend');
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data).toContain('Frontend');
     });
   });
 
@@ -98,7 +98,7 @@ describe('Skill Definitions API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ name: 'TestSkill_ReactJS', category: 'Frontend' });
       expect(res.statusCode).toBe(200);
-      expect(res.body.name).toBe('TestSkill_ReactJS');
+      expect(res.body.data.name).toBe('TestSkill_ReactJS');
     });
 
     it('should reject non-admin', async () => {
@@ -126,13 +126,13 @@ describe('Skill Definitions API', () => {
         .send({ name: 'TestSkill_ToDelete', category: 'Test' });
 
       const res = await request(app)
-        .delete(`/api/skill-definitions/${createRes.body._id}`)
+        .delete(`/api/skill-definitions/${createRes.body.data._id}`)
         .set('Authorization', `Bearer ${userToken}`);
       expect(res.statusCode).toBe(403);
 
       // Clean up
       await request(app)
-        .delete(`/api/skill-definitions/${createRes.body._id}`)
+        .delete(`/api/skill-definitions/${createRes.body.data._id}`)
         .set('Authorization', `Bearer ${adminToken}`);
     });
   });

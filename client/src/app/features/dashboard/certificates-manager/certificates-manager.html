@@ -26,26 +26,53 @@
           <button class="btn btn-primary" (click)="openAddModal()"><lucide-icon name="plus" [size]="16"></lucide-icon> Add Certificate</button>
         </div>
       } @else {
-        <div class="items-grid">
+        <div class="items-grid cert-grid">
           @for (item of items(); track item._id) {
             <div class="item-card certificate-card">
-              @if (item.CertificateImage && item.CertificateImage !== 'default-certificate-image.png') {
-                <div class="cert-image-preview">
-                  <img [src]="getCertificateImageUrl(item.CertificateImage)" [alt]="item.title">
+              <!-- Certificate Image (16:9) -->
+              <div class="cert-image-wrapper">
+                @if (item.CertificateImage && item.CertificateImage !== 'default-certificate-image.png') {
+                  <img [src]="getCertificateImageUrl(item.CertificateImage)" [alt]="item.title" class="cert-image">
+                } @else {
+                  <div class="cert-image-placeholder">
+                    <lucide-icon name="award" [size]="40"></lucide-icon>
+                  </div>
+                }
+                <!-- Hover Overlay -->
+                <div class="cert-overlay">
+                  <div class="cert-overlay-actions">
+                    <button class="overlay-btn edit" (click)="openEditModal(item)"><lucide-icon name="pencil" [size]="16"></lucide-icon> Edit</button>
+                    <button class="overlay-btn delete" (click)="delete(item)"><lucide-icon name="trash-2" [size]="16"></lucide-icon> Delete</button>
+                  </div>
                 </div>
-              }
-              <div class="cert-icon"><lucide-icon name="award" [size]="24"></lucide-icon></div>
-              <div class="cert-content">
-                <h3>{{ item.title }}</h3>
-                <p class="issuer"><lucide-icon name="building-2" [size]="18"></lucide-icon> {{ item.issuer }}</p>
-                <p class="date"><lucide-icon name="calendar" [size]="14"></lucide-icon> {{ item.issueDate | date:'MMM yyyy' }}</p>
+              </div>
+
+              <!-- Card Body -->
+              <div class="cert-body">
+                <h3 class="cert-title">{{ item.title }}</h3>
+                <p class="cert-issuer"><lucide-icon name="building-2" [size]="14"></lucide-icon> {{ item.issuer }}</p>
+
+                <div class="cert-dates">
+                  <span class="cert-date"><lucide-icon name="calendar" [size]="13"></lucide-icon> {{ item.issueDate | date:'MMM yyyy' }}</span>
+                  @if (item.expiryDate) {
+                    <span class="cert-date-sep">–</span>
+                    <span class="cert-date">{{ item.expiryDate | date:'MMM yyyy' }}</span>
+                  }
+                </div>
+
+                @if (item.credentialId) {
+                  <p class="cert-credential-id"><lucide-icon name="hash" [size]="13"></lucide-icon> {{ item.credentialId }}</p>
+                }
+
                 @if (item.credentialUrl) {
                   <a [href]="item.credentialUrl" target="_blank" class="credential-link">
                     <lucide-icon name="external-link" [size]="14"></lucide-icon> View Credential
                   </a>
                 }
               </div>
-              <div class="item-actions">
+
+              <!-- Card Footer Actions (mobile) -->
+              <div class="cert-footer-actions">
                 <button class="action-btn edit" (click)="openEditModal(item)"><lucide-icon name="pencil" [size]="16"></lucide-icon></button>
                 <button class="action-btn delete" (click)="delete(item)"><lucide-icon name="trash-2" [size]="16"></lucide-icon></button>
               </div>

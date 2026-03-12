@@ -81,7 +81,7 @@ const getExperienceById = async (req, res) => {
 const updateExperience = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, company, startDate, endDate, description, position, location, current, technologies } = req.body;
+        const { startDate, endDate, current } = req.body;
 
         // Date validation
         if (startDate && endDate && !current) {
@@ -90,17 +90,14 @@ const updateExperience = async (req, res) => {
             }
         }
 
-        const experience = await Experience.findByIdAndUpdate(id, {
-            title,
-            company,
-            startDate,
-            endDate,
-            description,
-            position,
-            location,
-            current,
-            technologies
-        }, { new: true });  
+        const allowedFields = ['title', 'company', 'startDate', 'endDate', 'description', 'position', 'location', 'current', 'technologies'];
+        const updateData = Object.fromEntries(
+            allowedFields
+                .filter(field => req.body[field] !== undefined)
+                .map(field => [field, req.body[field]])
+        );
+
+        const experience = await Experience.findByIdAndUpdate(id, updateData, { new: true });
         if (!experience) {
             return res.status(404).json({ error: 'Experience not found' });
         }

@@ -100,6 +100,22 @@ export class PortfolioDataService {
     return this.portfolioDataSubject.value;
   }
 
+  /**
+   * Invalidates the cache and re-fetches portfolio data for the current user.
+   * Call this after profile or portfolio updates from the dashboard.
+   */
+  refreshPortfolio(): void {
+    const userId = this.cachedUserId;
+    if (!userId) return;
+
+    // Clear cache so loadPortfolioData re-fetches
+    this.cachedRequest$ = null;
+    this.cachedUserId = null;
+
+    // Re-load data
+    this.loadPortfolioData(userId).subscribe();
+  }
+
   clearData(): void {
     this.portfolioDataSubject.next(this.initialState);
     this.cachedUserId = null;

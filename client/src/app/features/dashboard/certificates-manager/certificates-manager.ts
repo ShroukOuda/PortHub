@@ -100,7 +100,7 @@ export class CertificatesManagerComponent implements OnInit {
     if (this.selectedImageFile()) {
       this.portfolioService.uploadImage(this.selectedImageFile()!, 'certificates').subscribe({
         next: (res: any) => {
-          saveData.CertificateImage = res.url || res.path || res.data?.url;
+          saveData.CertificateImage = res.path || res.url || res.data?.path || res.data?.url;
           this._performSave(saveData);
         },
         error: () => {

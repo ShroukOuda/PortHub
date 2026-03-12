@@ -41,7 +41,12 @@
             @for (skill of getSkillsByCategory()[category]; track skill._id) {
               <div class="skill-card">
                 <div class="skill-header">
-                  <span class="skill-name">{{ skill.name }}</span>
+                  <div class="skill-name-with-icon">
+                    <img [src]="getSkillIconUrl(skill.name)" [alt]="skill.name"
+                         class="skill-icon-img"
+                         (error)="$any($event.target).style.display='none'">
+                    <span class="skill-name">{{ skill.name }}</span>
+                  </div>
                   <span class="skill-level">{{ skill.level }}%</span>
                 </div>
                 <div class="skill-bar">
@@ -78,8 +83,18 @@
             <lucide-icon name="search" [size]="16"></lucide-icon>
             <input type="text" placeholder="Search available skills..."
               [value]="searchQuery()"
-              (input)="searchQuery.set($any($event.target).value)">
+              (input)="searchQuery.set($any($event.target).value); updateIconPreview($any($event.target).value)">
           </div>
+
+          <!-- Icon Preview -->
+          @if (iconPreviewUrl() && !iconPreviewError()) {
+            <div class="icon-preview-container">
+              <img [src]="iconPreviewUrl()!" [alt]="searchQuery()"
+                   class="icon-preview-img"
+                   (error)="onIconPreviewError()">
+              <span class="icon-preview-label">Icon preview for "{{ searchQuery() }}"</span>
+            </div>
+          }
 
           @if (getFilteredAvailableSkills().length === 0) {
             <div class="empty-state compact">

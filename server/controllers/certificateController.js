@@ -2,15 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const Certificate = require('../models/Certificate');
 const Portfolio = require('../models/Portfolio');
+const { deleteFile } = require('../utils/fileUtils');
 
-// Helper: delete old file from disk
-const deleteOldFile = (filePath) => {
-    if (!filePath || filePath === 'default-certificate-image.png') return;
-    const fullPath = path.join(__dirname, '..', filePath);
-    fs.unlink(fullPath, (err) => {
-        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
-    });
-};
+
 
 // Get current user's certificates
 const getMyCertificates = async (req, res) => {
@@ -94,27 +88,25 @@ const getCertificateById = async (req, res) => {
 
 const updateCertificate = async (req, res) => {
     const { certificateId } = req.params;
-    const { title, name, description, technologies, issuer, issueDate, expirationDate, expiryDate, CertificateImage, credentialId, credentialUrl } = req.body;
+
+    const allowedFields = ['title', 'description', 'technologies', 'issuer', 'issueDate', 'expirationDate', 'CertificateImage', 'credentialId', 'credentialUrl'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
+
+    // Support legacy field aliases
+    if (updateData.title === undefined && req.body.name !== undefined) updateData.title = req.body.name;
+    if (updateData.expirationDate === undefined && req.body.expiryDate !== undefined) updateData.expirationDate = req.body.expiryDate;
 
     try {
-        // Delete old image if a new one is provided
-        if (CertificateImage) {
+        if (updateData.CertificateImage) {
             const existing = await Certificate.findById(certificateId);
-            if (existing && existing.CertificateImage && existing.CertificateImage !== CertificateImage) {
-                deleteOldFile(existing.CertificateImage);
+            if (existing?.CertificateImage && existing.CertificateImage !== updateData.CertificateImage) {
+                await deleteFile(existing.CertificateImage, 'default-certificate-image.png');
             }
         }
-
-        const updateData = {};
-        if (title || name) updateData.title = title || name;
-        if (description) updateData.description = description;
-        if (technologies) updateData.technologies = technologies;
-        if (issuer) updateData.issuer = issuer;
-        if (issueDate) updateData.issueDate = issueDate;
-        if (expirationDate || expiryDate) updateData.expirationDate = expirationDate || expiryDate;
-        if (CertificateImage) updateData.CertificateImage = CertificateImage;
-        if (credentialId) updateData.credentialId = credentialId;
-        if (credentialUrl) updateData.credentialUrl = credentialUrl;
 
         const updatedCertificate = await Certificate.findByIdAndUpdate(certificateId, updateData, { new: true });
         res.status(200).json({ data: updatedCertificate });
@@ -129,7 +121,7 @@ const deleteCertificate = async (req, res) => {
     try {
         const cert = await Certificate.findById(certificateId);
         if (cert && cert.CertificateImage) {
-            deleteOldFile(cert.CertificateImage);
+            await deleteFile(cert.CertificateImage, 'default-certificate-image.png');
         }
 
         await Certificate.findByIdAndDelete(certificateId);

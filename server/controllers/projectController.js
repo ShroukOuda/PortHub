@@ -2,15 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const Project = require('../models/Project');
 const Portfolio = require('../models/Portfolio');
+const { deleteFile } = require('../utils/fileUtils');
 
-// Helper: delete old file from disk
-const deleteOldFile = (filePath) => {
-    if (!filePath || filePath === 'default-project-image.png') return;
-    const fullPath = path.join(__dirname, '..', filePath);
-    fs.unlink(fullPath, (err) => {
-        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
-    });
-};
+
 
 // Get current user's projects
 const getMyProjects = async (req, res) => {
@@ -61,27 +55,23 @@ const createProject = async (req, res) => {
 }
 const updateProject = async (req, res) => {
     const { projectId } = req.params;
-    const { title, description, technologies, images, image, demoUrl, githubUrl, featured } = req.body;
+
+    const allowedFields = ['title', 'description', 'technologies', 'images', 'image', 'demoUrl', 'githubUrl', 'featured'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
 
     try {
-        // Delete old image if a new one is provided
-        if (image) {
-            const existingProject = await Project.findById(projectId);
-            if (existingProject && existingProject.image && existingProject.image !== image) {
-                deleteOldFile(existingProject.image);
+        if (updateData.image) {
+            const existing = await Project.findById(projectId);
+            if (existing?.image && existing.image !== updateData.image) {
+                await deleteFile(existing.image, 'default-project-image.png');
             }
         }
 
-        const updatedProject = await Project.findByIdAndUpdate(projectId, {
-            title,
-            description,
-            technologies,
-            images,
-            image,
-            demoUrl,
-            githubUrl,
-            featured
-        }, { new: true });
+        const updatedProject = await Project.findByIdAndUpdate(projectId, updateData, { new: true });
         res.status(200).json({ data: updatedProject });
     } catch (error) {
         res.status(500).json({ message: 'Error updating project', error: error.message });
@@ -95,7 +85,7 @@ const deleteProject = async (req, res) => {
         // Delete image file before removing from DB
         const project = await Project.findById(projectId);
         if (project && project.image) {
-            deleteOldFile(project.image);
+            await deleteFile(project.image, 'default-project-image.png');
         }
 
         await Project.findByIdAndDelete(projectId);

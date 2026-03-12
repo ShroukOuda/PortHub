@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthStateService } from '../../../core/services/auth-state.service';
 import { AdminService } from '../../../core/services/admin.service';
+import { PortfolioDataService } from '../../../core/services/portfolio/portfolio-data.service';
 import { IUser } from '../../../core/models/iuser';
 import { environment } from '../../../../environments/environment';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
@@ -28,6 +29,7 @@ interface Country {
 export class ProfileSettingsComponent implements OnInit {
   private authState = inject(AuthStateService);
   private http = inject(HttpClient);
+  private portfolioDataService = inject(PortfolioDataService);
   private adminService = inject(AdminService);
   private apiUrl = environment.apiUrl;
 
@@ -41,6 +43,7 @@ export class ProfileSettingsComponent implements OnInit {
   selectedFile: File | null = null;
   previewUrl: string | null = null;
   uploadingPhoto = signal(false);
+  cacheBuster = signal(Date.now());
 
   // Form data
   formData = {
@@ -180,13 +183,15 @@ export class ProfileSettingsComponent implements OnInit {
 
     // Set preview URL for profile picture
     if (user.profilePicture) {
-      this.previewUrl = user.profilePicture.startsWith('http') 
+      const base = user.profilePicture.startsWith('http') 
         ? user.profilePicture 
         : `${this.apiUrl}/${user.profilePicture}`;
+      this.previewUrl = `${base}?t=${this.cacheBuster()}`;
     } else if (user.profileImage) {
-      this.previewUrl = user.profileImage.startsWith('http') 
+      const base = user.profileImage.startsWith('http') 
         ? user.profileImage 
         : `${this.apiUrl}/${user.profileImage}`;
+      this.previewUrl = `${base}?t=${this.cacheBuster()}`;
     }
 
     // Find and set country based on user's country name
@@ -263,11 +268,20 @@ export class ProfileSettingsComponent implements OnInit {
     this.http.post<{path: string, url: string}>(`${this.apiUrl}/api/uploads/profiles`, formData).subscribe({
       next: (res) => {
         this.uploadingPhoto.set(false);
-        this.previewUrl = res.url || `${this.apiUrl}/${res.path}`;
+        // Bust browser cache with timestamp
+        this.cacheBuster.set(Date.now());
+        const baseUrl = res.url || `${this.apiUrl}/${res.path}`;
+        this.previewUrl = `${baseUrl}?t=${this.cacheBuster()}`;
         // Update the user with new profile picture
         this.updateProfileField('profilePicture', res.path);
+        // Also update auth state immediately
+        const updatedUser = { ...this.currentUser(), profilePicture: res.path } as IUser;
+        this.authState.updateUser(updatedUser);
+        this.currentUser.set(updatedUser);
         this.successMessage.set('Profile picture updated successfully!');
         this.selectedFile = null;
+        // Refresh portfolio viewer cache
+        this.portfolioDataService.refreshPortfolio();
         setTimeout(() => this.successMessage.set(''), 3000);
       },
       error: (err) => {
@@ -348,6 +362,9 @@ export class ProfileSettingsComponent implements OnInit {
           this.authState.updateUser(res.user);
           this.currentUser.set(res.user);
         }
+        
+        // Refresh portfolio viewer cache so public page reflects changes
+        this.portfolioDataService.refreshPortfolio();
         
         setTimeout(() => this.successMessage.set(''), 3000);
       },

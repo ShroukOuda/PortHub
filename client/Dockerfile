@@ -14,10 +14,12 @@ FROM node:22-alpine AS production
 
 WORKDIR /app
 
-# Copy the built SSR output
-COPY --from=build /app/dist ./dist
+# Install a simple static file server
+RUN npm install -g serve
 
-# The Angular SSR server is self-contained
+# Copy the built browser output
+COPY --from=build /app/dist/client/browser ./dist
+
 EXPOSE 4000
 
-CMD ["node", "dist/client/server/server.mjs"]
+CMD ["serve", "-s", "dist", "-l", "4000"]

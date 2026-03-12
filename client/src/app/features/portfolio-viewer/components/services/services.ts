@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { Iservice } from '../../../../core/models/iservice';
 
+
 @Component({
   selector: 'app-services',
   imports: [CommonModule, LucideAngularModule],
@@ -12,7 +13,7 @@ import { Iservice } from '../../../../core/models/iservice';
   styleUrls: ['./services.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Services implements OnInit, OnDestroy {
+export class Services implements OnInit, OnDestroy {  
   portfolioData: PortfolioData | null = null;
   private subscription: Subscription | null = null;
 
@@ -38,4 +39,5 @@ export class Services implements OnInit, OnDestroy {
   get services(): Iservice[] {
     return this.portfolioData?.services || [];
   }
+
 }

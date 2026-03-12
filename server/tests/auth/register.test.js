@@ -1,8 +1,19 @@
 const request = require('supertest');
-const app = require('../../app'); 
+const app = require('../../app');
+const User = require('../../models/User');
 
 
 describe('Register API', () => {
+  beforeAll(async () => {
+    // Clean up any leftover test user from previous runs
+    await User.deleteMany({ $or: [{ email: 'testuser@example.com' }, { username: 'testuser' }] });
+  });
+
+  afterAll(async () => {
+    // Clean up the test user created during the test
+    await User.deleteMany({ $or: [{ email: 'testuser@example.com' }, { username: 'testuser' }] });
+  });
+
   const validUser = {
     firstName: 'Test',
     lastName: 'User',
@@ -35,7 +46,7 @@ describe('Register API', () => {
       .post('/api/auth/register')
       .send(partialUser);
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe('All fields are required');
+    expect(res.body.message).toBe('First name, last name, username, email, and password are required');
   });
 
   it('should fail with invalid email', async () => {

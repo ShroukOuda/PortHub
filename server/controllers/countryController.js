@@ -82,29 +82,37 @@ const createCountry = async (req, res) => {
 const updateCountry = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, code, dialCode } = req.body;
 
-        if (!name || !code || !dialCode) {
-            return res.status(400).json({ message: 'Name, code, and dial code are required' });
+        const allowedFields = ['name', 'code', 'dialCode'];
+        const updateData = Object.fromEntries(
+            allowedFields
+                .filter(field => req.body[field] !== undefined)
+                .map(field => [field, req.body[field]])
+        );
+
+        if (typeof updateData.name === 'string') updateData.name = updateData.name.trim();
+        if (typeof updateData.code === 'string') updateData.code = updateData.code.trim().toUpperCase();
+        if (typeof updateData.dialCode === 'string') updateData.dialCode = updateData.dialCode.trim();
+
+        const duplicateConditions = [];
+        if (updateData.name) {
+            duplicateConditions.push({ name: { $regex: `^${updateData.name}$`, $options: 'i' } });
+        }
+        if (updateData.code) {
+            duplicateConditions.push({ code: updateData.code });
         }
 
-        // Check for duplicate (exclude current)
-        const existing = await Country.findOne({
-            $or: [
-                { name: { $regex: `^${name.trim()}$`, $options: 'i' } },
-                { code: code.trim().toUpperCase() }
-            ],
-            _id: { $ne: id }
-        });
-        if (existing) {
-            return res.status(409).json({ message: 'Country with this name or code already exists' });
+        if (duplicateConditions.length > 0) {
+            const existing = await Country.findOne({
+                $or: duplicateConditions,
+                _id: { $ne: id }
+            });
+            if (existing) {
+                return res.status(409).json({ message: 'Country with this name or code already exists' });
+            }
         }
 
-        const updated = await Country.findByIdAndUpdate(id, {
-            name: name.trim(),
-            code: code.trim().toUpperCase(),
-            dialCode: dialCode.trim()
-        }, { new: true });
+        const updated = await Country.findByIdAndUpdate(id, updateData, { new: true });
 
         if (!updated) {
             return res.status(404).json({ message: 'Country not found' });

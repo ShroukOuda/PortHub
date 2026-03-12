@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.di
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
 import { ISkill } from '../../../core/models/iskill';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-skills-manager',
@@ -14,9 +15,10 @@ import { ISkill } from '../../../core/models/iskill';
   templateUrl: './skills-manager.html',
   styleUrl: './skills-manager.css'
 })
-export class SkillsManagerComponent implements OnInit {
+export class SkillsManagerComponent implements OnInit, OnDestroy {
   private portfolioService = inject(DashboardPortfolioService);
   private skillDefService = inject(SkillDefinitionService);
+  private apiUrl = environment.apiUrl;
 
   loading = signal(true);
   saving = signal(false);
@@ -26,6 +28,11 @@ export class SkillsManagerComponent implements OnInit {
   editingItem = signal<ISkill | null>(null);
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
   searchQuery = signal('');
+
+  // Icon preview
+  iconPreviewUrl = signal<string | null>(null);
+  iconPreviewError = signal(false);
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   formData = signal<Partial<ISkill>>({
     name: '',
@@ -139,5 +146,35 @@ export class SkillsManagerComponent implements OnInit {
 
   getCategoryKeys(): string[] {
     return Object.keys(this.getSkillsByCategory()).sort();
+  }
+
+  /** Get CDN icon URL for a skill name */
+  getSkillIconUrl(name: string): string {
+    if (!name) return '';
+    const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '').replace(/\s+/g, '');
+    return `https://cdn.simpleicons.org/${slug}`;
+  }
+
+  /** Called when the search query changes in the modal — debounce icon preview */
+  updateIconPreview(skillName: string) {
+    this.iconPreviewError.set(false);
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
+
+    if (!skillName.trim()) {
+      this.iconPreviewUrl.set(null);
+      return;
+    }
+
+    this.debounceTimer = setTimeout(() => {
+      this.iconPreviewUrl.set(this.getSkillIconUrl(skillName));
+    }, 300);
+  }
+
+  onIconPreviewError() {
+    this.iconPreviewError.set(true);
+  }
+
+  ngOnDestroy() {
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
   }
 }

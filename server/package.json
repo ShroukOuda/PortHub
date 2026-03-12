@@ -4,7 +4,7 @@
   "description": "Personal Portfolio Builder is a full-stack web application that allows users to create, manage, and showcase their own professional portfolios. Each registered user gets a personal portfolio page where they can add projects, skills, experience, education, contact information, and more.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --forceExit",
     "seed": "node seed/seed.js",
     "start": "nodemon index.js"
   },

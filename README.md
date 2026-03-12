@@ -159,13 +159,37 @@ docker pull YOUR_USERNAME/porthub-client:latest
 
 ## Testing
 
-```bash
-# Server tests
-cd server && npm test
+### Run Tests
 
-# Client tests
-cd client && npm test
+The server test suite uses **Jest** and **Supertest**. Tests run against a separate test database so your development data is never affected.
+
+```bash
+cd server
+npm test                    # Run all tests (uses --runInBand for serial execution)
+npx jest --verbose          # Run with verbose output
+npx jest tests/auth         # Run only auth tests
+npx jest tests/certificates # Run only certificate tests
 ```
+
+> **Note:** Tests require a running MongoDB instance. The test database connection string is read from `server/.env.test` (`MONGODB_URI_TEST`). The test database is **dropped** after each full run.
+
+#### Client Tests
+
+```bash
+cd client
+npm test                    # Runs Karma + Jasmine unit tests
+```
+
+### Seed Database
+
+Populate the database with sample data for development:
+
+```bash
+cd server
+npm run seed
+```
+
+This runs `seed/seed.js` which clears existing data and inserts sample users, portfolios, projects, skills, services, education, experiences, certificates, and testimonials.
 
 ## API Overview
 

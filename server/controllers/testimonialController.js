@@ -2,15 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const Testimonial = require('../models/Testimonial');
 const Portfolio = require('../models/Portfolio');
+const { deleteFile } = require('../utils/fileUtils');
 
-// Helper: delete old file from disk
-const deleteOldFile = (filePath) => {
-    if (!filePath || filePath === 'default-author-image.png') return;
-    const fullPath = path.join(__dirname, '..', filePath);
-    fs.unlink(fullPath, (err) => {
-        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
-    });
-};
+
 
 // Get current user's testimonials
 const getMyTestimonials = async (req, res) => {
@@ -86,26 +80,29 @@ const getTestimonialById = async (req, res) => {
 
 const updateTestimonial = async (req, res) => {
     const { testimonialId } = req.params;
-    const { content, author, authorImage, position, company, rating, clientName, clientImage, clientPosition, clientCompany } = req.body;
+
+    const allowedFields = ['content', 'author', 'authorImage', 'position', 'company', 'rating'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
+
+    // Support legacy field aliases
+    if (updateData.author === undefined && req.body.clientName !== undefined) updateData.author = req.body.clientName;
+    if (updateData.authorImage === undefined && req.body.clientImage !== undefined) updateData.authorImage = req.body.clientImage;
+    if (updateData.position === undefined && req.body.clientPosition !== undefined) updateData.position = req.body.clientPosition;
+    if (updateData.company === undefined && req.body.clientCompany !== undefined) updateData.company = req.body.clientCompany;
 
     try {
-        // Delete old image if a new one is provided
-        const newImage = authorImage || clientImage;
-        if (newImage) {
+        if (updateData.authorImage) {
             const existing = await Testimonial.findById(testimonialId);
-            if (existing && existing.authorImage && existing.authorImage !== newImage) {
-                deleteOldFile(existing.authorImage);
+            if (existing?.authorImage && existing.authorImage !== updateData.authorImage) {
+                await deleteFile(existing.authorImage, 'default-author-image.png');
             }
         }
 
-        const updatedTestimonial = await Testimonial.findByIdAndUpdate(testimonialId, {
-            content,
-            author: author || clientName,
-            authorImage: newImage || undefined,
-            position: position || clientPosition,
-            company: company || clientCompany,
-            rating
-        }, { new: true });
+        const updatedTestimonial = await Testimonial.findByIdAndUpdate(testimonialId, updateData, { new: true });
         res.status(200).json({ data: updatedTestimonial });
     } catch (error) {
         res.status(500).json({ message: 'Error updating testimonial', error: error.message });
@@ -117,7 +114,7 @@ const deleteTestimonial = async (req, res) => {
     try {
         const testimonial = await Testimonial.findById(testimonialId);
         if (testimonial && testimonial.authorImage) {
-            deleteOldFile(testimonial.authorImage);
+            await deleteFile(testimonial.authorImage, 'default-author-image.png');
         }
 
         await Testimonial.findByIdAndDelete(testimonialId);

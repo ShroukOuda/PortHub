@@ -6,6 +6,7 @@ import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.di
 import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
 import { IService } from '../../../core/models/iservice';
 
+
 @Component({
   selector: 'app-services-manager',
   standalone: true,
@@ -22,7 +23,7 @@ export class ServicesManagerComponent implements OnInit {
   showModal = signal(false);
   editingItem = signal<IService | null>(null);
   message = signal<{ type: 'success' | 'error'; text: string } | null>(null);
-  formData = signal<Partial<IService>>({ title: '', description: '', icon: '' });
+  formData = signal<Partial<IService>>({ title: '', description: '' });
 
   ngOnInit() { this.loadItems(); }
 
@@ -36,13 +37,13 @@ export class ServicesManagerComponent implements OnInit {
 
   openAddModal() {
     this.editingItem.set(null);
-    this.formData.set({ title: '', description: '', icon: '' });
+    this.formData.set({ title: '', description: '' });
     this.showModal.set(true);
   }
 
   openEditModal(item: IService) {
     this.editingItem.set(item);
-    this.formData.set({ title: item.title, description: item.description, icon: item.icon });
+    this.formData.set({ title: item.title, description: item.description });
     this.showModal.set(true);
   }
 
@@ -90,4 +91,5 @@ export class ServicesManagerComponent implements OnInit {
       error: () => this.message.set({ type: 'error', text: 'Delete failed.' })
     });
   }
+
 }

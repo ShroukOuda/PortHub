@@ -6,6 +6,7 @@ const Education = require('../models/Education');
 const Experience = require('../models/Experience');
 const Certificate = require('../models/Certificate');
 const Testimonial = require('../models/Testimonial');
+const { deleteFile } = require('../utils/fileUtils');
 
 const createPortfolio = async (req, res) => {
     const { title, About, sociallinks, tagline, bio, theme, isPublic, cvUrl } = req.body;
@@ -48,7 +49,7 @@ const getMyPortfolio = async (req, res) => {
     try {
         const userId = req.user.id;
         
-        const portfolio = await Portfolio.findOne({ userId }).populate('userId', 'firstName lastName email profileImage');
+        const portfolio = await Portfolio.findOne({ userId }).populate('userId', 'firstName lastName email profileImage').lean();
         
         if (!portfolio) {
             return res.status(404).json({ message: 'No portfolio found. Create one first.' });
@@ -56,19 +57,19 @@ const getMyPortfolio = async (req, res) => {
 
         // Get all related data
         const [projects, skills, services, education, experience, certificates, testimonials] = await Promise.all([
-            Project.find({ portfolioId: portfolio._id }),
-            Skill.find({ portfolioId: portfolio._id }),
-            Service.find({ portfolioId: portfolio._id }),
-            Education.find({ portfolioId: portfolio._id }),
-            Experience.find({ portfolioId: portfolio._id }),
-            Certificate.find({ portfolioId: portfolio._id }),
-            Testimonial.find({ portfolioId: portfolio._id })
+            Project.find({ portfolioId: portfolio._id }).lean(),
+            Skill.find({ portfolioId: portfolio._id }).lean(),
+            Service.find({ portfolioId: portfolio._id }).lean(),
+            Education.find({ portfolioId: portfolio._id }).lean(),
+            Experience.find({ portfolioId: portfolio._id }).lean(),
+            Certificate.find({ portfolioId: portfolio._id }).lean(),
+            Testimonial.find({ portfolioId: portfolio._id }).lean()
         ]);
 
         // Return portfolio with all related data
         res.status(200).json({
             data: {
-                ...portfolio.toObject(),
+                ...portfolio,
                 projects,
                 skills,
                 services,
@@ -86,12 +87,18 @@ const getMyPortfolio = async (req, res) => {
 // Update portfolio theme
 const updatePortfolioTheme = async (req, res) => {
     const { portfolioId } = req.params;
-    const { theme } = req.body;
+
+    const allowedFields = ['theme'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
 
     try {
         const updatedPortfolio = await Portfolio.findByIdAndUpdate(
             portfolioId,
-            { theme },
+            updateData,
             { new: true }
         );
         res.status(200).json({ data: updatedPortfolio });
@@ -102,19 +109,27 @@ const updatePortfolioTheme = async (req, res) => {
 
 const updatePortfolio = async (req, res) => {
     const { portfolioId } = req.params;
-    const { title, About, tagline, bio, sociallinks, isPublic, theme, cvUrl } = req.body;
+
+    const allowedFields = ['title', 'About', 'tagline', 'bio', 'sociallinks', 'isPublic', 'theme', 'cvUrl', 'AboutImage'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
+
+    if (updateData.sociallinks === undefined && req.body.socialLinks !== undefined) {
+        updateData.sociallinks = req.body.socialLinks;
+    }
 
     try {
-        const updatedPortfolio = await Portfolio.findByIdAndUpdate(portfolioId, {
-            title,
-            About,
-            tagline,
-            bio,
-            sociallinks,
-            isPublic,
-            theme,
-            cvUrl
-        }, { new: true });
+        if (updateData.AboutImage) {
+            const existing = await Portfolio.findById(portfolioId);
+            if (existing?.AboutImage && existing.AboutImage !== updateData.AboutImage) {
+                await deleteFile(existing.AboutImage, 'default-about-image.png');
+            }
+        }
+
+        const updatedPortfolio = await Portfolio.findByIdAndUpdate(portfolioId, updateData, { new: true });
         res.status(200).json({ data: updatedPortfolio });
     } catch (error) {
         res.status(500).json({ message: 'Error updating portfolio', error: error.message });
@@ -177,7 +192,7 @@ const getPortfolioByUserId = async (req, res) => {
 
 const getAllPortfolios = async (req, res) => {
     try {
-        const portfolios = await Portfolio.find().populate('userId', 'name email');
+        const portfolios = await Portfolio.find().populate('userId', 'name email').lean();
         res.status(200).json(portfolios);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching portfolios', error: error.message });
@@ -292,7 +307,7 @@ const getMyPortfolioStats = async (req, res) => {
 const getFullPortfolioByUserId = async (req, res) => {
     const { userId } = req.params;
     try {
-        const portfolio = await Portfolio.findOne({ userId }).populate('userId', 'firstName lastName email profilePicture profileImage bio jobTitle city country phone');
+        const portfolio = await Portfolio.findOne({ userId }).populate('userId', 'firstName lastName email profilePicture profileImage bio jobTitle city country phone').lean();
         
         if (!portfolio) {
             return res.status(404).json({ message: 'No portfolio found for this user' });
@@ -310,18 +325,18 @@ const getFullPortfolioByUserId = async (req, res) => {
 
         const portfolioId = portfolio._id;
         const [projects, skills, services, education, experience, certificates, testimonials] = await Promise.all([
-            Project.find({ portfolioId }),
-            Skill.find({ portfolioId }),
-            Service.find({ portfolioId }),
-            Education.find({ portfolioId }),
-            Experience.find({ portfolioId }),
-            Certificate.find({ portfolioId }),
-            Testimonial.find({ portfolioId })
+            Project.find({ portfolioId }).lean(),
+            Skill.find({ portfolioId }).lean(),
+            Service.find({ portfolioId }).lean(),
+            Education.find({ portfolioId }).lean(),
+            Experience.find({ portfolioId }).lean(),
+            Certificate.find({ portfolioId }).lean(),
+            Testimonial.find({ portfolioId }).lean()
         ]);
 
         // Extract user data from populated field
         const user = portfolio.userId;
-        const portfolioObj = portfolio.toObject();
+        const portfolioObj = { ...portfolio };
         delete portfolioObj.userId;
 
         res.status(200).json({

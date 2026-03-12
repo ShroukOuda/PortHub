@@ -4,7 +4,8 @@ const ServiceSchema = new mongoose.Schema({
     portfolioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Portfolio',
-        required: true
+        required: true,
+        index: true
     },
     name: {
         type: String,
@@ -24,10 +25,6 @@ const ServiceSchema = new mongoose.Schema({
         maxlength: 1000,
         trim: true,
         default: ''
-    },
-    icon: {
-        type: String,
-        trim: true
     }
 }, {
     timestamps: true,

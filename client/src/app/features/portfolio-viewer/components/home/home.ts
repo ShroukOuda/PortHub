@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -35,5 +36,12 @@ export class Home implements OnInit, OnDestroy {
 
   get portfolio() {
     return this.portfolioData?.portfolio;
+  }
+
+  getCvUrl(): string {
+    const url = this.portfolio?.cvUrl || '';
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `${environment.apiUrl}/${url}`;
   }
 }

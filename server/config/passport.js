@@ -11,7 +11,8 @@ console.log('OAuth Config:', {
   githubClientId: process.env.GITHUB_CLIENT_ID ? 'SET' : 'NOT SET'
 });
 
-// Google OAuth Strategy
+// Google OAuth Strategy (only register if credentials are configured)
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -64,8 +65,10 @@ passport.use(new GoogleStrategy({
     }
   }
 ));
+} // end if GOOGLE_CLIENT_ID
 
-// GitHub OAuth Strategy
+// GitHub OAuth Strategy (only register if credentials are configured)
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
@@ -123,6 +126,7 @@ passport.use(new GitHubStrategy({
     }
   }
 ));
+} // end if GITHUB_CLIENT_ID
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

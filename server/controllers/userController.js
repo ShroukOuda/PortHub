@@ -4,15 +4,9 @@ const path = require('path');
 const userModel = require('../models/User');
 const Portfolio = require('../models/Portfolio');
 const { hashPassword } = require('../utils/hash');
+const { deleteFile } = require('../utils/fileUtils');
 
-// Helper: delete old file from disk
-const deleteOldFile = (filePath) => {
-    if (!filePath || filePath === 'default-profile.png') return;
-    const fullPath = path.join(__dirname, '..', filePath);
-    fs.unlink(fullPath, (err) => {
-        if (err && err.code !== 'ENOENT') console.error('Failed to delete old file:', fullPath, err.message);
-    });
-};
+
 
 
 // Get public stats (no auth required) — totals + country breakdown
@@ -74,34 +68,28 @@ const getUserById = async (req, res) => {
     }
 };
 
-// Update user
+// Update user (admin)
 const updateUser = async (req, res) => {
     const userId = req.params.id;
-    const { firstName, lastName, username, email, password, phone, gender, country, dateOfBirth, city, address, role } = req.body;
+
+    const allowedFields = ['firstName', 'lastName', 'username', 'email', 'phone', 'gender', 'country', 'dateOfBirth', 'city', 'address', 'role'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
 
     try {
-        const user = await userModel.findById(userId);
-        if (!user) {
+        const existingUser = await userModel.findById(userId);
+        if (!existingUser) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        user.firstName = firstName || user.firstName;
-        user.lastName = lastName || user.lastName;
-        user.username = username || user.username;
-        user.email = email || user.email;
-        user.phone = phone || user.phone;
-        user.role = role || user.role;
-        user.gender = gender || user.gender;
-        user.country = country || user.country;
-        user.city = city || user.city;
-        user.address = address || user.address;
-        user.dateOfBirth = dateOfBirth || user.dateOfBirth;
-
-        if (password) {
-            user.password = await hashPassword(password);
+        if (req.body.password) {
+            updateData.password = await hashPassword(req.body.password);
         }
 
-        await user.save();
+        const user = await userModel.findByIdAndUpdate(userId, updateData, { new: true });
         res.status(200).json({ message: 'User updated successfully', user });
     } catch (error) {
         res.status(500).json({ message: 'Error updating user', error: error.message });
@@ -112,11 +100,67 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     const userId = req.params.id;
     try {
-        const user = await userModel.findByIdAndDelete(userId);
+        // First find the user to get their profile picture path
+        const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json({ message: 'User deleted successfully' });
+
+        // Delete profile picture if it exists and isn't the default
+        if (user.profilePicture) {
+            try {
+                await deleteFile(user.profilePicture, 'default-profile.png');
+            } catch (fileError) {
+                console.error('Failed to delete user profile picture:', fileError.message);
+                
+            }
+        }
+
+     
+        const Portfolio = require('../models/Portfolio');
+        const portfolio = await Portfolio.findOne({ userId: user._id });
+        
+        if (portfolio) {
+            // Delete portfolio's projects images
+            const Project = require('../models/Project');
+            const projects = await Project.find({ portfolioId: portfolio._id });
+            for (const project of projects) {
+                if (project.image) {
+                    await deleteFile(project.image, 'default-project-image.png');
+                }
+                // Delete the project from DB
+                await Project.findByIdAndDelete(project._id);
+            }
+
+            // Delete portfolio's certificates images
+            const Certificate = require('../models/Certificate');
+            const certificates = await Certificate.find({ portfolioId: portfolio._id });
+            for (const cert of certificates) {
+                if (cert.CertificateImage) {
+                    await deleteFile(cert.CertificateImage, 'default-certificate-image.png');
+                }
+                // Delete the certificate from DB
+                await Certificate.findByIdAndDelete(cert._id);
+            }
+
+            // Delete portfolio's testimonials
+            const Testimonial = require('../models/Testimonial');
+            const testimonials = await Testimonial.find({ portfolioId: portfolio._id });
+            for (const testimonial of testimonials) {
+                if (testimonial.authorImage) {
+                    await deleteFile(testimonial.authorImage, 'default-author-image.png');
+                }
+                await Testimonial.findByIdAndDelete(testimonial._id);
+            }
+
+            // Finally delete the portfolio
+            await Portfolio.findByIdAndDelete(portfolio._id);
+        }
+
+        // Now delete the user
+        await userModel.findByIdAndDelete(userId);
+        
+        res.status(200).json({ message: 'User and all associated data deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting user', error: error.message });
     }
@@ -125,48 +169,41 @@ const deleteUser = async (req, res) => {
 // Update current user's profile (self-update)
 const updateMyProfile = async (req, res) => {
     const userId = req.user._id;
-    const { firstName, lastName, username, phone, gender, country, dateOfBirth, city, address, bio, jobTitle, profilePicture } = req.body;
+
+    const allowedFields = ['firstName', 'lastName', 'username', 'phone', 'gender', 'country', 'dateOfBirth', 'city', 'address', 'bio', 'jobTitle', 'profilePicture'];
+    const updateData = Object.fromEntries(
+        allowedFields
+            .filter(field => req.body[field] !== undefined)
+            .map(field => [field, req.body[field]])
+    );
 
     try {
-        const user = await userModel.findById(userId);
-        if (!user) {
+        const existingUser = await userModel.findById(userId);
+        if (!existingUser) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         // Check if username is being changed and if it's already taken
-        if (username && username !== user.username) {
-            const existingUser = await userModel.findOne({ username });
-            if (existingUser) {
+        if (updateData.username && updateData.username !== existingUser.username) {
+            const duplicateUser = await userModel.findOne({ username: updateData.username });
+            if (duplicateUser) {
                 return res.status(400).json({ message: 'Username already taken' });
             }
         }
 
-        // Update allowed fields only (not email, role, or password)
-        user.firstName = firstName || user.firstName;
-        user.lastName = lastName || user.lastName;
-        user.username = username || user.username;
-        user.phone = phone !== undefined ? phone : user.phone;
-        user.gender = gender || user.gender;
-        user.country = country || user.country;
-        user.city = city || user.city;
-        user.address = address || user.address;
-        user.dateOfBirth = dateOfBirth || user.dateOfBirth;
-        user.bio = bio !== undefined ? bio : user.bio;
-        user.jobTitle = jobTitle || user.jobTitle;
-        if (profilePicture !== undefined) {
-            // Delete old profile picture from disk
-            if (user.profilePicture && user.profilePicture !== profilePicture) {
-                deleteOldFile(user.profilePicture);
+        // Delete old profile picture if a new one is provided
+        if (updateData.profilePicture) {
+            if (existingUser.profilePicture && existingUser.profilePicture !== updateData.profilePicture) {
+                await deleteFile(existingUser.profilePicture, 'default-profile.png');
             }
-            user.profilePicture = profilePicture;
         }
 
-        await user.save();
-        
+        const user = await userModel.findByIdAndUpdate(userId, updateData, { new: true });
+
         // Return user without password
         const userResponse = user.toObject();
         delete userResponse.password;
-        
+
         res.status(200).json({ message: 'Profile updated successfully', user: userResponse });
     } catch (error) {
         res.status(500).json({ message: 'Error updating profile', error: error.message });
@@ -185,7 +222,7 @@ const changePassword = async (req, res) => {
         }
 
         // Verify current password
-        const bcrypt = require('bcrypt');
+        const bcrypt = require('bcryptjs');
         const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Current password is incorrect' });
