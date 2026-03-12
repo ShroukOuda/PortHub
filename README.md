@@ -186,7 +186,7 @@ Populate the database with sample data for development:
 
 ```bash
 cd server
-npm run seed
+node seed/seed.js
 ```
 
 This runs `seed/seed.js` which clears existing data and inserts sample users, portfolios, projects, skills, services, education, experiences, certificates, and testimonials.
