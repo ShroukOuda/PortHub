@@ -191,11 +191,15 @@ const updateMyProfile = async (req, res) => {
             }
         }
 
-        // Delete old profile picture if a new one is provided
-        if (updateData.profilePicture) {
-            if (existingUser.profilePicture && existingUser.profilePicture !== updateData.profilePicture) {
+
+        const newProfilePicture = req.file ? req.file.path : req.body.profilePicture;
+
+        if (newProfilePicture) {
+            // Delete old profile picture if it exists and is different
+            if (existingUser.profilePicture && existingUser.profilePicture !== newProfilePicture) {
                 await deleteFile(existingUser.profilePicture, 'default-profile.png');
             }
+            updateData.profilePicture = newProfilePicture; 
         }
 
         const user = await userModel.findByIdAndUpdate(userId, updateData, { new: true });
