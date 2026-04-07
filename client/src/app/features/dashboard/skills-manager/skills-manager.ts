@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
 import { ISkill } from '../../../core/models/iskill';
 import { environment } from '../../../../environments/environment';
@@ -16,7 +16,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './skills-manager.css'
 })
 export class SkillsManager implements OnInit, OnDestroy {
-  private portfolioService = inject(DashboardPortfolioService);
+  private portfolioService = inject(DashboardPortfolio);
   private skillDefService = inject(SkillDefinitionService);
   private apiUrl = environment.apiUrl;
 

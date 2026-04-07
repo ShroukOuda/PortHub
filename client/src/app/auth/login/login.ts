@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
-import { AuthStateService } from '../../core/services/auth-state.service';
+import { AuthState } from '../../core/services/auth-state';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { MouseFollowDirective } from '../../shared/directives/mouse-follow.directive';
@@ -20,7 +20,7 @@ export class Login {
 
   constructor(
     private authService: AuthService, 
-    private authState: AuthStateService,
+    private authState: AuthState,
     private router: Router
   ) {}
 

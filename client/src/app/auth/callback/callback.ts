@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
-import { AuthStateService } from '../../core/services/auth-state.service';
+import { AuthState } from '../../core/services/auth-state';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -18,7 +18,7 @@ export class Callback implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private authState: AuthStateService
+    private authState: AuthState
   ) {}
 
   ngOnInit(): void {

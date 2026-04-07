@@ -2,7 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { RouterModule } from '@angular/router';
-import { AdminService, AdminStats } from '../../../core/services/admin.service';
+import { Admin } from '../../../core/services/admin';
+import { IAdminStats } from 'app/core/models/iadmin-stats';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
@@ -18,11 +19,11 @@ Chart.register(...registerables);
   styleUrl: './admin-overview.css'
 })
 export class AdminOverview implements OnInit {
-  private adminService = inject(AdminService);
+  private adminService = inject(Admin);
   private apiUrl = environment.apiUrl;
 
   loading = signal(true);
-  stats = signal<AdminStats>({
+  stats = signal<IAdminStats>({
     totalUsers: 0,
     totalPortfolios: 0,
     totalProjects: 0,
@@ -145,7 +146,7 @@ export class AdminOverview implements OnInit {
     });
   }
 
-  private buildCharts(stats: AdminStats) {
+  private buildCharts(stats: IAdminStats) {
     // Growth chart
     const months = stats.userGrowthData.map(d => {
       const [y, m] = d.month.split('-');

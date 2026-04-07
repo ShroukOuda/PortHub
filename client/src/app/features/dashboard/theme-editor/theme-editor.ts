@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { IPortfolioTheme, THEME_PRESETS, DEFAULT_THEME } from '../../../core/models/iportfolio-theme';
 
 @Component({
@@ -14,7 +14,7 @@ import { IPortfolioTheme, THEME_PRESETS, DEFAULT_THEME } from '../../../core/mod
   styleUrl: './theme-editor.css'
 })
 export class ThemeEditor implements OnInit {
-  private portfolioService = inject(DashboardPortfolioService);
+  private portfolioService = inject(DashboardPortfolio);
 
   loading = signal(true);
   saving = signal(false);

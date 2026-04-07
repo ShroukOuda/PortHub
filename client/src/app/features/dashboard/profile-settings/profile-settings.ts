@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { AuthStateService } from '../../../core/services/auth-state.service';
-import { AdminService } from '../../../core/services/admin.service';
+import { AuthState } from '../../../core/services/auth-state';
+import { Admin } from '../../../core/services/admin';
 import { PortfolioDataService } from '../../../core/services/portfolio/portfolio-data.service';
 import { IUser } from '../../../core/models/iuser';
 import { environment } from '../../../../environments/environment';
@@ -27,10 +27,10 @@ interface Country {
   styleUrl: './profile-settings.css'
 })
 export class ProfileSettings implements OnInit {
-  private authState = inject(AuthStateService);
+  private authState = inject(AuthState);
   private http = inject(HttpClient);
   private portfolioDataService = inject(PortfolioDataService);
-  private adminService = inject(AdminService);
+  private adminService = inject(Admin);
   private apiUrl = environment.apiUrl;
 
   currentUser = signal<IUser | null>(null);

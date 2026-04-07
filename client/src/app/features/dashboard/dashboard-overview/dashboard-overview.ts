@@ -2,8 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
-import { AuthStateService } from '../../../core/services/auth-state.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
+import { AuthState } from '../../../core/services/auth-state';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
@@ -18,8 +18,8 @@ Chart.register(...registerables);
   styleUrl: './dashboard-overview.css'
 })
 export class DashboardOverview implements OnInit {
-  private portfolioService = inject(DashboardPortfolioService);
-  private authState = inject(AuthStateService);
+  private portfolioService = inject(DashboardPortfolio);
+  private authState = inject(AuthState);
 
   loading = signal(true);
   currentUser = this.authState.currentUser$;

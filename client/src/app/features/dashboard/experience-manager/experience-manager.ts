@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { IExperience } from '../../../core/models/iexperience';
 
 @Component({
@@ -14,7 +14,7 @@ import { IExperience } from '../../../core/models/iexperience';
   styleUrls: ['../projects-manager/projects-manager.css', '../education-manager/education-manager.css', './experience-manager.css']
 })
 export class ExperienceManager implements OnInit {
-  private portfolioService = inject(DashboardPortfolioService);
+  private portfolioService = inject(DashboardPortfolio);
 
   loading = signal(true);
   saving = signal(false);

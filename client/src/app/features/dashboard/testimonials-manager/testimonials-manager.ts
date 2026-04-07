@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { ITestimonial } from '../../../core/models/itestimonial';
 import { environment } from '../../../../environments/environment';
 
@@ -29,7 +29,7 @@ export class TestimonialsManager implements OnInit {
   selectedImageFile: File | null = null;
   imagePreview: string | null = null;
 
-  constructor(private portfolioService: DashboardPortfolioService) {}
+  constructor(private portfolioService: DashboardPortfolio) {}
 
   ngOnInit(): void {
     this.loadTestimonials();

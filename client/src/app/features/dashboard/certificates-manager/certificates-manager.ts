@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { ICertificate } from '../../../core/models/icertificate';
 import { environment } from '../../../../environments/environment';
 
@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['../projects-manager/projects-manager.css', './certificates-manager.css']
 })
 export class CertificatesManager implements OnInit {
-  private portfolioService = inject(DashboardPortfolioService);
+  private portfolioService = inject(DashboardPortfolio);
   private apiUrl = environment.apiUrl;
 
   loading = signal(true);

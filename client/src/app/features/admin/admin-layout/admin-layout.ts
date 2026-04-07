@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { AuthStateService } from '../../../core/services/auth-state.service';
+import { AuthState } from '../../../core/services/auth-state';
 import { IUser } from '../../../core/models/iuser';
 
 @Component({
@@ -13,7 +13,7 @@ import { IUser } from '../../../core/models/iuser';
   styleUrl: './admin-layout.css'
 })
 export class AdminLayout implements OnInit {
-  private authState = inject(AuthStateService);
+  private authState = inject(AuthState);
 
   currentUser = signal<IUser | null>(null);
   sidebarCollapsed = signal(false);

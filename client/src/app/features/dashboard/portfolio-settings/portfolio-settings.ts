@@ -4,8 +4,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
-import { AuthStateService } from '../../../core/services/auth-state.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
+import { AuthState } from '../../../core/services/auth-state';
 import { PortfolioDataService } from '../../../core/services/portfolio/portfolio-data.service';
 import { IPortfolio } from '../../../core/models/iportfolio';
 import { environment } from '../../../../environments/environment';
@@ -18,8 +18,8 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './portfolio-settings.css'
 })
 export class PortfolioSettings implements OnInit {
-  private portfolioService = inject(DashboardPortfolioService);
-  private authState = inject(AuthStateService);
+  private portfolioService = inject(DashboardPortfolio);
+  private authState = inject(AuthState);
   private portfolioDataService = inject(PortfolioDataService);
   private http = inject(HttpClient);
 

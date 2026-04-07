@@ -2,7 +2,7 @@ import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import {Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
-import { AuthStateService } from '../../../core/services/auth-state.service';
+import { AuthState } from '../../../core/services/auth-state';
 import { IUser } from '../../../core/models/iuser';
 import { environment } from '../../../../environments/environment';
 import { filter } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { filter } from 'rxjs/operators';
   styleUrl: './header.css'
 })
 export class Header implements OnInit {
-  private authState = inject(AuthStateService);
+  private authState = inject(AuthState);
   private apiUrl = environment.apiUrl;
   
   isLoggedIn = signal(false);

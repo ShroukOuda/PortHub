@@ -4,7 +4,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 import { SkillDefinitionService, SkillDefinition } from '../../../core/services/portfolio/skill-definition.service';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -16,7 +16,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class AdminSkills implements OnInit {
   private skillDefService = inject(SkillDefinitionService);
-  private uploadService = inject(DashboardPortfolioService);
+  private uploadService = inject(DashboardPortfolio);
 
   loading = signal(true);
   skills = signal<SkillDefinition[]>([]);

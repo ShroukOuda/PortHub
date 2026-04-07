@@ -2,30 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IUser } from '../models/iuser';
 import { IPortfolio } from '../models/iportfolio';
+import { IUser } from '../models/iuser';
+import { IAdminStats } from '../models/iadmin-stats';
 
-export interface AdminStats {
-  totalUsers: number;
-  totalPortfolios: number;
-  totalProjects: number;
-  totalSkills: number;
-  totalViews: number;
-  usersThisMonth: number;
-  portfoliosThisMonth: number;
-  publicPortfolioCount: number;
-  privatePortfolioCount: number;
-  recentUsers: IUser[];
-  recentPortfolios: IPortfolio[];
-  topPortfolios: any[];
-  userGrowthData: { month: string; count: number }[];
-  portfolioGrowthData: { month: string; count: number }[];
-  platformViewHistory: { date: string; count: number }[];
-  totalCountries: number;
-  countryCounts: { country: string; count: number }[];
-  genderCounts: { gender: string; count: number }[];
-  jobTitleCounts: { jobTitle: string; count: number }[];
-}
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -40,7 +20,7 @@ export interface PaginatedResponse<T> {
 @Injectable({
   providedIn: 'root'
 })
-export class AdminService {
+export class Admin {
   private apiUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
@@ -53,7 +33,7 @@ export class AdminService {
   }
 
   // Get admin dashboard stats
-  getStats(): Observable<AdminStats> {
+  getStats(): Observable<IAdminStats> {
     return this.http.get<any>(`${this.apiUrl}/api/admin/stats`, {
       headers: this.getAuthHeaders()
     }).pipe(

@@ -2,8 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { AuthStateService } from '../../../core/services/auth-state.service';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { AuthState } from '../../../core/services/auth-state';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { IUser } from '../../../core/models/iuser';
 import { IPortfolio } from '../../../core/models/iportfolio';
 import { environment } from '../../../../environments/environment';
@@ -16,8 +16,8 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './dashboard-layout.css'
 })
 export class DashboardLayout implements OnInit {
-  private authState = inject(AuthStateService);
-  private portfolioService = inject(DashboardPortfolioService);
+  private authState = inject(AuthState);
+  private portfolioService = inject(DashboardPortfolio);
   private apiUrl = environment.apiUrl;
 
   currentUser = signal<IUser | null>(null);

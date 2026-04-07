@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { DashboardPortfolioService } from '../../../core/services/dashboard-portfolio.service';
+import { DashboardPortfolio } from '../../../core/services/dashboard-portfolio';
 import { IService } from '../../../core/models/iservice';
 
 
@@ -15,7 +15,7 @@ import { IService } from '../../../core/models/iservice';
   styleUrls: ['../projects-manager/projects-manager.css', './services-manager.css']
 })
 export class ServicesManager implements OnInit {
-  private portfolioService = inject(DashboardPortfolioService);
+  private portfolioService = inject(DashboardPortfolio);
 
   loading = signal(true);
   saving = signal(false);

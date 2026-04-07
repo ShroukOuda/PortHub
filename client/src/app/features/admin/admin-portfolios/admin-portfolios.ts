@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { AdminService } from '../../../core/services/admin.service';
+import { Admin } from '../../../core/services/admin';
 import { IPortfolio } from '../../../core/models/iportfolio';
 
 @Component({
@@ -14,7 +14,7 @@ import { IPortfolio } from '../../../core/models/iportfolio';
   styleUrl: './admin-portfolios.css'
 })
 export class AdminPortfolios implements OnInit {
-  private adminService = inject(AdminService);
+  private adminService = inject(Admin);
 
   loading = signal(true);
   portfolios = signal<IPortfolio[]>([]);

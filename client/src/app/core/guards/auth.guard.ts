@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
-import { AuthStateService } from '../services/auth-state.service';
+import { AuthState } from '../services/auth-state';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authStateService = inject(AuthStateService);
+  const authStateService = inject(AuthState);
   const router = inject(Router);
 
   if (authStateService.isLoggedIn) {
@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 };
 
 export const adminGuard: CanActivateFn = (route, state) => {
-  const authStateService = inject(AuthStateService);
+  const authStateService = inject(AuthState);
   const router = inject(Router);
 
   if (authStateService.isLoggedIn && authStateService.isAdmin) {
@@ -31,7 +31,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
 };
 
 export const guestGuard: CanActivateFn = (route, state) => {
-  const authStateService = inject(AuthStateService);
+  const authStateService = inject(AuthState);
   const router = inject(Router);
 
   if (!authStateService.isLoggedIn) {

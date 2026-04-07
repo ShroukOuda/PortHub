@@ -5,7 +5,7 @@ import { Iuser } from '../models/iuser';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthStateService {
+export class AuthState {
   private currentUserSubject = new BehaviorSubject<Iuser | null>(null);
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
 

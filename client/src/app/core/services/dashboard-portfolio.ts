@@ -10,15 +10,15 @@ import { IEducation } from '../models/ieducation';
 import { IExperience } from '../models/iexperience';
 import { ICertificate } from '../models/icertificate';
 import { ITestimonial } from '../models/itestimonial';
-import { AuthStateService } from './auth-state.service';
+import { AuthState } from './auth-state';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardPortfolioService {
+export class DashboardPortfolio {
   private apiUrl = environment.apiUrl;
   private http = inject(HttpClient);
-  private authState = inject(AuthStateService);
+  private authState = inject(AuthState);
 
   // User's portfolio state
   private myPortfolioSubject = new BehaviorSubject<IPortfolio | null>(null);

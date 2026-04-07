@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
-import { AdminService } from '../../../core/services/admin.service';
+import { Admin } from '../../../core/services/admin';
 
 @Component({
   selector: 'app-admin-countries',
@@ -13,7 +13,7 @@ import { AdminService } from '../../../core/services/admin.service';
   styleUrl: './admin-countries.css'
 })
 export class AdminCountries implements OnInit {
-  private adminService = inject(AdminService);
+  private adminService = inject(Admin);
 
   loading = signal(true);
   saving = signal(false);
