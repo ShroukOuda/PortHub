@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-import { UserService } from 'app/core/services/user-service';
+import { User } from 'app/core/services/user';
 import { ScrollRevealDirective } from 'app/shared/directives/scroll-reveal.directive';
 
 @Component({
@@ -10,7 +10,7 @@ import { ScrollRevealDirective } from 'app/shared/directives/scroll-reveal.direc
   styleUrl: './about.css'
 })
 export class About implements OnInit {
-  private userService = inject(UserService);
+  private userService = inject(User);
 
   totalUsers = signal(0);
   totalPortfolios = signal(0);

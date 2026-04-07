@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Iuser } from '../../core/models/iuser';
-import { UserService } from '../../core/services/user-service';
+import { User } from '../../core/services/user';
 import { LucideAngularModule } from 'lucide-angular';
 import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.directive';
 
@@ -47,7 +47,7 @@ export class Portfolios implements OnInit {
     return pages;
   });
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: User) {}
 
   ngOnInit(): void {
     this.loadUsers();

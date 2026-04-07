@@ -14,7 +14,7 @@ import { IService } from '../../../core/models/iservice';
   templateUrl: "./services-manager.html",
   styleUrls: ['../projects-manager/projects-manager.css', './services-manager.css']
 })
-export class ServicesManagerComponent implements OnInit {
+export class ServicesManager implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
 
   loading = signal(true);

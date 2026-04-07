@@ -17,7 +17,7 @@ Chart.register(...registerables);
   templateUrl: './admin-overview.html',
   styleUrl: './admin-overview.css'
 })
-export class AdminOverviewComponent implements OnInit {
+export class AdminOverview implements OnInit {
   private adminService = inject(AdminService);
   private apiUrl = environment.apiUrl;
 

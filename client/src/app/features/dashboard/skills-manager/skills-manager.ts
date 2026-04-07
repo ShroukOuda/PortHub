@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './skills-manager.html',
   styleUrl: './skills-manager.css'
 })
-export class SkillsManagerComponent implements OnInit, OnDestroy {
+export class SkillsManager implements OnInit, OnDestroy {
   private portfolioService = inject(DashboardPortfolioService);
   private skillDefService = inject(SkillDefinitionService);
   private apiUrl = environment.apiUrl;

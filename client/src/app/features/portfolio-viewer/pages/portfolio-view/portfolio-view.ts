@@ -3,7 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { Header } from '../../components/header/header';
 import { ActivatedRoute, RouterOutlet, RouterLink } from '@angular/router';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
-import { PortfolioService } from '../../../../core/services/portfolio/portfolio-service';
+import { PortfolioService } from '../../../../core/services/portfolio/portfolio';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 

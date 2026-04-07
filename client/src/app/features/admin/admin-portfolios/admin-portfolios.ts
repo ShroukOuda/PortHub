@@ -13,7 +13,7 @@ import { IPortfolio } from '../../../core/models/iportfolio';
   templateUrl: './admin-portfolios.html',
   styleUrl: './admin-portfolios.css'
 })
-export class AdminPortfoliosComponent implements OnInit {
+export class AdminPortfolios implements OnInit {
   private adminService = inject(AdminService);
 
   loading = signal(true);

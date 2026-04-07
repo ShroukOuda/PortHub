@@ -1,23 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { UserService } from './user-service';
+import { User } from './user';
 import { environment } from '../../../environments/environment';
 
-describe('UserService', () => {
-  let service: UserService;
+describe('User', () => {
+  let service: User;
   let httpMock: HttpTestingController;
   const apiUrl = `${environment.apiUrl}/api/users`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        UserService,
+        User,
         provideHttpClient(),
         provideHttpClientTesting()
       ]
     });
-    service = TestBed.inject(UserService);
+    service = TestBed.inject(User);
     httpMock = TestBed.inject(HttpTestingController);
   });
 

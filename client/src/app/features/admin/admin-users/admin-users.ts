@@ -13,7 +13,7 @@ import { IUser } from '../../../core/models/iuser';
   templateUrl: './admin-users.html',
   styleUrl: './admin-users.css'
 })
-export class AdminUsersComponent implements OnInit {
+export class AdminUsers implements OnInit {
   private adminService = inject(AdminService);
 
   loading = signal(true);

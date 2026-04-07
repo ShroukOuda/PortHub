@@ -12,7 +12,7 @@ import { IUser } from '../../../core/models/iuser';
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css'
 })
-export class AdminLayoutComponent implements OnInit {
+export class AdminLayout implements OnInit {
   private authState = inject(AuthStateService);
 
   currentUser = signal<IUser | null>(null);

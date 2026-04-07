@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, inject, signal, PLATFORM_ID, ElementRef }
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { AuthService } from 'app/core/services/auth-service';
-import { UserService } from 'app/core/services/user-service';
+import { AuthService } from 'app/core/services/auth';
+import { User } from 'app/core/services/user';
 
 @Component({
   selector: 'app-hero',
@@ -14,7 +14,7 @@ import { UserService } from 'app/core/services/user-service';
 export class Hero implements OnInit, OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private userService = inject(User);
   private platformId = inject(PLATFORM_ID);
   private el = inject(ElementRef);
 

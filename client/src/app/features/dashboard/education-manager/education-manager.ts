@@ -13,7 +13,7 @@ import { IEducation } from '../../../core/models/ieducation';
   templateUrl: "./education-manager.html",
   styleUrls: ['../projects-manager/projects-manager.css', './education-manager.css']
 })
-export class EducationManagerComponent implements OnInit {
+export class EducationManager implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
 
   loading = signal(true);

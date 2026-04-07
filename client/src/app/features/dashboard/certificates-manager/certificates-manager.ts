@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: "./certificates-manager.html",
   styleUrls: ['../projects-manager/projects-manager.css', './certificates-manager.css']
 })
-export class CertificatesManagerComponent implements OnInit {
+export class CertificatesManager implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
   private apiUrl = environment.apiUrl;
 

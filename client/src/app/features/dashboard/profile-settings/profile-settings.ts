@@ -26,7 +26,7 @@ interface Country {
   templateUrl: './profile-settings.html',
   styleUrl: './profile-settings.css'
 })
-export class ProfileSettingsComponent implements OnInit {
+export class ProfileSettings implements OnInit {
   private authState = inject(AuthStateService);
   private http = inject(HttpClient);
   private portfolioDataService = inject(PortfolioDataService);
@@ -296,7 +296,12 @@ export class ProfileSettingsComponent implements OnInit {
     const userId = this.currentUser()?._id;
     if (!userId) return;
 
-    this.http.put<any>(`${this.apiUrl}/api/users/me`, { [field]: value }).subscribe({
+    const payload: any = { [field]: value };
+    if (field === 'profilePicture') {
+      payload.oldProfilePicture = this.currentUser()?.profilePicture;
+    }
+
+    this.http.put<any>(`${this.apiUrl}/api/users/me`, payload).subscribe({
       next: (res) => {
         // Update local state
         const updated = { ...this.currentUser(), [field]: value } as IUser;

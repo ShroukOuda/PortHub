@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth-service';
+import { AuthService } from '../../core/services/auth';
 import { IuserRegister } from '../../core/models/iuser-register';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';

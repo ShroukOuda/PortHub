@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './testimonials-manager.html',
   styleUrls: ['../projects-manager/projects-manager.css', './testimonials-manager.css']
 })
-export class TestimonialsManagerComponent implements OnInit {
+export class TestimonialsManager implements OnInit {
   private apiUrl = environment.apiUrl;
   testimonials: ITestimonial[] = [];
   loading = true;
@@ -101,7 +101,8 @@ export class TestimonialsManagerComponent implements OnInit {
 
   private _performSave(): void {
     if (this.editMode && this.currentTestimonial._id) {
-      this.portfolioService.updateTestimonial(this.currentTestimonial._id, this.currentTestimonial).subscribe({
+      const testimonialToUpdate = this.testimonials.find(t => t._id === this.currentTestimonial._id);
+      this.portfolioService.updateTestimonial(this.currentTestimonial._id, { ...this.currentTestimonial, authorImage: testimonialToUpdate?.authorImage }).subscribe({
         next: (result) => {
           // Update locally
           this.testimonials = this.testimonials.map(t => 

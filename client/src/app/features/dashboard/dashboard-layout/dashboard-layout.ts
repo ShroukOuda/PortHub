@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.css'
 })
-export class DashboardLayoutComponent implements OnInit {
+export class DashboardLayout implements OnInit {
   private authState = inject(AuthStateService);
   private portfolioService = inject(DashboardPortfolioService);
   private apiUrl = environment.apiUrl;

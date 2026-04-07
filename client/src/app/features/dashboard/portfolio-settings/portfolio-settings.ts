@@ -17,7 +17,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './portfolio-settings.html',
   styleUrl: './portfolio-settings.css'
 })
-export class PortfolioSettingsComponent implements OnInit {
+export class PortfolioSettings implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
   private authState = inject(AuthStateService);
   private portfolioDataService = inject(PortfolioDataService);

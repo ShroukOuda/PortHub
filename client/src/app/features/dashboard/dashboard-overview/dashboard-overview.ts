@@ -17,7 +17,7 @@ Chart.register(...registerables);
   templateUrl: './dashboard-overview.html',
   styleUrl: './dashboard-overview.css'
 })
-export class DashboardOverviewComponent implements OnInit {
+export class DashboardOverview implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
   private authState = inject(AuthStateService);
 

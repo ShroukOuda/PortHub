@@ -13,7 +13,7 @@ import { IPortfolioTheme, THEME_PRESETS, DEFAULT_THEME } from '../../../core/mod
   templateUrl: './theme-editor.html',
   styleUrl: './theme-editor.css'
 })
-export class ThemeEditorComponent implements OnInit {
+export class ThemeEditor implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
 
   loading = signal(true);

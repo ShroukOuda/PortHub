@@ -14,7 +14,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './admin-skills.html',
   styleUrl: './admin-skills.css'
 })
-export class AdminSkillsComponent implements OnInit {
+export class AdminSkills implements OnInit {
   private skillDefService = inject(SkillDefinitionService);
   private uploadService = inject(DashboardPortfolioService);
 

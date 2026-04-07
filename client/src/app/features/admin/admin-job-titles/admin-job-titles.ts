@@ -12,7 +12,7 @@ import { AdminService } from '../../../core/services/admin.service';
   templateUrl: './admin-job-titles.html',
   styleUrl: './admin-job-titles.css'
 })
-export class AdminJobTitlesComponent implements OnInit {
+export class AdminJobTitles implements OnInit {
   private adminService = inject(AdminService);
 
   loading = signal(true);

@@ -13,7 +13,7 @@ import { IExperience } from '../../../core/models/iexperience';
   templateUrl: "./experience-manager.html",
   styleUrls: ['../projects-manager/projects-manager.css', '../education-manager/education-manager.css', './experience-manager.css']
 })
-export class ExperienceManagerComponent implements OnInit {
+export class ExperienceManager implements OnInit {
   private portfolioService = inject(DashboardPortfolioService);
 
   loading = signal(true);

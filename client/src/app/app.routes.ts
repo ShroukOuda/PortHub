@@ -11,21 +11,21 @@ import { routes as portfolioRoutes } from './features/portfolio-viewer/portfolio
 import { authGuard, adminGuard, guestGuard } from './core/guards/auth.guard';
 
 // Dashboard Components
-import { DashboardLayoutComponent } from './features/dashboard/dashboard-layout/dashboard-layout';
-import { DashboardOverviewComponent } from './features/dashboard/dashboard-overview/dashboard-overview';
-import { PortfolioSettingsComponent } from './features/dashboard/portfolio-settings/portfolio-settings';
-import { ThemeEditorComponent } from './features/dashboard/theme-editor/theme-editor';
-import { ProjectsManagerComponent } from './features/dashboard/projects-manager/projects-manager';
-import { SkillsManagerComponent } from './features/dashboard/skills-manager/skills-manager';
+import { DashboardLayout } from './features/dashboard/dashboard-layout/dashboard-layout';
+import { DashboardOverview } from './features/dashboard/dashboard-overview/dashboard-overview';
+import { PortfolioSettings } from './features/dashboard/portfolio-settings/portfolio-settings';
+import { ThemeEditor } from './features/dashboard/theme-editor/theme-editor';
+import { ProjectsManager } from './features/dashboard/projects-manager/projects-manager';
+import { SkillsManager } from './features/dashboard/skills-manager/skills-manager';
 
 // Admin Components
-import { AdminLayoutComponent } from './features/admin/admin-layout/admin-layout';
-import { AdminOverviewComponent } from './features/admin/admin-overview/admin-overview';
-import { AdminUsersComponent } from './features/admin/admin-users/admin-users';
-import { AdminPortfoliosComponent } from './features/admin/admin-portfolios/admin-portfolios';
-import { AdminSkillsComponent } from './features/admin/admin-skills/admin-skills';
-import { AdminJobTitlesComponent } from './features/admin/admin-job-titles/admin-job-titles';
-import { AdminCountriesComponent } from './features/admin/admin-countries/admin-countries';
+import { AdminLayout } from './features/admin/admin-layout/admin-layout';
+import { AdminOverview } from './features/admin/admin-overview/admin-overview';
+import { AdminUsers } from './features/admin/admin-users/admin-users';
+import { AdminPortfolios } from './features/admin/admin-portfolios/admin-portfolios';
+import { AdminSkills } from './features/admin/admin-skills/admin-skills';
+import { AdminJobTitles } from './features/admin/admin-job-titles/admin-job-titles';
+import { AdminCountries } from './features/admin/admin-countries/admin-countries';
 
 export const routes: Routes = [
     // Public routes
@@ -44,38 +44,38 @@ export const routes: Routes = [
     // User Dashboard routes (protected)
     {
         path: 'dashboard',
-        component: DashboardLayoutComponent,
+        component: DashboardLayout,
         canActivate: [authGuard],
         children: [
-            { path: '', component: DashboardOverviewComponent },
-            { path: 'portfolio', component: PortfolioSettingsComponent },
-            { path: 'theme', component: ThemeEditorComponent },
-            { path: 'projects', component: ProjectsManagerComponent },
-            { path: 'skills', component: SkillsManagerComponent },
-            { path: 'services', loadComponent: () => import('./features/dashboard/services-manager/services-manager').then(m => m.ServicesManagerComponent) },
-            { path: 'education', loadComponent: () => import('./features/dashboard/education-manager/education-manager').then(m => m.EducationManagerComponent) },
-            { path: 'experience', loadComponent: () => import('./features/dashboard/experience-manager/experience-manager').then(m => m.ExperienceManagerComponent) },
-            { path: 'certificates', loadComponent: () => import('./features/dashboard/certificates-manager/certificates-manager').then(m => m.CertificatesManagerComponent) },
-            { path: 'testimonials', loadComponent: () => import('./features/dashboard/testimonials-manager/testimonials-manager').then(m => m.TestimonialsManagerComponent) },
-            { path: 'profile', loadComponent: () => import('./features/dashboard/profile-settings/profile-settings').then(m => m.ProfileSettingsComponent) },
+            { path: '', component: DashboardOverview },
+            { path: 'portfolio', component: PortfolioSettings },
+            { path: 'theme', component: ThemeEditor },
+            { path: 'projects', component: ProjectsManager },
+            { path: 'skills', component: SkillsManager },
+            { path: 'services', loadComponent: () => import('./features/dashboard/services-manager/services-manager').then(m => m.ServicesManager) },
+            { path: 'education', loadComponent: () => import('./features/dashboard/education-manager/education-manager').then(m => m.EducationManager) },
+            { path: 'experience', loadComponent: () => import('./features/dashboard/experience-manager/experience-manager').then(m => m.ExperienceManager) },
+            { path: 'certificates', loadComponent: () => import('./features/dashboard/certificates-manager/certificates-manager').then(m => m.CertificatesManager) },
+            { path: 'testimonials', loadComponent: () => import('./features/dashboard/testimonials-manager/testimonials-manager').then(m => m.TestimonialsManager) },
+            { path: 'profile', loadComponent: () => import('./features/dashboard/profile-settings/profile-settings').then(m => m.ProfileSettings) },
         ]
     },
     
     // Admin routes (protected, admin only)
     {
         path: 'admin',
-        component: AdminLayoutComponent,
+        component: AdminLayout,
         canActivate: [adminGuard],
         children: [
-            { path: '', component: AdminOverviewComponent },
-            { path: 'users', component: AdminUsersComponent },
-            { path: 'portfolios', component: AdminPortfoliosComponent },
-            { path: 'skills', component: AdminSkillsComponent },
-            { path: 'job-titles', component: AdminJobTitlesComponent },
-            { path: 'countries', component: AdminCountriesComponent },
+            { path: '', component: AdminOverview },
+            { path: 'users', component: AdminUsers },
+            { path: 'portfolios', component: AdminPortfolios },
+            { path: 'skills', component: AdminSkills },
+            { path: 'job-titles', component: AdminJobTitles },
+            { path: 'countries', component: AdminCountries },
         ]
     },
     
     // 404 Not Found - must be last
-    { path: '**', loadComponent: () => import('./shared/components/not-found/not-found').then(m => m.NotFoundComponent) }
+    { path: '**', loadComponent: () => import('./shared/components/not-found/not-found').then(m => m.NotFound) }
 ];
