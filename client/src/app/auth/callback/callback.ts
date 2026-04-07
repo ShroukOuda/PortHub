@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './callback.html',
   styleUrl: './callback.css'
 })
-export class AuthCallback implements OnInit {
+export class Callback implements OnInit {
   message = 'Completing authentication...';
 
   constructor(

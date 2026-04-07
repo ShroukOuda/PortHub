@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css'
 })
-export class ForgotPasswordComponent {
+export class ForgotPassword {
   private http = inject(HttpClient);
   private router = inject(Router);
   private apiUrl = environment.apiUrl;

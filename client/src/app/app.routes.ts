@@ -5,7 +5,7 @@ import { Portfolios } from './pages/portfolios/portfolios';
 import { Contact } from './pages/contact/contact';
 import { Login } from './auth/login/login';
 import { Signup } from './auth/signup/signup';
-import { AuthCallback } from './auth/callback/callback';
+import { Callback } from './auth/callback/callback';
 import { PortfolioView } from './features/portfolio-viewer/pages/portfolio-view/portfolio-view';
 import { routes as portfolioRoutes } from './features/portfolio-viewer/portfolio-viewer.routes';
 import { authGuard, adminGuard, guestGuard } from './core/guards/auth.guard';
@@ -38,8 +38,8 @@ export const routes: Routes = [
     // Auth routes (only for guests)
     {path: 'login', component: Login, canActivate: [guestGuard]},
     {path: 'signup', component: Signup, canActivate: [guestGuard]},
-    {path: 'forgot-password', loadComponent: () => import('./auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent), canActivate: [guestGuard]},
-    {path: 'auth/callback', component: AuthCallback},
+    {path: 'forgot-password', loadComponent: () => import('./auth/forgot-password/forgot-password').then(m => m.ForgotPassword), canActivate: [guestGuard]},
+    {path: 'auth/callback', component: Callback},
     
     // User Dashboard routes (protected)
     {
