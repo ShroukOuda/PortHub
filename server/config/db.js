@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const connectDB = async (retries = 5, delay = 3000) => {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-            await mongoose.connect(process.env.MONGO_URL, {
-                dbName: process.env.DB_NAME,
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            });
+            const connectionOptions = {};
+            if (process.env.DB_NAME) {
+                connectionOptions.dbName = process.env.DB_NAME;
+            }
+
+            await mongoose.connect(process.env.MONGO_URL, connectionOptions);
             console.log('MongoDB connected successfully');
             return;
         } catch (error) {
