@@ -100,26 +100,29 @@ export class TestimonialsManager implements OnInit {
   }
 
   private _performSave(): void {
+    
     if (this.editMode && this.currentTestimonial._id) {
-      const testimonialToUpdate = this.testimonials.find(t => t._id === this.currentTestimonial._id);
-      this.portfolioService.updateTestimonial(this.currentTestimonial._id, { ...this.currentTestimonial, authorImage: testimonialToUpdate?.authorImage }).subscribe({
-        next: (result) => {
-          // Update locally
-          this.testimonials = this.testimonials.map(t => 
-            t._id === result._id ? result : t
-          );
-          this.closeModal();
-          this.saving = false;
-          this.message = { type: 'success', text: 'Testimonial updated successfully!' };
-          setTimeout(() => this.message = null, 3000);
-        },
-        error: (err: any) => {
-          console.error('Failed to update testimonial:', err);
-          this.saving = false;
-          this.message = { type: 'error', text: 'Failed to update testimonial.' };
-        }
-      });
-    } else {
+
+  this.portfolioService.updateTestimonial(
+    this.currentTestimonial._id,
+    { ...this.currentTestimonial }
+  ).subscribe({
+    next: (result) => {
+      this.testimonials = this.testimonials.map(t =>
+        t._id === result._id ? result : t
+      );
+      this.closeModal();
+      this.saving = false;
+      this.message = { type: 'success', text: 'Testimonial updated successfully!' };
+      setTimeout(() => this.message = null, 3000);
+    },
+    error: (err: any) => {
+      console.error('Failed to update testimonial:', err);
+      this.saving = false;
+      this.message = { type: 'error', text: 'Failed to update testimonial.' };
+    }
+  });
+} else {
       this.portfolioService.createTestimonial(this.currentTestimonial).subscribe({
         next: (result) => {
           // Add locally
