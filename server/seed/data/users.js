@@ -11,7 +11,7 @@ const users = [
     phone: "+12125551234", password: "Password@123", profilePicture: "uploads/profiles/seed/user-avatar-1.jpg",
     bio: "Senior Software Engineer with 8+ years of experience building scalable web applications.",
     gender: "male", dateOfBirth: "1988-03-15", country: "USA", city: "New York", address: "123 Broadway, Apt 4B",
-    jobTitle: "Senior Software Engineer", role: "user", isActive: true
+    jobTitle: "Senior Software Engineer", role: "admin", isActive: true
   },
   {
     _id: userIds[1],
@@ -43,7 +43,7 @@ const users = [
     phone: "+16175559876", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-1.jpg",
     bio: "Data Scientist with background in machine learning and statistical analysis.",
     gender: "male", dateOfBirth: "1989-12-05", country: "USA", city: "Boston", address: "201 Boylston St",
-    jobTitle: "Data Scientist", role: "admin", isActive: true
+    jobTitle: "Data Scientist", role: "user", isActive: true
   },
   {
     _id: userIds[5],
@@ -91,7 +91,7 @@ const users = [
     phone: "+12125556789", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-2.jpg",
     bio: "Systems Architect with expertise in designing scalable, fault-tolerant distributed systems.",
     gender: "male", dateOfBirth: "1984-10-14", country: "USA", city: "Dallas", address: "801 Elm St",
-    jobTitle: "Systems Architect", role: "admin", isActive: true
+    jobTitle: "Systems Architect", role: "user", isActive: true
   },
   {
     _id: userIds[11],
@@ -139,7 +139,7 @@ const users = [
     phone: "+16175552345", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-2.jpg",
     bio: "Engineering Manager with 10+ years experience leading distributed development teams.",
     gender: "female", dateOfBirth: "1982-08-27", country: "USA", city: "Detroit", address: "1401 Woodward Ave",
-    jobTitle: "Engineering Manager", role: "admin", isActive: true
+    jobTitle: "Engineering Manager", role: "user", isActive: true
   },
   {
     _id: userIds[17],
@@ -211,7 +211,7 @@ const users = [
     phone: "+13105559876", password: "Password@123", profilePicture: "uploads/profiles/seed/professional-male-4.jpg",
     bio: "Technical Lead guiding development teams and architecting scalable solutions.",
     gender: "male", dateOfBirth: "1981-12-10", country: "USA", city: "Kansas City", address: "2301 Grand Blvd",
-    jobTitle: "Technical Lead", role: "admin", isActive: true
+    jobTitle: "Technical Lead", role: "user", isActive: true
   },
   {
     _id: userIds[26],
@@ -293,7 +293,7 @@ const users = [
     phone: "+441912345678", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-3.jpg",
     bio: "Technical Project Manager with experience delivering complex software projects.",
     gender: "female", dateOfBirth: "1987-03-25", country: "UK", city: "Newcastle", address: "23 Grey St",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[36],
@@ -455,7 +455,7 @@ const users = [
     phone: "+17805557654", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-5.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-11-14", country: "Canada", city: "Edmonton", address: "600 Jasper Ave",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[56],
@@ -511,7 +511,7 @@ const users = [
     phone: "+19055553456", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-9.jpg",
     bio: "Cloud Architect designing solutions on AWS, Azure and GCP.",
     gender: "male", dateOfBirth: "1985-09-22", country: "Canada", city: "Regina", address: "1300 Albert St",
-    jobTitle: "Cloud Architect", role: "admin", isActive: true
+    jobTitle: "Cloud Architect", role: "user", isActive: true
   },
   {
     _id: userIds[63],
@@ -577,7 +577,7 @@ const users = [
     phone: "+61255557654", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-7.jpg",
     bio: "Technical Project Manager leading agile teams in e-commerce sector.",
     gender: "female", dateOfBirth: "1986-12-11", country: "Australia", city: "Canberra", address: "500 London Circuit",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[71],
@@ -633,7 +633,7 @@ const users = [
     phone: "+61855559878", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-11.jpg",
     bio: "Security Engineer focusing on cloud security and compliance.",
     gender: "male", dateOfBirth: "1988-03-12", country: "Australia", city: "Darwin", address: "1200 Mitchell St",
-    jobTitle: "Security Engineer", role: "admin", isActive: true
+    jobTitle: "Security Engineer", role: "user", isActive: true
   },
   {
     _id: userIds[78],
@@ -699,7 +699,7 @@ const users = [
     phone: "+911112345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-9.jpg",
     bio: "Technical Project Manager leading distributed development teams.",
     gender: "female", dateOfBirth: "1986-12-04", country: "India", city: "Delhi", address: "500 Connaught Place",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[86],
@@ -755,7 +755,7 @@ const users = [
     phone: "+914712345690", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-13.jpg",
     bio: "Cloud Architect designing solutions on AWS and Azure.",
     gender: "male", dateOfBirth: "1985-11-30", country: "India", city: "Thiruvananthapuram", address: "1200 MG Road",
-    jobTitle: "Cloud Architect", role: "admin", isActive: true
+    jobTitle: "Cloud Architect", role: "user", isActive: true
   },
   {
     _id: userIds[93],
@@ -821,7 +821,7 @@ const users = [
     phone: "+494012345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-11.jpg",
     bio: "Technical Project Manager leading agile development teams in fintech.",
     gender: "female", dateOfBirth: "1986-07-16", country: "Germany", city: "Hamburg", address: "500 Rathausmarkt",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[101],
@@ -877,7 +877,7 @@ const users = [
     phone: "+4951112345690", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-15.jpg",
     bio: "Cloud Architect designing solutions on AWS, Azure and Google Cloud.",
     gender: "male", dateOfBirth: "1985-12-22", country: "Germany", city: "Cologne", address: "1200 MediaPark",
-    jobTitle: "Cloud Architect", role: "admin", isActive: true
+    jobTitle: "Cloud Architect", role: "user", isActive: true
   },
   {
     _id: userIds[108],
@@ -943,7 +943,7 @@ const users = [
     phone: "+33123456780", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-13.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-12-08", country: "France", city: "Toulouse", address: "500 Place du Capitole",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[116],
@@ -999,7 +999,7 @@ const users = [
     phone: "+33512345680", password: "Password@123", profilePicture: "uploads/profiles/seed/engineer-male-17.jpg",
     bio: "Security Engineer specializing in application security and DevSecOps.",
     gender: "male", dateOfBirth: "1988-11-19", country: "France", city: "Bordeaux", address: "1200 Quinconces",
-    jobTitle: "Security Engineer", role: "admin", isActive: true
+    jobTitle: "Security Engineer", role: "user", isActive: true
   },
   {
     _id: userIds[123],
@@ -1065,7 +1065,7 @@ const users = [
     phone: "+556112345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-15.jpg",
     bio: "Technical Project Manager leading agile teams.",
     gender: "female", dateOfBirth: "1986-06-11", country: "Brazil", city: "Brasília", address: "500 Esplanada dos Ministérios",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[131],
@@ -1129,7 +1129,7 @@ const users = [
     phone: "+555112345691", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-16.jpg",
     bio: "Product Manager with expertise in SaaS and enterprise software.",
     gender: "female", dateOfBirth: "1987-01-05", country: "Brazil", city: "Salvador", address: "1300 Pelourinho",
-    jobTitle: "Product Manager", role: "admin", isActive: true
+    jobTitle: "Product Manager", role: "user", isActive: true
   },
   {
     _id: userIds[139],
@@ -1187,7 +1187,7 @@ const users = [
     phone: "+234612345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-17.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-10-14", country: "Nigeria", city: "Enugu", address: "500 Independence Layout",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[146],
@@ -1269,7 +1269,7 @@ const users = [
     phone: "+390612345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-18.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-12-08", country: "Italy", city: "Florence", address: "500 Piazza della Signoria",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[156],
@@ -1351,7 +1351,7 @@ const users = [
     phone: "+349712345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-19.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-10-09", country: "Spain", city: "Malaga", address: "500 Calle Larios",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[166],
@@ -1433,7 +1433,7 @@ const users = [
     phone: "+524441345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-20.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-11-03", country: "Mexico", city: "León", address: "500 Arco de la Calzada",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[176],
@@ -1515,7 +1515,7 @@ const users = [
     phone: "+811112345683", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-21.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-10-14", country: "Japan", city: "Sapporo", address: "500 Odori Park",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[186],
@@ -1597,7 +1597,7 @@ const users = [
     phone: "+46812345678", password: "Password@123", profilePicture: "uploads/profiles/seed/executive-female-22.jpg",
     bio: "Technical Project Manager leading agile development teams.",
     gender: "female", dateOfBirth: "1986-10-28", country: "Sweden", city: "Stockholm", address: "500 Gamla Stan",
-    jobTitle: "Technical Project Manager", role: "admin", isActive: true
+    jobTitle: "Technical Project Manager", role: "user", isActive: true
   },
   {
     _id: userIds[196],
