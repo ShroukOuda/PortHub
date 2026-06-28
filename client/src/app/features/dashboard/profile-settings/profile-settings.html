@@ -240,7 +240,7 @@
                   [placeholder]="getPhonePlaceholder()">
               </div>
               @if (selectedCountry) {
-                <span class="hint">Format: {{ selectedCountry.format }}</span>
+                <span class="hint">Phone number should be between 6 and 15 digits</span>
               }
               @if (validationErrors()['phone']) {
                 <span class="hint" style="color: #e74c3c;">{{ validationErrors()['phone'] }}</span>

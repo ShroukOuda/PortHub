@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, Signal, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
@@ -10,14 +10,6 @@ import { IUser } from '../../../core/models/iuser';
 import { environment } from '../../../../environments/environment';
 import { MouseFollowDirective } from '../../../shared/directives/mouse-follow.directive';
 
-interface Country {
-  name: string;
-  code: string;
-  dialCode: string;
-  format: string;
-  minLength: number;
-  maxLength: number;
-}
 
 @Component({
   selector: 'app-profile-settings',
@@ -61,79 +53,10 @@ export class ProfileSettings implements OnInit {
     address: ''
   };
 
-  // Countries list
-  countries: Country[] = [
-    { name: 'Egypt', code: 'EG', dialCode: '+20', format: '+20 XXX XXX XXXX', minLength: 10, maxLength: 11 },
-    { name: 'United States', code: 'US', dialCode: '+1', format: '+1 (XXX) XXX-XXXX', minLength: 10, maxLength: 10 },
-    { name: 'United Kingdom', code: 'GB', dialCode: '+44', format: '+44 XXXX XXXXXX', minLength: 10, maxLength: 11 },
-    { name: 'Saudi Arabia', code: 'SA', dialCode: '+966', format: '+966 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'United Arab Emirates', code: 'AE', dialCode: '+971', format: '+971 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Germany', code: 'DE', dialCode: '+49', format: '+49 XXX XXXXXXXX', minLength: 10, maxLength: 12 },
-    { name: 'France', code: 'FR', dialCode: '+33', format: '+33 X XX XX XX XX', minLength: 9, maxLength: 9 },
-    { name: 'Italy', code: 'IT', dialCode: '+39', format: '+39 XXX XXX XXXX', minLength: 9, maxLength: 11 },
-    { name: 'Spain', code: 'ES', dialCode: '+34', format: '+34 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Canada', code: 'CA', dialCode: '+1', format: '+1 (XXX) XXX-XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Australia', code: 'AU', dialCode: '+61', format: '+61 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'India', code: 'IN', dialCode: '+91', format: '+91 XXXXX XXXXX', minLength: 10, maxLength: 10 },
-    { name: 'China', code: 'CN', dialCode: '+86', format: '+86 XXX XXXX XXXX', minLength: 11, maxLength: 11 },
-    { name: 'Japan', code: 'JP', dialCode: '+81', format: '+81 XX XXXX XXXX', minLength: 10, maxLength: 11 },
-    { name: 'South Korea', code: 'KR', dialCode: '+82', format: '+82 XX XXXX XXXX', minLength: 9, maxLength: 11 },
-    { name: 'Brazil', code: 'BR', dialCode: '+55', format: '+55 XX XXXXX XXXX', minLength: 10, maxLength: 11 },
-    { name: 'Mexico', code: 'MX', dialCode: '+52', format: '+52 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Russia', code: 'RU', dialCode: '+7', format: '+7 XXX XXX XX XX', minLength: 10, maxLength: 10 },
-    { name: 'Turkey', code: 'TR', dialCode: '+90', format: '+90 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'South Africa', code: 'ZA', dialCode: '+27', format: '+27 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Nigeria', code: 'NG', dialCode: '+234', format: '+234 XXX XXX XXXX', minLength: 10, maxLength: 11 },
-    { name: 'Kenya', code: 'KE', dialCode: '+254', format: '+254 XXX XXXXXX', minLength: 9, maxLength: 10 },
-    { name: 'Morocco', code: 'MA', dialCode: '+212', format: '+212 XXX XXXXXX', minLength: 9, maxLength: 9 },
-    { name: 'Algeria', code: 'DZ', dialCode: '+213', format: '+213 XXX XX XX XX', minLength: 9, maxLength: 9 },
-    { name: 'Tunisia', code: 'TN', dialCode: '+216', format: '+216 XX XXX XXX', minLength: 8, maxLength: 8 },
-    { name: 'Jordan', code: 'JO', dialCode: '+962', format: '+962 X XXXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Lebanon', code: 'LB', dialCode: '+961', format: '+961 XX XXX XXX', minLength: 7, maxLength: 8 },
-    { name: 'Iraq', code: 'IQ', dialCode: '+964', format: '+964 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Kuwait', code: 'KW', dialCode: '+965', format: '+965 XXXX XXXX', minLength: 8, maxLength: 8 },
-    { name: 'Qatar', code: 'QA', dialCode: '+974', format: '+974 XXXX XXXX', minLength: 8, maxLength: 8 },
-    { name: 'Bahrain', code: 'BH', dialCode: '+973', format: '+973 XXXX XXXX', minLength: 8, maxLength: 8 },
-    { name: 'Oman', code: 'OM', dialCode: '+968', format: '+968 XXXX XXXX', minLength: 8, maxLength: 8 },
-    { name: 'Pakistan', code: 'PK', dialCode: '+92', format: '+92 XXX XXXXXXX', minLength: 10, maxLength: 10 },
-    { name: 'Bangladesh', code: 'BD', dialCode: '+880', format: '+880 XXXX XXXXXX', minLength: 10, maxLength: 10 },
-    { name: 'Indonesia', code: 'ID', dialCode: '+62', format: '+62 XXX XXXX XXXX', minLength: 9, maxLength: 12 },
-    { name: 'Malaysia', code: 'MY', dialCode: '+60', format: '+60 XX XXX XXXX', minLength: 9, maxLength: 10 },
-    { name: 'Singapore', code: 'SG', dialCode: '+65', format: '+65 XXXX XXXX', minLength: 8, maxLength: 8 },
-    { name: 'Thailand', code: 'TH', dialCode: '+66', format: '+66 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Vietnam', code: 'VN', dialCode: '+84', format: '+84 XXX XXX XXXX', minLength: 9, maxLength: 10 },
-    { name: 'Philippines', code: 'PH', dialCode: '+63', format: '+63 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Netherlands', code: 'NL', dialCode: '+31', format: '+31 X XXXXXXXX', minLength: 9, maxLength: 9 },
-    { name: 'Belgium', code: 'BE', dialCode: '+32', format: '+32 XXX XX XX XX', minLength: 9, maxLength: 9 },
-    { name: 'Switzerland', code: 'CH', dialCode: '+41', format: '+41 XX XXX XX XX', minLength: 9, maxLength: 9 },
-    { name: 'Austria', code: 'AT', dialCode: '+43', format: '+43 XXX XXXXXXX', minLength: 10, maxLength: 11 },
-    { name: 'Poland', code: 'PL', dialCode: '+48', format: '+48 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Sweden', code: 'SE', dialCode: '+46', format: '+46 XX XXX XX XX', minLength: 9, maxLength: 9 },
-    { name: 'Norway', code: 'NO', dialCode: '+47', format: '+47 XXX XX XXX', minLength: 8, maxLength: 8 },
-    { name: 'Denmark', code: 'DK', dialCode: '+45', format: '+45 XX XX XX XX', minLength: 8, maxLength: 8 },
-    { name: 'Finland', code: 'FI', dialCode: '+358', format: '+358 XX XXX XXXX', minLength: 9, maxLength: 10 },
-    { name: 'Greece', code: 'GR', dialCode: '+30', format: '+30 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Portugal', code: 'PT', dialCode: '+351', format: '+351 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Ireland', code: 'IE', dialCode: '+353', format: '+353 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'New Zealand', code: 'NZ', dialCode: '+64', format: '+64 XX XXX XXXX', minLength: 9, maxLength: 10 },
-    { name: 'Argentina', code: 'AR', dialCode: '+54', format: '+54 XX XXXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Chile', code: 'CL', dialCode: '+56', format: '+56 X XXXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Colombia', code: 'CO', dialCode: '+57', format: '+57 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Peru', code: 'PE', dialCode: '+51', format: '+51 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Venezuela', code: 'VE', dialCode: '+58', format: '+58 XXX XXX XXXX', minLength: 10, maxLength: 10 },
-    { name: 'Ukraine', code: 'UA', dialCode: '+380', format: '+380 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Czech Republic', code: 'CZ', dialCode: '+420', format: '+420 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Romania', code: 'RO', dialCode: '+40', format: '+40 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Hungary', code: 'HU', dialCode: '+36', format: '+36 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Israel', code: 'IL', dialCode: '+972', format: '+972 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Palestine', code: 'PS', dialCode: '+970', format: '+970 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Syria', code: 'SY', dialCode: '+963', format: '+963 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Yemen', code: 'YE', dialCode: '+967', format: '+967 XXX XXX XXX', minLength: 9, maxLength: 9 },
-    { name: 'Libya', code: 'LY', dialCode: '+218', format: '+218 XX XXX XXXX', minLength: 9, maxLength: 9 },
-    { name: 'Sudan', code: 'SD', dialCode: '+249', format: '+249 XX XXX XXXX', minLength: 9, maxLength: 9 },
-  ].sort((a, b) => a.name.localeCompare(b.name));
+  // Countries from API
+  countries: { _id: string; name: string; code: string; dialCode: string; isactive: boolean }[] = [];
 
-  selectedCountry: Country | null = null;
+  selectedCountry: { _id: string; name: string; code: string; dialCode: string; isactive: boolean } | null = null;
   phoneNumber = ''; // Local phone number without dial code
 
   // Job titles from API
@@ -144,12 +67,26 @@ export class ProfileSettings implements OnInit {
 
   ngOnInit() {
     this.loadUserData();
+    this.loadCountries();
     this.loadJobTitles();
   }
 
   loadJobTitles() {
     this.adminService.getActiveJobTitles().subscribe({
       next: (titles) => this.jobTitles.set(titles),
+      error: () => {}
+    });
+  }
+
+  loadCountries() {
+    this.adminService.getCountries().subscribe({
+      next: (res) => {
+        this.countries = res.data;
+        // Set selected country if user has one
+        if (this.currentUser() && this.currentUser()!.country) {
+          this.selectedCountry = this.countries.find(c => c.name === this.currentUser()!.country) || null;
+        }
+      },
       error: () => {}
     });
   }
@@ -229,7 +166,7 @@ export class ProfileSettings implements OnInit {
 
   getPhonePlaceholder(): string {
     if (!this.selectedCountry) return 'Select a country first';
-    return this.selectedCountry.format.replace(this.selectedCountry.dialCode + ' ', '');
+    return this.selectedCountry.dialCode + ' ' + 'Enter phone number';
   }
 
   onFileSelected(event: Event) {
@@ -329,10 +266,8 @@ export class ProfileSettings implements OnInit {
     this.updatePhoneNumber();
     if (this.selectedCountry && this.phoneNumber) {
       const digits = this.phoneNumber.replace(/\D/g, '').replace(/^0/, '');
-      if (digits.length < this.selectedCountry.minLength) {
-        errors['phone'] = `Phone too short for ${this.selectedCountry.name} (min ${this.selectedCountry.minLength} digits)`;
-      } else if (digits.length > this.selectedCountry.maxLength) {
-        errors['phone'] = `Phone too long for ${this.selectedCountry.name} (max ${this.selectedCountry.maxLength} digits)`;
+      if (digits.length < 6 || digits.length > 15) {
+        errors['phone'] = 'Phone number must be between 6 and 15 digits';
       }
     }
 
