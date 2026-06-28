@@ -4,6 +4,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 import { PortfolioDataService, PortfolioData } from '../../../../core/services/portfolio/portfolio-data.service';
 import { environment } from '../../../../../environments/environment';
+import { Iuser } from '../../../../core/models/iuser';
+import { AuthState } from '../../../../core/services/auth-state';
 
 @Component({
   selector: 'app-about',
@@ -13,15 +15,22 @@ import { environment } from '../../../../../environments/environment';
 })
 export class About implements OnInit, OnDestroy {
   portfolioData: PortfolioData | null = null;
+  currentUser: Iuser | null = null;
   private subscription: Subscription | null = null;
   apiUrl = environment.apiUrl;
 
-  constructor(private portfolioDataService: PortfolioDataService) {}
+  constructor(private portfolioDataService: PortfolioDataService, private authState: AuthState) {}
 
   ngOnInit(): void {
+   
     this.subscription = this.portfolioDataService.portfolioData$.subscribe(data => {
-      this.portfolioData = data;
+        this.portfolioData = data;
+      });
+    
+    this.authState.currentUser$.subscribe(user => {
+      this.currentUser = user;
     });
+
   }
 
   ngOnDestroy(): void {
@@ -38,18 +47,16 @@ export class About implements OnInit, OnDestroy {
     return this.portfolioData?.portfolio;
   }
 
-  getProfileImageUrl(): string | null {
-    if (this.user?.profilePicture && this.user.profilePicture !== 'default-profile.png') {
-      if (this.user.profilePicture.startsWith('http')) return this.user.profilePicture;
-      return `${this.apiUrl}/${this.user.profilePicture}`;
-    }
-    return null;
+   getProfileImageUrl(): string | null {
+    const pic = this.currentUser?.profilePicture || this.currentUser?.profileImage;
+    if (!pic || pic === 'default-profile.png') return null;
+    if (pic.startsWith('http')) return pic;
+    return `${this.apiUrl}/${pic}`;
   }
-
-
+   
   getUserInitials(): string {
-    const first = this.user?.firstName?.charAt(0)?.toUpperCase() || '';
-    const last = this.user?.lastName?.charAt(0)?.toUpperCase() || '';
+    const first = this.currentUser?.firstName?.charAt(0)?.toUpperCase() || '';
+    const last = this.currentUser?.lastName?.charAt(0)?.toUpperCase() || '';
     return first + last || '?';
   }
 }
