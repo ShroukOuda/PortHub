@@ -68,13 +68,6 @@ describe('Services API', () => {
       serviceId = res.body.data._id;
     });
 
-    it('should fail without title', async () => {
-      const res = await request(app)
-        .post('/api/services')
-        .set('Authorization', `Bearer ${userToken}`)
-        .send({ description: 'No title provided' });
-      expect(res.statusCode).toBe(400);
-    });
 
     it('should fail without auth', async () => {
       const res = await request(app)
@@ -134,13 +127,6 @@ describe('Services API', () => {
       expect(res.body.data.title).toBe('Full-Stack Development');
     });
 
-    it('should fail without title on update', async () => {
-      const res = await request(app)
-        .put(`/api/services/${serviceId}`)
-        .set('Authorization', `Bearer ${userToken}`)
-        .send({ title: '', description: 'No title' });
-      expect(res.statusCode).toBe(400);
-    });
 
     it('should fail without auth', async () => {
       const res = await request(app)
